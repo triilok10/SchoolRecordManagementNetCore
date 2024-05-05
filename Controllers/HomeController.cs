@@ -60,7 +60,8 @@ namespace CoreProject1.Controllers
         public IActionResult ChartsViewStudent()
         {
             return View();
-        }  public IActionResult ChartsViewTeacher()
+        }  
+        public IActionResult ChartsViewTeacher()
         {
             return View();
         }
