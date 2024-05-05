@@ -1,0 +1,78 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - School Management Project</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/CoreProject1.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="container-fluid">
+       
+        <div class="row no-g">
+          
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar collapse" style="height:100vh; position:fixed">
+                <div class="position-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Index">School Management</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="DashBoard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Finance">Finance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Students">Student</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Teachers">Teachers</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Notices">Notices</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Attendance">Attendance</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Classes">Classes</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Departments">Departments</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="LogOut">LogOut</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- Main content area -->
+            <main class="col-md-9 col-lg-10 ms-sm-auto" style="padding:0px;">
+                @RenderBody()
+                <!-- Scripts section -->
+                @RenderSection("Scripts", required: false)
+                <hr />
+                <footer class="text-center">
+                    <p>&copy; @DateTime.Now.Year - Developed by Trilok Chand Swami</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#tbJquerytable').DataTable({
+                paging: true,
+                responsive: true,
+                scrollY: "400px"
+            });
+        });
+    </script>
+</body>
+</html>
