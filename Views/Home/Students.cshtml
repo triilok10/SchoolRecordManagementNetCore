@@ -66,29 +66,26 @@
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
                 <img src="~/Images/View.png" style="height:auto; width: 70px;">
             </div>
-            @*   <div style="width:50%"><h3>View Students</h3></div>*@
-            <div style="width:50%"><h3>@Html.ActionLink("View Students", "ViewStudent", "StudentUtility", new { id = "1" }, new { @class = "text-dark text-decoration-none", @id = "ViewStudent" })</h3></div>
+            <div style="width:50%"><h3> @Html.ActionLink("View Students", "ViewStudent", "StudentUtility", null, new { @class = "text-dark text-decoration-none" })</div>
+
         </div>
         <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
                 <img src="~/Images//Add.png" style="height:auto; width: 70px;">
             </div>
-            @*<div style="width:50%"><h3>Add Student</h3></div>*@
-            <div style="width:50%"><h3>@Html.ActionLink("Add Student", "AddStudent", "StudentUtility",null, new { @class = "text-dark text-decoration-none", @id = "AddStudent" })</h3></div>
+            <div style="width:50%"><h3>@Html.ActionLink("Add Student", "AddStudent", "StudentUtility", null, new { @class = "text-dark text-decoration-none" })</h3></div>
         </div>
         <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
                 <img src="~/Images/Update.png" style="height:auto; width: 70px;">
             </div>
-            @*<div style="width:50%"><h3>Update Student</h3></div>*@
-            <div style="width:50%"><h3>@Html.ActionLink("Update Student", "UpdateStudent", "StudentUtility", new { id = "3" }, new { @class = "text-dark text-decoration-none", @id = "UpdateStudent" })</h3></div>
+            <div style="width:50%"><h3>@Html.ActionLink("Update Student", "UpdateStudent", "StudentUtility", null, new { @class = "text-dark text-decoration-none" })</h3></div>
         </div>
         <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
                 <img src="~/Images/Delete.png" style="height:auto; width: 70px;">
             </div>
-            @*<div style="width:50%"><h3>Delete Student</h3></div>*@
-            <div style="width:50%"><h3>@Html.ActionLink("Delete Student", "DeleteStudent", "StudentUtility", new { id = "4" }, new { @class = "text-dark text-decoration-none", @id = "DeleteStudent" })</h3></div>
+            <div style="width:50%"><h3>@Html.ActionLink("Delete Student", "DeleteStudent", "StudentUtility", null, new { @class = "text-dark text-decoration-none" })</h3></div>
         </div>
     </div>
 </div>

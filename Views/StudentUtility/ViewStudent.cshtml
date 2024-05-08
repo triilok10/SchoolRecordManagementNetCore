@@ -1,0 +1,48 @@
+﻿@model List<CoreProject1.Models.Student>
+<br />
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<div class="text-center" style="padding:10px">
+    <br />
+    <h2 class="text-danger"> View Student Record </h2>
+    <table id="tbJquerytable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th> ID </th>
+                <th> First Name </th>
+                <th> Last Name </th>
+                <th> Father's Name </th>
+                <th> Mother's Name </th>
+                <th> Class </th>
+                <th> Gender </th>
+                <th> Address </th>
+                <th> Remarks </th>
+                <th> Mobile </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> @item.Id </td>
+                    <td> @item.Firstname</td>
+                    <td> @item.Lastname </td>
+                    <td> @item.Fathername </td>
+                    <td> @item.Mothername </td>
+                    <td> @item.Class</td>
+                    <td> @item.Gender</td>
+                    <td> @item.Address</td>
+                    <td> @item.Remark </td>
+                    <td> @item.Mobile</td>
+                    <td><a asp-action="EDoc" asp-route-Id="@item.Id">ID Card</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
