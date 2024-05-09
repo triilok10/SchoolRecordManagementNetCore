@@ -14,12 +14,12 @@ namespace CoreProject1.Controllers
     {
        
 
-        [HttpGet]
+        //[HttpGet]
         //public async Task<IActionResult> ViewStudent()
         //{
         //    try
         //    {
-        //        HttpResponseMessage /*response*/ = await _httpClient.GetAsync(baseurl + "api/DataAPIController/ViewStudentAPI");
+        //        HttpResponseMessage response = await _httpClient.GetAsync(baseurl + "api/DataAPIController/ViewStudentAPI");
 
         //        if (response.IsSuccessStatusCode)
         //        {

@@ -1,5 +1,4 @@
 using CoreProject1.Models;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,13 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-var provider = builder.Services.BuildServiceProvider();
-var config = provider.GetRequiredService<IConfiguration>();
-builder.Services.AddDbContext<SchoolManagementSystemContext>(item => item.UseSqlServer(config.GetConnectionString("DBConnection")));
 var app = builder.Build();
 
 var configuration = builder.Configuration;
-string connectionString = configuration.GetConnectionString("DefaultConnection");
+string connectionString = "data source=ACER\\CYNOSUREDBS; Initial Catalog = SchoolManagementSystem; Integrated Security = true; TrustServerCertificate=true";
+configuration["ConnectionStrings:CustomConnection"] = connectionString;
+
 
 
 // Configure the HTTP request pipeline.

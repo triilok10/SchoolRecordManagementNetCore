@@ -1,31 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
+using System.ComponentModel.DataAnnotations;
 
-namespace CoreProject1.Models;
 
-public partial class Student
+namespace CoreProject1.Models
 {
-    public int Id { get; set; }
 
-    public string Firstname { get; set; } = null!;
 
-    public string? Lastname { get; set; }
 
-    public string Fathername { get; set; } = null!;
+    public class Student
+    {
 
-    public string Mothername { get; set; } = null!;
+        public int Id { get; set; }
 
-    public string Address { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter your FirstName")]
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
-    public string Remark { get; set; } = null!;
+        [Required(ErrorMessage = "Please Select your Class")]
+        public ClassName Class { get; set; }
 
-    public string Email { get; set; } = null!;
+        [Required(ErrorMessage = "Please Select your Gender")]
+        public GenderType Gender { get; set; }
 
-    public int Gender { get; set; }
+        [Required(ErrorMessage = "Please Enter your Address")]
+        public string Address { get; set; }
 
-    public int Class { get; set; }
+        [Required(ErrorMessage = "Please Enter your Father's Name")]
+        public string FatherName { get; set; }
 
-    public string Filepath { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter your Mother's Name")]
+        public string MotherName { get; set; }
 
-    public string Mobile { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter the Remarks")]
+        public string Remarks { get; set; }
+
+        [Required(ErrorMessage = "Please Enter the Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Please Enter the Mobile")]
+        public string Mobile { get; set; }
+
+        [Required(ErrorMessage = "Please Select the Profile Photo")]
+        public string Filepath { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+
+    }
+    public enum ClassName
+    {
+        First,
+        Second,
+        Third,
+        Fourth,
+        Fifth,
+        Sixth,
+        Seventh,
+        Eight,
+        Nineth,
+        Tenth,
+        Eleventh,
+        Twelveth
+    }
+    public enum GenderType
+    {
+        Male,
+        Female,
+        Other
+    }
 }
