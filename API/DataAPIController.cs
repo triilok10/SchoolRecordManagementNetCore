@@ -179,5 +179,42 @@ namespace CoreProject1.API
                 return Ok(ex.Message);
             }
         }
+
+        [HttpPost]
+        public IActionResult UpdateStudentDataAPI(Student std)
+        {
+            string Message = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("UpdateStudentData", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    
+                    cmd.Parameters.AddWithValue("@Id", std.Id);
+                    cmd.Parameters.AddWithValue("@Filepath", std.Filepath);
+                    cmd.Parameters.AddWithValue("@FirstName", std.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", std.LastName);
+                    cmd.Parameters.AddWithValue("@Class", std.Class);
+                    cmd.Parameters.AddWithValue("@Gender", std.Gender);
+                    cmd.Parameters.AddWithValue("@FatherName", std.FatherName);
+                    cmd.Parameters.AddWithValue("@MotherName", std.MotherName);
+                    cmd.Parameters.AddWithValue("@Address", std.Address);
+                    cmd.Parameters.AddWithValue("@Remark", std.Remarks);
+                    cmd.Parameters.AddWithValue("@Email", std.Email);
+                    cmd.Parameters.AddWithValue("@Mobile", std.Mobile);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                Message = "Data Updated Successfully";
+            }
+            catch (Exception ex)
+            {
+                Message = "Error in updating data: " + ex.Message;
+            }
+
+            return Ok(new { message = Message });
+        }
+
     }
 }

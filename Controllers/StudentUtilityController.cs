@@ -44,7 +44,7 @@ namespace CoreProject1.Controllers
             }
         }
 
-      
+
         [HttpPost]
         public async Task<IActionResult> CreateStudentData(Student pStudent, IFormFile File)
         {
@@ -163,7 +163,65 @@ namespace CoreProject1.Controllers
             }
         }
 
-        
+        [HttpPost]
+        public async  Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
+        {
+            try
+            {
+                if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
+                {
+                    // Process file upload if present
+                    if (File != null && File.Length > 0)
+                    {
+                        string FileName = Path.GetFileName(File.FileName);
+                        string FilePathData = Path.Combine("wwwroot", "Images", "UserImages", FileName);
+                        using (var stream = new FileStream(FilePathData, FileMode.Create))
+                        {
+                            await File.CopyToAsync(stream);
+                        }
+
+                        pStudent.Filepath = FileName;
+                    }
+
+                    string Apiurl = _baseUrl + "api/DataAPI/UpdateStudentDataAPI";
+
+
+                    string jsonStudent = JsonConvert.SerializeObject(pStudent);
+
+
+                    var content = new StringContent(jsonStudent, Encoding.UTF8, "application/json");
+
+
+                    HttpResponseMessage response = await _httpClient.PostAsync(Apiurl, content);
+
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+                        var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
+                        string successMessage = responseObject.message;
+
+
+                        ViewBag.SuccessMessage = successMessage;
+                        return View("AddStudent");
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
+                }
+                else
+                {
+
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return View("Error");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> DeleteStudent()
