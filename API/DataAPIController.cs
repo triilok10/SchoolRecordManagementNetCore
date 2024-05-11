@@ -66,33 +66,39 @@ namespace CoreProject1.API
             return Ok(ltrStudents);
         }
 
-        [HttpGet]
+        [HttpPost]
         public IActionResult AddStudentAPI(Student pStudent)
         {
+            string Message = "";
+            bool res = false;
             try
             {
-                
-                using (SqlConnection con = new SqlConnection(_connectionString))
+                if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
                 {
-                    con.Open();
-                    using (SqlCommand cmd = new SqlCommand("AddStudentMain", con))
+                    using (SqlConnection con = new SqlConnection(_connectionString))
                     {
-                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                        cmd.Parameters.AddWithValue("@Filepath", pStudent.Filepath);
-                        cmd.Parameters.AddWithValue("@FirstName", pStudent.FirstName);
-                        cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pStudent.LastName) ? (object)DBNull.Value : pStudent.LastName);
-                        cmd.Parameters.AddWithValue("@Class", pStudent.Class);
-                        cmd.Parameters.AddWithValue("@Gender", pStudent.Gender);
-                        cmd.Parameters.AddWithValue("@FatherName", pStudent.FatherName);
-                        cmd.Parameters.AddWithValue("@MotherName", pStudent.MotherName);
-                        cmd.Parameters.AddWithValue("@Address", pStudent.Address);
-                        cmd.Parameters.AddWithValue("@Remark", pStudent.Remarks);
-                        cmd.Parameters.AddWithValue("@Email", pStudent.Email);
-                        cmd.Parameters.AddWithValue("@Mobile", pStudent.Mobile);
+                        con.Open();
+                        using (SqlCommand cmd = new SqlCommand("AddStudentMain", con))
+                        {
+                            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                            cmd.Parameters.AddWithValue("@Filepath", pStudent.Filepath);
+                            cmd.Parameters.AddWithValue("@FirstName", pStudent.FirstName);
+                            cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pStudent.LastName) ? (object)DBNull.Value : pStudent.LastName);
+                            cmd.Parameters.AddWithValue("@Class", pStudent.Class);
+                            cmd.Parameters.AddWithValue("@Gender", pStudent.Gender);
+                            cmd.Parameters.AddWithValue("@FatherName", pStudent.FatherName);
+                            cmd.Parameters.AddWithValue("@MotherName", pStudent.MotherName);
+                            cmd.Parameters.AddWithValue("@Address", pStudent.Address);
+                            cmd.Parameters.AddWithValue("@Remark", pStudent.Remarks);
+                            cmd.Parameters.AddWithValue("@Email", pStudent.Email);
+                            cmd.Parameters.AddWithValue("@Mobile", pStudent.Mobile);
 
-                        cmd.ExecuteNonQuery();
+                            cmd.ExecuteNonQuery();
+                        }
                     }
                 }
+                Message = "Data Added Successfully";
+                res = true;
             }
             catch (Exception ex)
             {
@@ -100,7 +106,7 @@ namespace CoreProject1.API
                 return StatusCode(500, "An error occurred while processing the request.");
             }
 
-            return Ok(new { Message = "User Record " + pStudent.FirstName + " successfully saved!" });
+            return Ok(new {  message = Message });
         }
 
 
