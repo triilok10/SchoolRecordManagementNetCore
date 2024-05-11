@@ -132,5 +132,52 @@ namespace CoreProject1.API
             }
             return Ok(new { Message = message });
         }
+
+        [HttpGet("{Id}")]
+        public IActionResult UpdateChangeDataAPI(int Id)
+        {
+            try
+            {
+                Student objStudent = null;
+                using (var con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("UpdateChangeData", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Id", Id);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            objStudent = new Student
+                            {
+                                Id = Convert.ToInt32(rdr["Id"]),
+                                FirstName = Convert.ToString(rdr["FirstName"]),
+                                LastName = Convert.ToString(rdr["LastName"]),
+                                FatherName = Convert.ToString(rdr["FatherName"]),
+                                MotherName = Convert.ToString(rdr["MotherName"]),
+                                Gender = (GenderType)Enum.Parse(typeof(GenderType), Convert.ToString(rdr["Gender"])),
+                                Address = Convert.ToString(rdr["Address"]),
+                                Class = (ClassName)Enum.Parse(typeof(ClassName), Convert.ToString(rdr["Class"])),
+                                Remarks = Convert.ToString(rdr["Remark"]),
+                                Email = Convert.ToString(rdr["Email"]),
+                                Mobile = Convert.ToString(rdr["Mobile"])
+                            };
+                        }
+                    }
+
+                }
+                if (objStudent == null)
+                {
+                    return RedirectToAction("ViewStudent");
+                }
+                return Ok(objStudent);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }
     }
 }
