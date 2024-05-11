@@ -106,9 +106,31 @@ namespace CoreProject1.API
                 return StatusCode(500, "An error occurred while processing the request.");
             }
 
-            return Ok(new {  message = Message });
+            return Ok(new { message = Message });
         }
 
-
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteStudentAPI(int Id)
+        {
+            bool res = false;
+            string message = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("DeleteStudentByID", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ID", Id);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                message = "User Deleted Successfully";
+                res = true;
+            }
+            catch (Exception ex)
+            {
+            }
+            return Ok(new { Message = message });
+        }
     }
 }

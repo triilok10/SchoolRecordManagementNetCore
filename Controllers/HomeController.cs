@@ -25,6 +25,8 @@ namespace CoreProject1.Controllers
 
         public IActionResult Students()
         {
+            string successMessage = TempData["SuccessMessage"] as string;
+            ViewBag.SuccessMessage = successMessage;
             return View();
         }
 
@@ -60,7 +62,7 @@ namespace CoreProject1.Controllers
         public IActionResult ChartsViewStudent()
         {
             return View();
-        }  
+        }
         public IActionResult ChartsViewTeacher()
         {
             return View();

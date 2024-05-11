@@ -1,22 +1,14 @@
 ﻿using CoreProject1.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace CoreProject1.Controllers
 {
     public class StudentUtilityController : Controller
     {
         private readonly HttpClient _httpClient;
-        IHttpContextAccessor _httpContextAccessor; 
+        IHttpContextAccessor _httpContextAccessor;
         private readonly dynamic _baseUrl;
 
         public StudentUtilityController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
@@ -121,7 +113,7 @@ namespace CoreProject1.Controllers
                         string FilePathData = Path.Combine("wwwroot", "Images", "UserImages", FileName);
                         using (var stream = new FileStream(FilePathData, FileMode.Create))
                         {
-                            await File.CopyToAsync(stream); 
+                            await File.CopyToAsync(stream);
                         }
 
                         pStudent.Filepath = FileName;
@@ -129,23 +121,23 @@ namespace CoreProject1.Controllers
 
                     string Apiurl = _baseUrl + "api/DataAPI/AddStudentAPI";
 
-                
+
                     string jsonStudent = JsonConvert.SerializeObject(pStudent);
 
-                
+
                     var content = new StringContent(jsonStudent, Encoding.UTF8, "application/json");
 
-               
+
                     HttpResponseMessage response = await _httpClient.PostAsync(Apiurl, content);
 
-               
+
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
-                        string successMessage = responseObject.message; 
+                        string successMessage = responseObject.message;
 
-                       
+
                         ViewBag.SuccessMessage = successMessage;
                         return View("AddStudent");
                     }
@@ -156,13 +148,13 @@ namespace CoreProject1.Controllers
                 }
                 else
                 {
-                   
+
                     return View("Error");
                 }
             }
             catch (Exception ex)
             {
-               
+
                 return View("Error");
             }
         }
@@ -179,9 +171,59 @@ namespace CoreProject1.Controllers
             return View();
         }
 
-        public IActionResult DeleteStudent()
+        [HttpGet]
+        public async Task<IActionResult> DeleteStudent()
         {
-            return View();
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    return View(objstudent);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteStudentData(int Id)
+        {
+            try
+            {
+                string apiUrl = $"{_baseUrl}api/DataAPI/DeleteStudentAPI/{Id}";
+                HttpResponseMessage response = await _httpClient.DeleteAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    dynamic responseObject = JsonConvert.DeserializeObject(responsebody);
+                    string message = responseObject.message;
+
+                    TempData["SuccessMessage"] = message;
+
+                    return RedirectToAction("Students", "Home");
+
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+
     }
 }

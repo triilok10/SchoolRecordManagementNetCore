@@ -1,5 +1,11 @@
-﻿@* @model  List<SchoolBookManagementRecord.Models.Student> *@
+﻿
 <div>
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.SuccessMessage
+        </div>
+    }
     <br />
     <div>
         <h2 class="text-danger text-center"> Student DashBoard </h2>
