@@ -1,0 +1,43 @@
+﻿@model List<CoreProject1.Models.TeacherDetail>
+
+<div class="text-center">
+    <br />
+    <h2 class="text-danger"> Update Teacher Record</h2>
+
+    <table class="table table-bordered table-hover" id="tbJquerytable">
+        <thead>
+            <tr>
+                <th> ID </th>
+                <th> First Name </th>
+                <th> Last Name </th>
+                <th> Father's Name </th>
+                <th> Mother's Name </th>
+                <th> Class </th>
+                <th> Gender </th>
+                <th> Address </th>
+                <th> Remarks </th>
+                <th> Mobile</th>
+                <th> Action </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> @item.Id </td>
+                    <td> @item.FirstName</td>
+                    <td> @item.LastName </td>
+                    <td> @item.FatherName </td>
+                    <td> @item.MotherName </td>
+                    <td> @item.Class</td>
+                    <td> @item.Gender</td>
+                    <td> @item.Address</td>
+                    <td> @item.Remarks </td>
+                    <td> @item.Mobile</td>
+                    <td><a asp-controller="TeacherUtility" asp-action="UpdateChangeData" asp-route-Id="@item.Id">Edit</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

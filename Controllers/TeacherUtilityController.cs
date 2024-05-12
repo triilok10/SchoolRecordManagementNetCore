@@ -5,13 +5,13 @@ using System.Text;
 
 namespace CoreProject1.Controllers
 {
-    public class StudentUtilityController : Controller
+    public class TeacherUtilityController : Controller
     {
         private readonly HttpClient _httpClient;
         IHttpContextAccessor _httpContextAccessor;
         private readonly dynamic _baseUrl;
 
-        public StudentUtilityController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+        public TeacherUtilityController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _httpContextAccessor = httpContextAccessor;
@@ -20,18 +20,20 @@ namespace CoreProject1.Controllers
 
         }
 
+        #region "View Teacher"
+
         [HttpGet]
-        [Route("View-Student-Record")]
-        public async Task<IActionResult> ViewStudent()
+        [Route("View-Teacher")]
+        public async Task<IActionResult> ViewTeacher()
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/TeacherAPI/ViewTeacherAPI");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    List<TeacherDetail> objstudent = JsonConvert.DeserializeObject<List<TeacherDetail>>(responsebody);
                     return View(objstudent);
                 }
                 else
@@ -46,15 +48,24 @@ namespace CoreProject1.Controllers
         }
 
 
+        #endregion
+
+        #region "Add Teacher"
+
+        [Route("Add-Teacher-Record")]
+        public IActionResult AddTeacher()
+        {
+            return View();
+        }
+
         [HttpPost]
-        [Route("Add-NewStudent-Record")]
-        public async Task<IActionResult> CreateStudentData(Student pStudent, IFormFile File)
+        public async Task<IActionResult> CreateTeacherData(TeacherDetail pStudent, IFormFile File)
         {
             try
             {
                 if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
                 {
-               
+
                     if (File != null && File.Length > 0)
                     {
                         string FileName = Path.GetFileName(File.FileName);
@@ -67,25 +78,21 @@ namespace CoreProject1.Controllers
                         pStudent.Filepath = FileName;
                     }
 
-                    if (string.IsNullOrWhiteSpace(pStudent.Filepath))
+                    if (string.IsNullOrEmpty(pStudent.Filepath))
                     {
-                        pStudent.Filepath = "null.jpg";
+                        pStudent.Filepath = "";
                     }
                     if (string.IsNullOrEmpty(pStudent.LastName))
                     {
                         pStudent.LastName = "";
                     }
-                    if(pStudent.FirstName == pStudent.FatherName)
+                    if (pStudent.FirstName == pStudent.FatherName)
                     {
-                        ViewBag.SuccessMessage = "Student Name and Father's Name not be Same! , Please fill the correct data.";
-                        return View("AddStudent");
+                        ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
+                        return View("AddTeacher");
                     }
-                    if (pStudent.Mobile.Length != 10)
-                    {
-                        ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
-                        return View("AddStudent");
-                    }
-                    string Apiurl = _baseUrl + "api/DataAPI/AddStudentAPI";
+
+                    string Apiurl = _baseUrl + "api/TeacherAPI/AddTeacherAPI";
 
 
                     string jsonStudent = JsonConvert.SerializeObject(pStudent);
@@ -105,18 +112,18 @@ namespace CoreProject1.Controllers
 
 
                         ViewBag.SuccessMessage = successMessage;
-                        return View("AddStudent");
+                        return View("AddTeacher");
                     }
                     else
                     {
                         ViewBag.SuccessMessage = "Please Enter the Correct Data, Failed!";
-                        return View("AddStudent");
+                        return View("AddTeacher");
                     }
                 }
                 else
                 {
                     ViewBag.SuccessMessage = "Please Enter the Mandatory Field's.";
-                    return View("AddStudent");
+                    return View("AddTeacher");
 
                 }
             }
@@ -126,25 +133,21 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
 
-        [Route("Add-Student-Record")]
-        public IActionResult AddStudent()
-        {
-            return View();
-        }
-
+        #region "Update Teacher"
         [HttpGet]
-        [Route("ViewUpdate-Student-Record")]
-        public async Task<IActionResult> UpdateStudent()
+        [Route("ViewUpdate-Teacher-Record")]
+        public async Task<IActionResult> UpdateTeacher()
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/TeacherAPI/ViewTeacherAPI");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    List<TeacherDetail> objstudent = JsonConvert.DeserializeObject<List<TeacherDetail>>(responsebody);
                     return View(objstudent);
                 }
                 else
@@ -159,19 +162,19 @@ namespace CoreProject1.Controllers
         }
 
         [HttpGet]
-        [Route("PostUpdate-Student-Record")]
+        [Route("PostUpdate-Teacher-Record")]
         public async Task<IActionResult> UpdateChangeData(int Id)
         {
             try
             {
-                string apiUrl = $"{_baseUrl}api/DataAPI/UpdateChangeDataAPI/{Id}";
+                string apiUrl = $"{_baseUrl}api/TeacherAPI/UpdateChangeDataAPI/{Id}";
                 HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responsebody = await response.Content.ReadAsStringAsync();
 
-                    Student student = JsonConvert.DeserializeObject<Student>(responsebody);
+                    TeacherDetail student = JsonConvert.DeserializeObject<TeacherDetail>(responsebody);
                     return View(student);
 
                 }
@@ -187,13 +190,13 @@ namespace CoreProject1.Controllers
         }
 
         [HttpPost]
-        public async  Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
+        public async Task<IActionResult> UpdateTeacherData(TeacherDetail pStudent, IFormFile File)
         {
             try
             {
                 if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
                 {
-                   
+
                     if (File != null && File.Length > 0)
                     {
                         string FileName = Path.GetFileName(File.FileName);
@@ -217,13 +220,13 @@ namespace CoreProject1.Controllers
                     {
                         ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
                         return View("UpdateChangeData");
-                    } 
-                    if ( pStudent.Mobile.Length != 10)
+                    }
+                    if (pStudent.Mobile.Length != 10)
                     {
                         ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
                         return View("UpdateChangeData");
                     }
-                    string Apiurl = _baseUrl + "api/DataAPI/UpdateStudentDataAPI";
+                    string Apiurl = _baseUrl + "api/TeacherAPI/UpdateTeacherDataAPI";
 
 
                     string jsonStudent = JsonConvert.SerializeObject(pStudent);
@@ -243,7 +246,7 @@ namespace CoreProject1.Controllers
 
 
                         ViewBag.SuccessMessage = successMessage;
-                        return View("AddStudent");
+                        return View("UpdateChangeData");
                     }
                     else
                     {
@@ -263,18 +266,22 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
+
+        #region "Delete Student"
+
         [HttpGet]
-        [Route("DeleteView-Student-Record")]
-        public async Task<IActionResult> DeleteStudent()
+        [Route("DeleteView-Teacher-Record")]
+        public async Task<IActionResult> DeleteTeacher()
         {
             try
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/TeacherAPI/ViewTeacherAPI");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    List<TeacherDetail> objstudent = JsonConvert.DeserializeObject<List<TeacherDetail>>(responsebody);
                     return View(objstudent);
                 }
                 else
@@ -289,12 +296,12 @@ namespace CoreProject1.Controllers
         }
 
         [HttpGet]
-        [Route("Delete-Student-Record")]
-        public async Task<IActionResult> DeleteStudentData(int Id)
+        [Route("Delete-Teacher-Record")]
+        public async Task<IActionResult> DeleteTeacherData(int Id)
         {
             try
             {
-                string apiUrl = $"{_baseUrl}api/DataAPI/DeleteStudentAPI/{Id}";
+                string apiUrl = $"{_baseUrl}api/TeacherAPI/DeleteTeacherAPI/{Id}";
                 HttpResponseMessage response = await _httpClient.DeleteAsync(apiUrl);
 
                 if (response.IsSuccessStatusCode)
@@ -305,7 +312,7 @@ namespace CoreProject1.Controllers
 
                     TempData["SuccessMessage"] = message;
 
-                    return RedirectToAction("Students", "Home");
+                    return RedirectToAction("Teachers", "Home");
 
                 }
                 else
@@ -319,5 +326,6 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
     }
 }

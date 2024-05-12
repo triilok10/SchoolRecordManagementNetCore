@@ -1,0 +1,42 @@
+﻿@model CoreProject1.Models.Student
+
+<style>
+    .DataStudent {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .DataStudentC{
+        display: inline-flex;
+        justify-content: space-evenly;
+    }
+</style>
+<div class="text-center DataStudent">
+    <div>
+        <h3>Issue the Book</h3>
+        <div>
+            <form method="post" asp-controller="LibraryRecord" asp-action="GetBookByClass">
+                <div class="DataStudentC">
+                    <div class="form-group">
+                        @* <label class="control-label">Class :</label> *@
+                        <select asp-for="Class" class="form-control" required>
+                            <option value="">Select Class</option>
+                            @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
+                            {
+                                <option value="@item">@item</option>
+                            }
+                        </select>
+                    </div>
+                    <div style="width: 50%;display:flex;justify-content:end ">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>

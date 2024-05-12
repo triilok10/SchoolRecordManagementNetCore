@@ -1,32 +1,32 @@
 ﻿using CoreProject1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 
 namespace CoreProject1.API
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class DataAPIController : ControllerBase
+    public class TeacherAPIController : ControllerBase
     {
+
         private readonly string _connectionString;
 
-        public DataAPIController(IConfiguration configuration)
+        public TeacherAPIController(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("CustomConnection");
         }
 
+        #region "View Teacher API"
         [HttpGet]
-        public IActionResult ViewStudentAPI()
+        public IActionResult ViewTeacherAPI()
         {
             List<Student> ltrStudents = new List<Student>();
             try
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand("AddViewStudents", con);
+                    SqlCommand cmd = new SqlCommand("AddViewTeachers", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     con.Open();
                     using (SqlDataReader rdr = cmd.ExecuteReader())
@@ -38,10 +38,11 @@ namespace CoreProject1.API
                             objStudent.Id = Convert.ToInt32(rdr["ID"]);
                             objStudent.FirstName = Convert.ToString(rdr["FirstName"]);
                             objStudent.LastName = Convert.ToString(rdr["LastName"]);
-                            objStudent.FatherName = Convert.ToString(rdr["FatherName"]);
+                            objStudent.FatherName = Convert.ToString(rdr["FathersName"]);
                             objStudent.MotherName = Convert.ToString(rdr["MotherName"]);
                             objStudent.Address = Convert.ToString(rdr["Address"]);
-                            objStudent.Remarks = Convert.ToString(rdr["Remark"]);
+                            objStudent.Remarks = Convert.ToString(rdr["Remarks"]);
+                            objStudent.Email = Convert.ToString(rdr["Email"]);
                             objStudent.Mobile = Convert.ToString(rdr["Mobile"]);
                             objStudent.Filepath = Convert.ToString(rdr["Filepath"]);
 
@@ -66,8 +67,11 @@ namespace CoreProject1.API
             return Ok(ltrStudents);
         }
 
+        #endregion
+
+        #region "Add Teacher API"
         [HttpPost]
-        public IActionResult AddStudentAPI(Student pStudent)
+        public IActionResult AddTeacherAPI(TeacherDetail pStudent)
         {
             string Message = "";
             bool res = false;
@@ -78,7 +82,7 @@ namespace CoreProject1.API
                     using (SqlConnection con = new SqlConnection(_connectionString))
                     {
                         con.Open();
-                        using (SqlCommand cmd = new SqlCommand("AddStudentMain", con))
+                        using (SqlCommand cmd = new SqlCommand("AddTeacherMain", con))
                         {
                             cmd.CommandType = System.Data.CommandType.StoredProcedure;
                             cmd.Parameters.AddWithValue("@Filepath", string.IsNullOrEmpty(pStudent.Filepath) ? (object)DBNull.Value : pStudent.Filepath);
@@ -86,31 +90,37 @@ namespace CoreProject1.API
                             cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pStudent.LastName) ? (object)DBNull.Value : pStudent.LastName);
                             cmd.Parameters.AddWithValue("@Class", pStudent.Class);
                             cmd.Parameters.AddWithValue("@Gender", pStudent.Gender);
-                            cmd.Parameters.AddWithValue("@FatherName", pStudent.FatherName);
+                            cmd.Parameters.AddWithValue("@FathersName", pStudent.FatherName);
                             cmd.Parameters.AddWithValue("@MotherName", pStudent.MotherName);
                             cmd.Parameters.AddWithValue("@Address", pStudent.Address);
                             cmd.Parameters.AddWithValue("@Remark", pStudent.Remarks);
                             cmd.Parameters.AddWithValue("@Email", pStudent.Email);
                             cmd.Parameters.AddWithValue("@Mobile", pStudent.Mobile);
+                            cmd.Parameters.AddWithValue("@DateOfBirth", pStudent.DateOfBirth);
+
 
                             cmd.ExecuteNonQuery();
                         }
                     }
                 }
-                Message = "Data Added Successfully";
+                Message = "Teacher Data Added Successfully";
                 res = true;
             }
             catch (Exception ex)
             {
                 // Handle exception
-                return StatusCode(500, "An error occurred while processing the request.");
+                return StatusCode(500, "There is a issue in the Database Coloumns, Please Check!");
             }
 
             return Ok(new { message = Message });
         }
 
+        #endregion
+
+        #region "Delete Teacher API"
+
         [HttpDelete("{Id}")]
-        public IActionResult DeleteStudentAPI(int Id)
+        public IActionResult DeleteTeacherAPI(int Id)
         {
             bool res = false;
             string message = "";
@@ -118,7 +128,7 @@ namespace CoreProject1.API
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand("DeleteStudentByID", con);
+                    SqlCommand cmd = new SqlCommand("DeleteTeacherByID", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@ID", Id);
                     con.Open();
@@ -133,16 +143,20 @@ namespace CoreProject1.API
             return Ok(new { Message = message });
         }
 
+        #endregion
+
+        #region "Update Teacher API"
+
         [HttpGet("{Id}")]
         public IActionResult UpdateChangeDataAPI(int Id)
         {
             try
             {
-                Student objStudent = null;
+                TeacherDetail objStudent = null;
                 using (var con = new SqlConnection(_connectionString))
                 {
                     con.Open();
-                    SqlCommand cmd = new SqlCommand("UpdateChangeData", con);
+                    SqlCommand cmd = new SqlCommand("UpChangeData", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@Id", Id);
 
@@ -150,19 +164,20 @@ namespace CoreProject1.API
                     {
                         if (rdr.Read())
                         {
-                            objStudent = new Student
+                            objStudent = new TeacherDetail
                             {
                                 Id = Convert.ToInt32(rdr["Id"]),
                                 FirstName = Convert.ToString(rdr["FirstName"]),
                                 LastName = Convert.ToString(rdr["LastName"]),
-                                FatherName = Convert.ToString(rdr["FatherName"]),
+                                FatherName = Convert.ToString(rdr["FathersName"]),
                                 MotherName = Convert.ToString(rdr["MotherName"]),
-                                Gender = (GenderType)Enum.Parse(typeof(GenderType), Convert.ToString(rdr["Gender"])),
+                                Gender = (GenderTypes)Enum.Parse(typeof(GenderTypes), Convert.ToString(rdr["Gender"])),
                                 Address = Convert.ToString(rdr["Address"]),
-                                Class = (ClassName)Enum.Parse(typeof(ClassName), Convert.ToString(rdr["Class"])),
-                                Remarks = Convert.ToString(rdr["Remark"]),
+                                Class = (Degination)Enum.Parse(typeof(Degination), Convert.ToString(rdr["Class"])),
+                                Remarks = Convert.ToString(rdr["Remarks"]),
                                 Email = Convert.ToString(rdr["Email"]),
-                                Mobile = Convert.ToString(rdr["Mobile"])
+                                Mobile = Convert.ToString(rdr["Mobile"]),
+                                DateOfBirth = Convert.ToString(rdr["DateOfBirth"])
                             };
                         }
                     }
@@ -170,7 +185,7 @@ namespace CoreProject1.API
                 }
                 if (objStudent == null)
                 {
-                    return RedirectToAction("ViewStudent");
+                    return RedirectToAction("ViewTeacher");
                 }
                 return Ok(objStudent);
             }
@@ -181,17 +196,17 @@ namespace CoreProject1.API
         }
 
         [HttpPost]
-        public IActionResult UpdateStudentDataAPI(Student std)
+        public IActionResult UpdateTeacherDataAPI(TeacherDetail std)
         {
             string Message = "";
             try
             {
-             
+
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
-                    SqlCommand cmd = new SqlCommand("UpdateStudentData", con);
+                    SqlCommand cmd = new SqlCommand("UpdateTeacherData", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    
+
                     cmd.Parameters.AddWithValue("@Id", std.Id);
                     cmd.Parameters.AddWithValue("@Filepath", std.Filepath);
                     cmd.Parameters.AddWithValue("@FirstName", std.FirstName);
@@ -204,6 +219,7 @@ namespace CoreProject1.API
                     cmd.Parameters.AddWithValue("@Remark", std.Remarks);
                     cmd.Parameters.AddWithValue("@Email", std.Email);
                     cmd.Parameters.AddWithValue("@Mobile", std.Mobile);
+                    cmd.Parameters.AddWithValue("@DateOfBirth", std.DateOfBirth);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
@@ -217,5 +233,6 @@ namespace CoreProject1.API
             return Ok(new { message = Message });
         }
 
+        #endregion
     }
 }

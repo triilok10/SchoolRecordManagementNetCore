@@ -23,6 +23,7 @@ namespace CoreProject1.Controllers
             return View();
         }
 
+        [Route("Data-Students")]
         public IActionResult Students()
         {
             string successMessage = TempData["SuccessMessage"] as string;
@@ -30,11 +31,17 @@ namespace CoreProject1.Controllers
             return View();
         }
 
+
+        [Route("Data-Teachers")]
         public IActionResult Teachers()
         {
+            string successMessage = TempData["SuccessMessage"] as string;
+            ViewBag.SuccessMessage = successMessage;
             return View();
         }
 
+
+        [Route("Library-Book-Management")]
         public IActionResult Notices()
         {
             return View();

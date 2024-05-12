@@ -1,7 +1,129 @@
-﻿
-@{
-    ViewData["Title"] = "Notices";
-}
+﻿    @model CoreProject1.Models.Student
 
-<h1>Notices</h1>
+
+
+<style>
+    .DataStudent {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .DataStudentC {
+        display: inline-flex;
+        justify-content: space-evenly;
+    }
+</style>
+
+<div style="background-color:#fffcc6; height:100vh;">
+    @if (ViewBag.SuccessMessage != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewBag.SuccessMessage
+        </div>
+    }
+    <br />
+    <div>
+        <h2 class="text-danger text-center"> Library Book Management </h2>
+    </div>
+    <br />
+    <div class="text-center d-flex justify-content-evenly align-content-center">
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: yellowgreen; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width:50%;">
+                <img src="~/Images/students.png" style="height:auto; width: 70px;">
+            </div>
+            <div><h4>Total Books: </h4></div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: chocolate; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width: 50%">
+                <img src="~/Images/girlstudent.png" style="height:auto; width: 70px;">
+            </div>
+            <div><h4>Hindi Books:  </h4></div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: coral; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width: 50%">
+                <img src="~/Images/boy.png" style="height:auto; width: 70px;">
+            </div>
+            <div><h4>English Books: </h4></div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color:orchid; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width: 50%">
+                <img src="~/Images/transgender.png" style="height:auto; width: 70px;">
+            </div>
+            <div><h4>Other's: @ViewBag.OtherCount</h4></div>
+        </div>
+    </div>
+    <br />
+
+    <br />
+    <div class="text-center d-flex justify-content-evenly align-content-center">
+
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color:darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images/View.png" style="height:auto; width: 70px;">
+            </div>
+            <div style="width:50%"><h3> @Html.ActionLink("View Available Books", "ViewBooks", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images//Add.png" style="height:auto; width: 70px;">
+            </div>
+            <div style="width:50%"><h3>@Html.ActionLink("Add Books", "AddBooks", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images/Update.png" style="height:auto; width: 70px;">
+            </div>
+            <div style="width:50%"><h3>@Html.ActionLink("Update Book Records", "UpdateBooks", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+        </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images/Delete.png" style="height:auto; width: 70px;">
+            </div>
+            <div style="width:50%"><h3>@Html.ActionLink("Delete Books", "DeleteBooks", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="text-center d-flex justify-content-evenly align-content-center">
+
+        <div class="text-center DataStudent">
+            <div>
+                <h3>Issue the Book</h3>
+                <div>
+                    <form method="post" asp-controller="LibraryRecord" asp-action="GetBookByClass">
+                        <div class="DataStudentC">
+                            <div class="form-group">
+                                @* <label class="control-label">Class :</label> *@
+                                <select asp-for="Class" class="form-control" required>
+                                    <option value="">Select Class</option>
+                                    @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                </select>
+                            </div>
+                            <div style="width: 50%;display:flex;justify-content:end ">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+</div>
+
+
 

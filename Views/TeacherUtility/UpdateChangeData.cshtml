@@ -1,4 +1,5 @@
-﻿@model CoreProject1.Models.Student
+﻿@model CoreProject1.Models.TeacherDetail
+
 @if (ViewBag.SuccessMessage != null)
 {
     <div class="alert alert-success" role="alert">
@@ -9,9 +10,9 @@
     <br />
     <div class="row justify-content-center">
         <div class="col-md-6" style="padding:23px;">
-            <h2 class="text-center text-capitalize">Add Students</h2>
+            <h2 class="text-center text-capitalize">Update Teacher</h2>
             <br />
-            <form method="post" asp-controller="StudentUtility" asp-action="CreateStudentData" enctype="multipart/form-data">
+            <form method="post" asp-controller="TeacherUtility" asp-action="UpdateTeacherData" enctype="multipart/form-data">
                 <div class="d-flex justify-content-evenly align-items-center">
                     <div style="width: 50%;">
                         <div class="form-group">
@@ -20,6 +21,13 @@
                         </div>
                     </div>
                     <div style="width: 50%; ">
+                        <div class="form-group">
+                            <input asp-for="Id" class="form-control" type="hidden" />
+                            <div class="form-group">
+                                <label class="control-label">Date Of Birth :</label>
+                                <input type="date" name="DateOfBirth" />
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-evenly align-items-center">
@@ -32,7 +40,7 @@
                             <label class="control-label">Class :</label>
                             <select asp-for="Class" class="form-control" required>
                                 <option value="">Select Class</option>
-                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
+                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.Degination)))
                                 {
                                     <option value="@item">@item</option>
                                 }
@@ -60,7 +68,7 @@
                             <label class="control-label">Gender :</label>
                             <select asp-for="Gender" class="form-control" required>
                                 <option value="">Select Gender</option>
-                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.GenderType)))
+                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.GenderTypes)))
                                 {
                                     <option value="@item">@item</option>
                                 }
@@ -80,6 +88,7 @@
                         </div>
                     </div>
                 </div>
+
                 <br />
                 <div class="d-flex justify-content-evenly align-items-center">
                     <div style="width: 50%;">

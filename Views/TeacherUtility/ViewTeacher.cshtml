@@ -1,0 +1,42 @@
+﻿@model List<CoreProject1.Models.TeacherDetail>
+<br />
+
+<div class="text-center" style="padding:10px">
+    <br />
+    <h2 class="text-danger"> View Teacher Record </h2>
+    <table id="tbJquerytable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th> ID </th>
+                <th> First Name </th>
+                <th> Last Name </th>
+                <th> Father's Name </th>
+                <th> Mother's Name </th>
+                <th> Class </th>
+                <th> Gender </th>
+                <th> Address </th>
+                <th> Remarks </th>
+                <th> Mobile </th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> @item.Id </td>
+                    <td> @item.FirstName</td>
+                    <td> @item.LastName </td>
+                    <td> @item.FatherName </td>
+                    <td> @item.MotherName </td>
+                    <td> @item.Class</td>
+                    <td> @item.Gender</td>
+                    <td> @item.Address</td>
+                    <td> @item.Remarks </td>
+                    <td> @item.Mobile</td>
+                    <td><a asp-action="EDoc" asp-route-Id="@item.Id">ID Card</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

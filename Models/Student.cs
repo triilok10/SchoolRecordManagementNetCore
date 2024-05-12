@@ -44,6 +44,9 @@ namespace CoreProject1.Models
         public string Filepath { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
+        public string Book1 { get; set; }
+
+        public string Book2 { get; set; }
     }
     public enum ClassName
     {

@@ -1,33 +1,71 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace CoreProject1.Models;
 
-public partial class TeacherDetail
+namespace CoreProject1.Models
 {
-    public int Id { get; set; }
+    public class TeacherDetail
+    {
+        public int Id { get; set; }
 
-    public string FirstName { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter your FirstName")]
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
-    public string? LastName { get; set; }
+        [Required(ErrorMessage = "Please Select your Class")]
+        public Degination Class { get; set; }
 
-    public string FathersName { get; set; } = null!;
+        [Required(ErrorMessage = "Please Select your Gender")]
+        public GenderTypes Gender { get; set; }
 
-    public string MotherName { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter your Address")]
+        public string Address { get; set; }
 
-    public string Address { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter your Father's Name")]
+        public string FatherName { get; set; }
 
-    public string Remarks { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter your Mother's Name")]
+        public string MotherName { get; set; }
 
-    public string Email { get; set; } = null!;
+        [Required(ErrorMessage = "Please Enter the Remarks")]
+        public string Remarks { get; set; }
 
-    public int Gender { get; set; }
+        [Required(ErrorMessage = "Please Enter the Email")]
+        public string Email { get; set; }
 
-    public int Class { get; set; }
+        [Required(ErrorMessage = "Please Enter the Mobile")]
+        public string Mobile { get; set; }
 
-    public string Filepath { get; set; } = null!;
+        [Required(ErrorMessage = "Please Select the Profile Photo")]
+        public string Filepath { get; set; }
+        public string DateOfBirth { get; set; }
 
-    public string Mobile { get; set; } = null!;
-
-    public DateOnly? DateOfBirth { get; set; }
+    }
+    public enum Degination
+    {
+        PTI,
+        TGTEnglish,
+        TGTBiology,
+        TGTPhysics,
+        TGTChemistry,
+        TGTMath,
+        TGTSocialScience,
+        TGTComputer,
+        TGTART,
+        TGTHindi,
+        PGTEnglish,
+        PGTBiology,
+        PGTPhysics,
+        PGTChemistry,
+        PGTMath,
+        PGTSocialScience,
+        PGTComputer,
+        PGTART,
+        PGTHindi
+    }
+    public enum GenderTypes
+    {
+        Male,
+        Female,
+        Other
+    }
 }
