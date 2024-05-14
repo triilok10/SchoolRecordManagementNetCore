@@ -67,8 +67,7 @@ namespace CoreProject1.Controllers
 
                         List<Student> students = JsonConvert.DeserializeObject<List<Student>>(responseBody);
 
-                        TempData["Students"] = students;
-                        return RedirectToAction("BookIssue");
+                        return View("BookIssue", students);
                     }
                     else
                     {

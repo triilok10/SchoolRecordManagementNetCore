@@ -1,4 +1,4 @@
-﻿@model CoreProject1.Models.Student
+﻿@model List<CoreProject1.Models.Student>
 
 <style>
     .DataStudent {
@@ -8,28 +8,36 @@
         padding: 25px;
     }
 
-    .DataStudentC{
+    .DataStudentC {
         display: inline-flex;
         justify-content: space-evenly;
     }
 </style>
+
 <div class="text-center DataStudent">
     <div>
         <h3>Issue the Book</h3>
         <div>
-            <form method="post" asp-controller="LibraryRecord" asp-action="GetBookByClass">
+            <form id="classForm" method="post" asp-controller="LibraryRecord" asp-action="GetBookByClass">
                 <div class="DataStudentC">
                     <div class="form-group">
-                        @* <label class="control-label">Class :</label> *@
-                        <select asp-for="Class" class="form-control" required>
-                            <option value="">Select Class</option>
-                            @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
-                            {
-                                <option value="@item">@item</option>
-                            }
+                        <select id="classSelect" class="form-control" name="Class" required>
+                            <option value="" selected disabled>Select Class</option>
+                            <option value="0">First</option>
+                            <option value="1">Second</option>
+                            <option value="2">Third</option>
+                            <option value="3">Fourth</option>
+                            <option value="4">Fifth</option>
+                            <option value="5">Sixth</option>
+                            <option value="6">Seventh</option>
+                            <option value="7">Eight</option>
+                            <option value="8">Nineth</option>
+                            <option value="9">Tenth</option>
+                            <option value="10">Eleventh</option>
+                            <option value="11">Twelth</option>
                         </select>
                     </div>
-                    <div style="width: 50%;display:flex;justify-content:end ">
+                    <div style="width: 50%; display: flex; justify-content: flex-end;">
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
@@ -38,5 +46,39 @@
             </form>
         </div>
     </div>
+</div>
 
+<div class="text-center" style="padding:10px">
+    <br />
+    <h2 class="text-danger"> Student Record to Issue the Book </h2>
+    @if (Model == null || Model.Count == 0)
+    {
+        <p>No data available</p>
+    }
+    else
+    {
+        <table id="tbJquerytable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th> ID </th>
+                    <th> First Name </th>
+                    <th> Father's Name </th>
+                    <th> Mother's Name </th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td> @item.Id </td>
+                        <td> @item.FirstName @item.LastName </td>
+                        <td> @item.FatherName </td>
+                        <td> @item.MotherName </td>
+                        <td><a asp-action="EDoc" asp-route-Id="@item.Id">Book Issue</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>

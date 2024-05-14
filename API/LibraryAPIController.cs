@@ -21,6 +21,7 @@ namespace CoreProject1.API
             try
             {
                 int classValue = (int)Enum.Parse(typeof(ClassName), className);
+
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
@@ -37,8 +38,10 @@ namespace CoreProject1.API
                                 var student = new Student
                                 {
                                     Id = Convert.ToInt32(reader["Id"]),
-                                    FirstName = reader["FirstName"].ToString()
-                                   
+                                    FirstName = reader["FirstName"].ToString(),
+                                    LastName = reader["LastName"].ToString(),
+                                    FatherName = reader["Fathername"].ToString(),
+                                    MotherName = reader["Mothername"].ToString()
                                 };
                                 students.Add(student);
                             }
@@ -49,7 +52,7 @@ namespace CoreProject1.API
             }
             catch (Exception ex)
             {
-                
+
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }

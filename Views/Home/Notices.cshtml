@@ -89,32 +89,11 @@
     <br />
     <div class="text-center d-flex justify-content-evenly align-content-center">
 
-        <div class="text-center DataStudent">
-            <div>
-                <h3>Issue the Book</h3>
-                <div>
-                    <form method="post" asp-controller="LibraryRecord" asp-action="GetBookByClass">
-                        <div class="DataStudentC">
-                            <div class="form-group">
-                                @* <label class="control-label">Class :</label> *@
-                                <select asp-for="Class" class="form-control" required>
-                                    <option value="">Select Class</option>
-                                    @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
-                                    {
-                                        <option value="@item">@item</option>
-                                    }
-                                </select>
-                            </div>
-                            <div style="width: 50%;display:flex;justify-content:end ">
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images/View.png" style="height:auto; width: 70px;">
             </div>
-
+            <div style="width:50%"><h3>@Html.ActionLink("Issue Book", "BookIssue", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
         </div>
 
     </div>
