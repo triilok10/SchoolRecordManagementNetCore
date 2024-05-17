@@ -66,14 +66,41 @@ namespace CoreProject1.API
             return Ok(ltrStudents);
         }
 
-        [HttpPost]
-        public IActionResult AddStudentAPI(Student pStudent)
+        //public IActionResult AddStudentAPI(Student pStudent)
+        [HttpGet]
+        public IActionResult AddStudentAPI(string FirstName = "", string LastName = "", string FatherName = "", string MotherName = "", string Mobile = "", 
+            string Gender = "", string Email = "", string Remarks = "", string Class = "", string DateOfBirth = "", string Filepath = "", string Address = "")
+
         {
             string Message = "";
             bool res = false;
+
+            Student pstudent =  new Student();
+            int GenderValue = (int)Enum.Parse(typeof(GenderType), Gender);
+            int ClassValue = (int)Enum.Parse(typeof(ClassName), Class);
+            DateTime DOBValue;
+            if (!DateTime.TryParse(DateOfBirth, out DOBValue))
+            {
+                Message = "Please Select the DateOfBirth in Correct Format";
+            }
+
+
+            pstudent.FirstName = FirstName;
+            pstudent.LastName = LastName;
+            pstudent.FatherName = FatherName;
+            pstudent.MotherName = MotherName;
+            pstudent.Mobile = Mobile;
+            pstudent.Gender = (GenderType)GenderValue;
+            pstudent.Email = Email;
+            pstudent.Remarks = Remarks;
+            pstudent.Class = (ClassName)ClassValue;
+            pstudent.Filepath = Filepath;
+            pstudent.Address = Address;
+            pstudent.DateOfBirth = DOBValue;
+
             try
             {
-                if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
+                if (FirstName != "" && FatherName != "" && Email != "")
                 {
                     using (SqlConnection con = new SqlConnection(_connectionString))
                     {
@@ -81,18 +108,18 @@ namespace CoreProject1.API
                         using (SqlCommand cmd = new SqlCommand("AddStudentMain", con))
                         {
                             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@Filepath", string.IsNullOrEmpty(pStudent.Filepath) ? (object)DBNull.Value : pStudent.Filepath);
-                            cmd.Parameters.AddWithValue("@FirstName", pStudent.FirstName);
-                            cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pStudent.LastName) ? (object)DBNull.Value : pStudent.LastName);
-                            cmd.Parameters.AddWithValue("@Class", pStudent.Class);
-                            cmd.Parameters.AddWithValue("@Gender", pStudent.Gender);
-                            cmd.Parameters.AddWithValue("@FatherName", pStudent.FatherName);
-                            cmd.Parameters.AddWithValue("@MotherName", pStudent.MotherName);
-                            cmd.Parameters.AddWithValue("@Address", pStudent.Address);
-                            cmd.Parameters.AddWithValue("@Remark", pStudent.Remarks);
-                            cmd.Parameters.AddWithValue("@Email", pStudent.Email);
-                            cmd.Parameters.AddWithValue("@Mobile", pStudent.Mobile);
-
+                            cmd.Parameters.AddWithValue("@Filepath", string.IsNullOrEmpty(pstudent.Filepath) ? (object)DBNull.Value : pstudent.Filepath);
+                            cmd.Parameters.AddWithValue("@FirstName", pstudent.FirstName);
+                            cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pstudent.LastName) ? (object)DBNull.Value : pstudent.LastName);
+                            cmd.Parameters.AddWithValue("@Class", pstudent.Class);
+                            cmd.Parameters.AddWithValue("@Gender", pstudent.Gender);
+                            cmd.Parameters.AddWithValue("@FatherName", pstudent.FatherName);
+                            cmd.Parameters.AddWithValue("@MotherName", pstudent.MotherName);
+                            cmd.Parameters.AddWithValue("@Address", pstudent.MotherName);
+                            cmd.Parameters.AddWithValue("@Remark", pstudent.Remarks);
+                            cmd.Parameters.AddWithValue("@Email", pstudent.Email);
+                            cmd.Parameters.AddWithValue("@Mobile", pstudent.Mobile);
+                            cmd.Parameters.AddWithValue("@DateOfBirth", pstudent.DateOfBirth);
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -186,12 +213,12 @@ namespace CoreProject1.API
             string Message = "";
             try
             {
-             
+
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     SqlCommand cmd = new SqlCommand("UpdateStudentData", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    
+
                     cmd.Parameters.AddWithValue("@Id", std.Id);
                     cmd.Parameters.AddWithValue("@Filepath", std.Filepath);
                     cmd.Parameters.AddWithValue("@FirstName", std.FirstName);

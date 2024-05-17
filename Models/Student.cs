@@ -42,7 +42,7 @@ namespace CoreProject1.Models
 
         [Required(ErrorMessage = "Please Select the Profile Photo")]
         public string Filepath { get; set; }
-        public DateTime? DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public string Book1 { get; set; }
 

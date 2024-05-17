@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
+using System.Web;
 
 namespace CoreProject1.Controllers
 {
@@ -50,11 +51,15 @@ namespace CoreProject1.Controllers
         [Route("Add-NewStudent-Record")]
         public async Task<IActionResult> CreateStudentData(Student pStudent, IFormFile File)
         {
+            bool res = false;
+            string successMessage = "";
             try
             {
+
+
                 if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
                 {
-               
+
                     if (File != null && File.Length > 0)
                     {
                         string FileName = Path.GetFileName(File.FileName);
@@ -67,15 +72,7 @@ namespace CoreProject1.Controllers
                         pStudent.Filepath = FileName;
                     }
 
-                    if (string.IsNullOrWhiteSpace(pStudent.Filepath))
-                    {
-                        pStudent.Filepath = "null.jpg";
-                    }
-                    if (string.IsNullOrEmpty(pStudent.LastName))
-                    {
-                        pStudent.LastName = "";
-                    }
-                    if(pStudent.FirstName == pStudent.FatherName)
+                    if (pStudent.FirstName == pStudent.FatherName)
                     {
                         ViewBag.SuccessMessage = "Student Name and Father's Name not be Same! , Please fill the correct data.";
                         return View("AddStudent");
@@ -85,24 +82,30 @@ namespace CoreProject1.Controllers
                         ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
                         return View("AddStudent");
                     }
+
+                 
+
                     string Apiurl = _baseUrl + "api/DataAPI/AddStudentAPI";
+                    string FullUrl = $"{Apiurl}?FirstName={(string.IsNullOrWhiteSpace(pStudent.FirstName) ? "" : HttpUtility.UrlEncode(pStudent.FirstName))}" +
+                       $"&LastName={(string.IsNullOrWhiteSpace(pStudent.LastName) ? "" : HttpUtility.UrlEncode(pStudent.LastName))}" +
+                       $"&FatherName={(string.IsNullOrWhiteSpace(pStudent.FatherName) ? "" : HttpUtility.UrlEncode(pStudent.FatherName))}" +
+                       $"&MotherName={(string.IsNullOrWhiteSpace(pStudent.MotherName) ? "" : HttpUtility.UrlEncode(pStudent.MotherName))}" +
+                       $"&Mobile={(string.IsNullOrWhiteSpace(pStudent.Mobile) ? "" : HttpUtility.UrlEncode(pStudent.Mobile))}" +
+                       $"&Gender={(string.IsNullOrWhiteSpace(pStudent.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Gender.ToString()))}" +
+                       $"&Email={(string.IsNullOrWhiteSpace(pStudent.Email) ? "" : HttpUtility.UrlEncode(pStudent.Email))}" +
+                       $"&Remarks={(string.IsNullOrWhiteSpace(pStudent.Remarks) ? "" : HttpUtility.UrlEncode(pStudent.Remarks))}" +
+                       $"&Class={(string.IsNullOrWhiteSpace(pStudent.Class.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Class.ToString()))}" +
+                       $"&DateOfBirth={(string.IsNullOrWhiteSpace(pStudent.DateOfBirth.ToString()) ? "DD/MM/YYYY" : HttpUtility.UrlEncode(pStudent.DateOfBirth.ToString()))}" +
+                       $"&Filepath={(string.IsNullOrWhiteSpace(pStudent.Filepath) ? "Null.jpg" : HttpUtility.UrlEncode(pStudent.Filepath))}" +
+                       $"&Address={(string.IsNullOrWhiteSpace(pStudent.Address) ? "" : HttpUtility.UrlEncode(pStudent.Address))}";
 
-
-                    string jsonStudent = JsonConvert.SerializeObject(pStudent);
-
-
-                    var content = new StringContent(jsonStudent, Encoding.UTF8, "application/json");
-
-
-                    HttpResponseMessage response = await _httpClient.PostAsync(Apiurl, content);
-
+                    HttpResponseMessage response = await _httpClient.GetAsync(FullUrl);
 
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
-                        string successMessage = responseObject.message;
-
+                        successMessage = responseObject.message;
 
                         ViewBag.SuccessMessage = successMessage;
                         return View("AddStudent");
@@ -187,13 +190,13 @@ namespace CoreProject1.Controllers
         }
 
         [HttpPost]
-        public async  Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
+        public async Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
         {
             try
             {
                 if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
                 {
-                   
+
                     if (File != null && File.Length > 0)
                     {
                         string FileName = Path.GetFileName(File.FileName);
@@ -217,8 +220,8 @@ namespace CoreProject1.Controllers
                     {
                         ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
                         return View("UpdateChangeData");
-                    } 
-                    if ( pStudent.Mobile.Length != 10)
+                    }
+                    if (pStudent.Mobile.Length != 10)
                     {
                         ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
                         return View("UpdateChangeData");
