@@ -83,7 +83,30 @@ namespace CoreProject1.Controllers
         }
 
         [Route("Update-Books")]
-        public IActionResult UpdateBooks()
+        public async Task<IActionResult> UpdateBooks()
+        {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    return View(objBooks);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+        [Route("Get-Book-Data-by-Id")]
+        public IActionResult GetBookDatabyId(int Id)
         {
             return View();
         }

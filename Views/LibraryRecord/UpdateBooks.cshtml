@@ -1,7 +1,30 @@
-﻿
-@{
-    ViewData["Title"] = "UpdateBooks";
-}
+﻿@model List<CoreProject1.Models.Student>
+<br />
 
-<h1>UpdateBooks</h1>
-
+<div class="text-center" style="padding:10px">
+    <br />
+    <h2 class="text-danger"> View Book Record From Library </h2>
+    <table id="tbJquerytable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th> ID </th>
+                <th> Book Name </th>
+                <th> Book Author Name </th>
+                <th> Book Medium </th>
+                <th> Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> @item.Id </td>
+                    <td> @item.BookName</td>
+                    <td> @item.BookAuthorName </td>
+                    <td> @item.BookMediumLanguage </td>
+                    <td><a asp-controller="LibraryRecord" asp-action="GetBookDatabyId" asp-route-Id="@item.Id">Update Record</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
