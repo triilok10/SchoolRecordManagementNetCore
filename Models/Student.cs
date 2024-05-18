@@ -44,9 +44,20 @@ namespace CoreProject1.Models
         public string Filepath { get; set; }
         public DateTime DateOfBirth { get; set; }
 
-        public string Book1 { get; set; }
+        public string BookName { get; set; }
 
-        public string Book2 { get; set; }
+        public string BookAuthorName { get; set; }
+        public BookMedium BookMediumLanguage { get; set; }
+    }
+
+    public enum BookMedium
+    {
+        Hindi, 
+        English, 
+        Punjabi,
+        Spanish,
+        Italian,
+        Other
     }
     public enum ClassName
     {

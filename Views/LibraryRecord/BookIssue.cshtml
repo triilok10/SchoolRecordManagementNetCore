@@ -75,10 +75,21 @@
                         <td> @item.FirstName @item.LastName </td>
                         <td> @item.FatherName </td>
                         <td> @item.MotherName </td>
-                        <td><a asp-action="EDoc" asp-route-Id="@item.Id">Book Issue</a></td>
+                        <td><a asp-controller="LibraryRecord" asp-action="BookIssueStd" asp-route-Id="@item.Id">Book Issue</a></td>
                     </tr>
                 }
             </tbody>
         </table>
     }
 </div>
+
+<script type="text/javascript">
+    function Js_IssueBook()
+    {
+
+
+    }
+
+
+
+</script>

@@ -1,6 +1,7 @@
 ﻿using CoreProject1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Web;
 
 namespace CoreProject1.Controllers
 {
@@ -19,15 +20,65 @@ namespace CoreProject1.Controllers
 
         }
 
+        [HttpGet]
         [Route("View-Books")]
-        public IActionResult ViewBooks()
+        public async Task<IActionResult> ViewBooks()
         {
-            return View();
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    return View(objBooks);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
         }
 
         [Route("Add-Books")]
         public IActionResult AddBooks()
         {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddBookInfo(Student objBooks)
+        {
+            string successMessage = "";
+            try
+            {
+                string ApiUrl = $"{_baseUrl}api/LibraryAPI/AddNewBooks";
+                string Fullurl = $"{ApiUrl}?BookName={(string.IsNullOrWhiteSpace(objBooks.BookName) ? "" : HttpUtility.UrlEncode(objBooks.BookName))}" +
+                    $"&BookAuthorName={(string.IsNullOrWhiteSpace(objBooks.BookAuthorName) ? "" : HttpUtility.UrlEncode(objBooks.BookAuthorName))}" +
+                    $"&BookMediumLanguage={(string.IsNullOrWhiteSpace(objBooks.BookMediumLanguage.ToString()) ? "" : HttpUtility.UrlEncode(objBooks.BookMediumLanguage.ToString()))}";
+
+
+                HttpResponseMessage response = await _httpClient.GetAsync(Fullurl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responseBody = await response.Content.ReadAsStringAsync();
+                    var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
+                    successMessage = responseObject.message;
+
+                    ViewBag.SuccessMessage = successMessage;
+                    return View("AddBooks");
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             return View();
         }
 
@@ -50,7 +101,33 @@ namespace CoreProject1.Controllers
         }
 
 
-        [HttpPost] 
+        [Route("Book-Issue")]
+        public async Task<IActionResult> BookIssueStd(int Id)
+        {
+            try
+            {
+                string apiUrl = $"{_baseUrl}api/DataAPI/UpdateChangeDataAPI/{Id}";
+                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+
+                    Student student = JsonConvert.DeserializeObject<Student>(responsebody);
+                    return View(student);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
         [Route("Class-Student")]
         public async Task<IActionResult> GetBookByClass(string Class)
         {
@@ -81,7 +158,7 @@ namespace CoreProject1.Controllers
             }
             catch (Exception ex)
             {
-               
+
                 return View("Error");
             }
         }

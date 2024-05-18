@@ -1,5 +1,6 @@
 ﻿using CoreProject1.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System.Text;
 using System.Web;
@@ -71,7 +72,11 @@ namespace CoreProject1.Controllers
 
                         pStudent.Filepath = FileName;
                     }
-
+                    if (pStudent.DateOfBirth < new DateTime(1998, 1, 1))
+                    {
+                        ViewBag.SuccessMessage = "Please Enter the Correct DOB.";
+                        return View("UpdateChangeData");
+                    }
                     if (pStudent.FirstName == pStudent.FatherName)
                     {
                         ViewBag.SuccessMessage = "Student Name and Father's Name not be Same! , Please fill the correct data.";
@@ -83,7 +88,7 @@ namespace CoreProject1.Controllers
                         return View("AddStudent");
                     }
 
-                 
+
 
                     string Apiurl = _baseUrl + "api/DataAPI/AddStudentAPI";
                     string FullUrl = $"{Apiurl}?FirstName={(string.IsNullOrWhiteSpace(pStudent.FirstName) ? "" : HttpUtility.UrlEncode(pStudent.FirstName))}" +
@@ -189,9 +194,12 @@ namespace CoreProject1.Controllers
             }
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
         {
+
             try
             {
                 if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
@@ -212,9 +220,10 @@ namespace CoreProject1.Controllers
                     {
                         pStudent.Filepath = "null.jpg";
                     }
-                    if (string.IsNullOrEmpty(pStudent.LastName))
+                    if(pStudent.DateOfBirth < new DateTime(1998,1,1))
                     {
-                        pStudent.LastName = "";
+                        ViewBag.SuccessMessage = "Please Enter the Correct DOB.";
+                        return View("UpdateChangeData");
                     }
                     if (pStudent.FirstName == pStudent.FatherName)
                     {
@@ -229,14 +238,21 @@ namespace CoreProject1.Controllers
                     string Apiurl = _baseUrl + "api/DataAPI/UpdateStudentDataAPI";
 
 
-                    string jsonStudent = JsonConvert.SerializeObject(pStudent);
+                    string FullUrl = $"{Apiurl}?FirstName={(string.IsNullOrWhiteSpace(pStudent.FirstName) ? "" : HttpUtility.UrlEncode(pStudent.FirstName))}" +
+                        $"&Id={(string.IsNullOrWhiteSpace(pStudent.Id.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Id.ToString()))}" +
+                        $"&LastName={(string.IsNullOrWhiteSpace(pStudent.LastName) ? "" : HttpUtility.UrlEncode(pStudent.LastName))}" +
+                        $"&FatherName={(string.IsNullOrWhiteSpace(pStudent.FatherName) ? "" : HttpUtility.UrlEncode(pStudent.FatherName))}" +
+                        $"&MotherName={(string.IsNullOrWhiteSpace(pStudent.MotherName) ? "" : HttpUtility.UrlEncode(pStudent.MotherName))}" +
+                        $"&Mobile={(string.IsNullOrWhiteSpace(pStudent.Mobile) ? "" : HttpUtility.UrlEncode(pStudent.Mobile))}" +
+                        $"&Gender={(string.IsNullOrWhiteSpace(pStudent.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Gender.ToString()))}" +
+                        $"&Email={(string.IsNullOrWhiteSpace(pStudent.Email) ? "" : HttpUtility.UrlEncode(pStudent.Email))}" +
+                        $"&Remarks={(string.IsNullOrWhiteSpace(pStudent.Remarks) ? "" : HttpUtility.UrlEncode(pStudent.Remarks))}" +
+                        $"&Class={(string.IsNullOrWhiteSpace(pStudent.Class.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Class.ToString()))}" +
+                        $"&DateOfBirth={(string.IsNullOrWhiteSpace(pStudent.DateOfBirth.ToString()) ? "DD/MM/YYYY" : HttpUtility.UrlEncode(pStudent.DateOfBirth.ToString()))}" +
+                        $"&Filepath={(string.IsNullOrWhiteSpace(pStudent.Filepath) ? "Null.jpg" : HttpUtility.UrlEncode(pStudent.Filepath))}" +
+                        $"&Address={(string.IsNullOrWhiteSpace(pStudent.Address) ? "" : HttpUtility.UrlEncode(pStudent.Address))}";
 
-
-                    var content = new StringContent(jsonStudent, Encoding.UTF8, "application/json");
-
-
-                    HttpResponseMessage response = await _httpClient.PostAsync(Apiurl, content);
-
+                    HttpResponseMessage response = await _httpClient.GetAsync(FullUrl);
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -246,7 +262,7 @@ namespace CoreProject1.Controllers
 
 
                         ViewBag.SuccessMessage = successMessage;
-                        return View("AddStudent");
+                        return View("UpdateChangeData");
                     }
                     else
                     {

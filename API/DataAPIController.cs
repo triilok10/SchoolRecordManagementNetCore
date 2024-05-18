@@ -66,16 +66,15 @@ namespace CoreProject1.API
             return Ok(ltrStudents);
         }
 
-        //public IActionResult AddStudentAPI(Student pStudent)
         [HttpGet]
-        public IActionResult AddStudentAPI(string FirstName = "", string LastName = "", string FatherName = "", string MotherName = "", string Mobile = "", 
+        public IActionResult AddStudentAPI(string FirstName = "", string LastName = "", string FatherName = "", string MotherName = "", string Mobile = "",
             string Gender = "", string Email = "", string Remarks = "", string Class = "", string DateOfBirth = "", string Filepath = "", string Address = "")
 
         {
             string Message = "";
             bool res = false;
 
-            Student pstudent =  new Student();
+            Student pstudent = new Student();
             int GenderValue = (int)Enum.Parse(typeof(GenderType), Gender);
             int ClassValue = (int)Enum.Parse(typeof(ClassName), Class);
             DateTime DOBValue;
@@ -165,7 +164,7 @@ namespace CoreProject1.API
         {
             try
             {
-                Student objStudent = null;
+                Student objStudent = new Student();
                 using (var con = new SqlConnection(_connectionString))
                 {
                     con.Open();
@@ -177,20 +176,22 @@ namespace CoreProject1.API
                     {
                         if (rdr.Read())
                         {
-                            objStudent = new Student
-                            {
-                                Id = Convert.ToInt32(rdr["Id"]),
-                                FirstName = Convert.ToString(rdr["FirstName"]),
-                                LastName = Convert.ToString(rdr["LastName"]),
-                                FatherName = Convert.ToString(rdr["FatherName"]),
-                                MotherName = Convert.ToString(rdr["MotherName"]),
-                                Gender = (GenderType)Enum.Parse(typeof(GenderType), Convert.ToString(rdr["Gender"])),
-                                Address = Convert.ToString(rdr["Address"]),
-                                Class = (ClassName)Enum.Parse(typeof(ClassName), Convert.ToString(rdr["Class"])),
-                                Remarks = Convert.ToString(rdr["Remark"]),
-                                Email = Convert.ToString(rdr["Email"]),
-                                Mobile = Convert.ToString(rdr["Mobile"])
-                            };
+
+
+                            Id = Convert.ToInt32(rdr["Id"]);
+                            objStudent.FirstName = Convert.ToString(rdr["FirstName"]);
+                            objStudent.LastName = Convert.ToString(rdr["LastName"]);
+                            objStudent.FatherName = Convert.ToString(rdr["FatherName"]);
+                            objStudent.MotherName = Convert.ToString(rdr["MotherName"]);
+                            objStudent.Gender = (GenderType)Enum.Parse(typeof(GenderType), Convert.ToString(rdr["Gender"]));
+                            objStudent.Address = Convert.ToString(rdr["Address"]);
+                            objStudent.Class = (ClassName)Enum.Parse(typeof(ClassName), Convert.ToString(rdr["Class"]));
+                            objStudent.Remarks = Convert.ToString(rdr["Remark"]);
+                            objStudent.Email = Convert.ToString(rdr["Email"]);
+                            objStudent.Mobile = Convert.ToString(rdr["Mobile"]);
+                            //objStudent.DateOfBirth = Convert.ToDateTime(rdr["DateOfBirth"]);
+                            objStudent.Filepath = Convert.ToString(rdr["Filepath"]);
+
                         }
                     }
 
@@ -207,10 +208,35 @@ namespace CoreProject1.API
             }
         }
 
-        [HttpPost]
-        public IActionResult UpdateStudentDataAPI(Student std)
+        [HttpGet]
+        public IActionResult UpdateStudentDataAPI(int Id, string FirstName = "", string LastName = "", string FatherName = "", string MotherName = "", string Mobile = "",
+            string Gender = "", string Email = "", string Remarks = "", string Class = "", string DateOfBirth = "", string Filepath = "", string Address = "")
         {
             string Message = "";
+            bool res = false;
+
+            Student std = new Student();
+            int GenderValue = (int)Enum.Parse(typeof(GenderType), Gender);
+            int ClassValue = (int)Enum.Parse(typeof(ClassName), Class);
+            DateTime DOBValue;
+            if (!DateTime.TryParse(DateOfBirth, out DOBValue))
+            {
+                Message = "Please Select the DateOfBirth in Correct Format";
+            }
+
+            std.Id = Id;
+            std.FirstName = FirstName;
+            std.LastName = LastName;
+            std.FatherName = FatherName;
+            std.MotherName = MotherName;
+            std.Mobile = Mobile;
+            std.Gender = (GenderType)GenderValue;
+            std.Email = Email;
+            std.Remarks = Remarks;
+            std.Class = (ClassName)ClassValue;
+            std.Filepath = Filepath;
+            std.Address = Address;
+            std.DateOfBirth = DOBValue;
             try
             {
 
@@ -231,6 +257,7 @@ namespace CoreProject1.API
                     cmd.Parameters.AddWithValue("@Remark", std.Remarks);
                     cmd.Parameters.AddWithValue("@Email", std.Email);
                     cmd.Parameters.AddWithValue("@Mobile", std.Mobile);
+                    cmd.Parameters.AddWithValue("@DateOfBirth", std.DateOfBirth);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
