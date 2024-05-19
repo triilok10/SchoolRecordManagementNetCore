@@ -41,7 +41,7 @@ namespace CoreProject1.API
                                     FirstName = reader["FirstName"].ToString(),
                                     LastName = reader["LastName"].ToString(),
                                     FatherName = reader["Fathername"].ToString(),
-                                    MotherName = reader["Mothername"].ToString()
+                                    MotherName = reader["Mothername"].ToString(),
                                 };
                                 students.Add(student);
                             }
@@ -52,7 +52,6 @@ namespace CoreProject1.API
             }
             catch (Exception ex)
             {
-
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }

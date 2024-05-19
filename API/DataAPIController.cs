@@ -176,8 +176,6 @@ namespace CoreProject1.API
                     {
                         if (rdr.Read())
                         {
-
-
                             Id = Convert.ToInt32(rdr["Id"]);
                             objStudent.FirstName = Convert.ToString(rdr["FirstName"]);
                             objStudent.LastName = Convert.ToString(rdr["LastName"]);
