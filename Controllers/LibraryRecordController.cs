@@ -125,19 +125,17 @@ namespace CoreProject1.Controllers
 
 
         [Route("Book-Issue")]
-        public async Task<IActionResult> BookIssueStd(int Id)
+        public async Task<IActionResult> BookIssueStd()
         {
             try
             {
-                string apiUrl = $"{_baseUrl}api/DataAPI/UpdateChangeDataAPI/{Id}";
-                HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responsebody = await response.Content.ReadAsStringAsync();
-
-                    Student student = JsonConvert.DeserializeObject<Student>(responsebody);
-                    return View(student);
+                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    return View(objBooks);
                 }
                 else
                 {
@@ -184,6 +182,12 @@ namespace CoreProject1.Controllers
 
                 return View("Error");
             }
+        }
+
+        [HttpGet("{Id}")]
+        public IActionResult SelectBookByStd(int Id)
+        {
+            return View();
         }
 
     }
