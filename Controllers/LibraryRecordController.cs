@@ -124,17 +124,23 @@ namespace CoreProject1.Controllers
         }
 
 
+        [HttpPost]
         [Route("Book-Issue")]
-        public async Task<IActionResult> BookIssueStd()
+        public async Task<IActionResult> BookIssueStd(int StudentId)
         {
             try
             {
+                int HdnStudentId = StudentId;
                 HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
 
                 if (response.IsSuccessStatusCode)
                 {
                     string responsebody = await response.Content.ReadAsStringAsync();
                     List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    foreach (var student in objBooks)
+                    {
+                        student.HdnStudentId = HdnStudentId;
+                    }
                     return View(objBooks);
                 }
                 else
@@ -184,10 +190,22 @@ namespace CoreProject1.Controllers
             }
         }
 
-        [HttpGet("{Id}")]
-        public IActionResult SelectBookByStd(int Id)
+        [HttpPost]
+        public IActionResult SelectBookByStd(int BookId, int HdnStudentId)
         {
-            return View();
+            string Message = "";
+            try
+            {
+                if(BookId == 0)
+                {
+                    Message = "Please Select the Book"; 
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Ok();
         }
 
     }

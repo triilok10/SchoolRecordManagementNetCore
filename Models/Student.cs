@@ -47,6 +47,7 @@ namespace CoreProject1.Models
         public string BookName { get; set; }
 
         public string BookAuthorName { get; set; }
+        public int HdnStudentId { get; set; }
         public BookMedium BookMediumLanguage { get; set; }
     }
 
