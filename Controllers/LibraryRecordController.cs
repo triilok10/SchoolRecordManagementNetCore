@@ -193,13 +193,11 @@ namespace CoreProject1.Controllers
         [HttpPost]
         public IActionResult SelectBookByStd(int BookId, int HdnStudentId)
         {
-            string Message = "";
             try
             {
-                if(BookId == 0)
-                {
-                    Message = "Please Select the Book"; 
-                }
+                string apiurl = $"{_baseUrl}api/LibraryAPI/GetClassRecord/";
+                string fullurl = $"{apiurl}?BookId={(string.IsNullOrWhiteSpace(BookId.ToString()) ? "" : HttpUtility.UrlEncode(BookId.ToString()))}" +
+                $"&HdnStudentId={(string.IsNullOrWhiteSpace(HdnStudentId.ToString()) ? "" : HttpUtility.UrlEncode(HdnStudentId.ToString()))}";
             }
             catch (Exception ex)
             {
