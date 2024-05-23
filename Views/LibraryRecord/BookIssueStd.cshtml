@@ -36,6 +36,10 @@
                                     <form method="post" asp-controller="LibraryRecord" asp-action="SelectBookByStd">
                                         <input type="hidden" name="BookId" value="@item.Id" />
                                         <input type="hidden" name="HdnStudentId" value="@item.HdnStudentId" />
+                                        <input type="hidden" name="StudentFirstName" value="@item.FirstName" />
+                                        <input type="hidden" name="StudentLastName" value="@item.LastName" />
+                                        <input type="hidden" name="StudentClass" value="@item.Class" />
+                                        <input type="hidden" name="IssueDateTime" value="@DateTime.Now" />
                                         <button type="submit" class="btn btn-primary">Book Issue</button>
                                     </form>
                                 </td>

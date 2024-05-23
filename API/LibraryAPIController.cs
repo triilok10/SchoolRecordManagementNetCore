@@ -129,5 +129,36 @@ namespace CoreProject1.API
             }
             return Ok(objBooks);
         }
+
+        [HttpGet]
+        public IActionResult IssueBooktoStd(int BookId, int HdnStudentId, string FullName, string StudentClass, string IssueDateTime)
+        {
+            string Message = "";
+            bool res = false;
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+                    string query = $"Insert Into Library(Id, Book1IssuedTo,Book1IssueClass,Book1IssueDateTime,Book1IssueId) Values (@id,@Book1IssuedTo,@Book1IssueClass,@Book1IssueDateTime,@Book1IssueId)";
+                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    {
+                        cmd.Parameters.AddWithValue("@id", BookId);
+                        cmd.Parameters.AddWithValue("@Book1IssuedTo", FullName);
+                        cmd.Parameters.AddWithValue("@Book1IssueClass", StudentClass);
+                        cmd.Parameters.AddWithValue("@Book1IssueDateTime", IssueDateTime);
+                        cmd.Parameters.AddWithValue("@Book1IssueId", HdnStudentId);
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Message = ex.Message;
+            }
+
+
+            return Ok();
+        }
     }
 }

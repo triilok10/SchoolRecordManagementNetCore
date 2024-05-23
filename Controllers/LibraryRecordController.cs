@@ -1,6 +1,8 @@
 ﻿using CoreProject1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Security.Claims;
 using System.Web;
 
 namespace CoreProject1.Controllers
@@ -126,11 +128,15 @@ namespace CoreProject1.Controllers
 
         [HttpPost]
         [Route("Book-Issue")]
-        public async Task<IActionResult> BookIssueStd(int StudentId)
+        public async Task<IActionResult> BookIssueStd(int StudentId, string StudentFirstName, string StudentLastName)
         {
             try
             {
                 int HdnStudentId = StudentId;
+                string HdnFirstName = StudentFirstName;
+                string HdnLastName = StudentLastName;
+               
+
                 HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
 
                 if (response.IsSuccessStatusCode)
@@ -140,6 +146,8 @@ namespace CoreProject1.Controllers
                     foreach (var student in objBooks)
                     {
                         student.HdnStudentId = HdnStudentId;
+                        student.FirstName = HdnFirstName;
+                        student.LastName = HdnLastName;
                     }
                     return View(objBooks);
                 }
@@ -191,13 +199,34 @@ namespace CoreProject1.Controllers
         }
 
         [HttpPost]
-        public IActionResult SelectBookByStd(int BookId, int HdnStudentId)
+        public async Task<IActionResult> SelectBookByStd(int BookId, int HdnStudentId, string StudentFirstName, string StudentLastName, string StudentClass, string IssueDateTime)
         {
+            string Message = "";
             try
             {
-                string apiurl = $"{_baseUrl}api/LibraryAPI/GetClassRecord/";
-                string fullurl = $"{apiurl}?BookId={(string.IsNullOrWhiteSpace(BookId.ToString()) ? "" : HttpUtility.UrlEncode(BookId.ToString()))}" +
-                $"&HdnStudentId={(string.IsNullOrWhiteSpace(HdnStudentId.ToString()) ? "" : HttpUtility.UrlEncode(HdnStudentId.ToString()))}";
+                if (string.IsNullOrWhiteSpace(StudentFirstName) && string.IsNullOrWhiteSpace(StudentLastName))
+                {
+                    Message = "Student Name and FatherName must not be null!";
+                    return View("");
+                }
+                if (HdnStudentId != null && BookId != null)
+                {
+                    string FullName = StudentFirstName + " " + StudentLastName;
+
+                    string apiurl = $"{_baseUrl}api/LibraryAPI/IssueBooktoStd";
+                    string fullurl = $"{apiurl}?BookId={(string.IsNullOrWhiteSpace(BookId.ToString()) ? "" : HttpUtility.UrlEncode(BookId.ToString()))}" +
+                    $"&HdnStudentId={(string.IsNullOrWhiteSpace(HdnStudentId.ToString()) ? "" : HttpUtility.UrlEncode(HdnStudentId.ToString()))}" +
+                    $"&FullName={(string.IsNullOrWhiteSpace(FullName) ? "" : HttpUtility.UrlEncode(FullName))}"+
+                    $"&StudentClass={(string.IsNullOrWhiteSpace(StudentClass) ? "" : HttpUtility.UrlEncode(StudentClass))}"+
+                    $"&IssueDateTime={(string.IsNullOrWhiteSpace(IssueDateTime) ? "" : HttpUtility.UrlEncode(IssueDateTime))}"
+                    ;
+                    HttpResponseMessage response = await _httpClient.GetAsync(fullurl);
+                    if (response.IsSuccessStatusCode)
+                    {
+
+                    }
+                }
+
             }
             catch (Exception ex)
             {
