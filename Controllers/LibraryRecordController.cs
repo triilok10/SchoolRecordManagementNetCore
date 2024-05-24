@@ -199,7 +199,7 @@ namespace CoreProject1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SelectBookByStd(int BookId, int HdnStudentId, string StudentFirstName, string StudentLastName, string StudentClass, string IssueDateTime)
+        public async Task<IActionResult> SelectBookByStd(int BookId, int HdnStudentId, string StudentFirstName, string StudentLastName, string StudentClass, string IssueDateTime, string hdnBookAuthor, string hdnBookName)
         {
             string Message = "";
             try
@@ -216,9 +216,11 @@ namespace CoreProject1.Controllers
                     string apiurl = $"{_baseUrl}api/LibraryAPI/IssueBooktoStd";
                     string fullurl = $"{apiurl}?BookId={(string.IsNullOrWhiteSpace(BookId.ToString()) ? "" : HttpUtility.UrlEncode(BookId.ToString()))}" +
                     $"&HdnStudentId={(string.IsNullOrWhiteSpace(HdnStudentId.ToString()) ? "" : HttpUtility.UrlEncode(HdnStudentId.ToString()))}" +
-                    $"&FullName={(string.IsNullOrWhiteSpace(FullName) ? "" : HttpUtility.UrlEncode(FullName))}"+
-                    $"&StudentClass={(string.IsNullOrWhiteSpace(StudentClass) ? "" : HttpUtility.UrlEncode(StudentClass))}"+
-                    $"&IssueDateTime={(string.IsNullOrWhiteSpace(IssueDateTime) ? "" : HttpUtility.UrlEncode(IssueDateTime))}"
+                    $"&FullName={(string.IsNullOrWhiteSpace(FullName) ? "" : HttpUtility.UrlEncode(FullName))}" +
+                    $"&StudentClass={(string.IsNullOrWhiteSpace(StudentClass) ? "" : HttpUtility.UrlEncode(StudentClass))}" +
+                    $"&IssueDateTime={(string.IsNullOrWhiteSpace(IssueDateTime) ? "" : HttpUtility.UrlEncode(IssueDateTime))}" +
+                    $"&hdnBookAuthor={(string.IsNullOrWhiteSpace(hdnBookAuthor) ? "" : HttpUtility.UrlEncode(hdnBookAuthor))}" +
+                    $"&hdnBookName={(string.IsNullOrWhiteSpace(hdnBookName) ? "" : HttpUtility.UrlEncode(hdnBookName))}";
                     ;
                     HttpResponseMessage response = await _httpClient.GetAsync(fullurl);
                     if (response.IsSuccessStatusCode)

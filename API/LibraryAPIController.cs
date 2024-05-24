@@ -131,23 +131,51 @@ namespace CoreProject1.API
         }
 
         [HttpGet]
-        public IActionResult IssueBooktoStd(int BookId, int HdnStudentId, string FullName, string StudentClass, string IssueDateTime)
+        public IActionResult IssueBooktoStd(int BookId, int HdnStudentId, string FullName, string StudentClass, string IssueDateTime, string hdnBookAuthor, string hdnBookName)
         {
             string Message = "";
             bool res = false;
             try
             {
+                DateTime parsedDateTime;
+                if (!DateTime.TryParse(IssueDateTime, out parsedDateTime))
+                {
+                    Message = "Invalid Date Format";
+                }
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
-                    string query = $"Insert Into Library(Id, Book1IssuedTo,Book1IssueClass,Book1IssueDateTime,Book1IssueId) Values (@id,@Book1IssuedTo,@Book1IssueClass,@Book1IssueDateTime,@Book1IssueId)";
+
+                    //string query = "Update Library Set Book1IssuedTo= @Book1IssuedTo , Book1IssueClass = @Book1IssueClass ,Book1IssueDateTime = @Book1IssueDateTime,Book1IssueId = @Book1IssueId WHERE Id = @id";
+                    string query = @"UPDATE Library 
+                                     SET 
+                                        Book1IssuedTo = CASE WHEN Book1IssuedTo IS NULL THEN @Book1IssuedTo ELSE Book1IssuedTo END,
+                                        Book1IssueClass = CASE WHEN Book1IssueClass IS NULL THEN @Book1IssueClass ELSE Book1IssueClass END,
+                                        Book1IssueDateTime = CASE WHEN Book1IssueDateTime IS NULL THEN @Book1IssueDateTime ELSE Book1IssueDateTime END,
+                                        Book1IssueId = CASE WHEN Book1IssueId IS NULL THEN @Book1IssueId ELSE Book1IssueId END
+                                     WHERE Id = @Id AND (Book1IssuedTo IS NULL OR Book1IssueClass IS NULL OR Book1IssueDateTime IS NULL OR Book1IssueId IS NULL)";
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@id", BookId);
                         cmd.Parameters.AddWithValue("@Book1IssuedTo", FullName);
                         cmd.Parameters.AddWithValue("@Book1IssueClass", StudentClass);
-                        cmd.Parameters.AddWithValue("@Book1IssueDateTime", IssueDateTime);
+                        cmd.Parameters.AddWithValue("@Book1IssueDateTime", parsedDateTime);
                         cmd.Parameters.AddWithValue("@Book1IssueId", HdnStudentId);
+                        cmd.ExecuteNonQuery();
+                    }
+                    Message = "Book Issued Successfully to the Student";
+                    res = true;
+                    if (res == true)
+                    {
+                        string Studentquery = "Update Student Set Book1= @Book1 , BAuthor1 = @BAuthor1 WHERE Id = @id";
+                        using (SqlCommand cmd = new SqlCommand(Studentquery, connection))
+                        {
+                            cmd.Parameters.AddWithValue("@Id", HdnStudentId);
+                            cmd.Parameters.AddWithValue("@Book1", hdnBookName);
+                            cmd.Parameters.AddWithValue("@BAuthor1", hdnBookAuthor);
+                            cmd.ExecuteNonQuery();
+                            Message = "Book Inseration Update in Student Record";
+                        }
                     }
                 }
 
