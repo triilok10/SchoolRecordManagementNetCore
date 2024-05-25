@@ -42,7 +42,7 @@ namespace CoreProject1.Controllers
 
 
         [Route("Library-Book-Management")]
-        public IActionResult Notices()
+        public IActionResult LibraryBookManagement()
         {
             return View();
         }

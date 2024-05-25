@@ -246,5 +246,20 @@ namespace CoreProject1.Controllers
             return Ok();
         }
 
+
+
+        [HttpGet]
+        [Route("IssuedBook")]
+        public IActionResult IssuedBook()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("SubmitBook")]
+        public IActionResult SubmitBook()
+        {
+            return View();
+        }
     }
 }

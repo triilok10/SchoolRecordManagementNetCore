@@ -16,7 +16,7 @@
     }
 </style>
 
-<div style="background-color:#fffcc6; height:100vh;">
+<div>
     @if (ViewBag.SuccessMessage != null)
     {
         <div class="alert alert-success" role="alert">
@@ -93,7 +93,21 @@
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
                 <img src="~/Images/View.png" style="height:auto; width: 70px;">
             </div>
-            <div style="width:50%"><h3>@Html.ActionLink("Issue Book", "BookIssue", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+            <div style="width:50%"><h3>@Html.ActionLink("Issue New Book", "BookIssue", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+        </div>
+
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images/View.png" style="height:auto; width: 70px;">
+            </div>
+            <div style="width:50%"><h3>@Html.ActionLink("Issued Book", "IssuedBook", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
+        </div>
+
+        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: darkgray; border-radius: 10px;">
+            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
+                <img src="~/Images/View.png" style="height:auto; width: 70px;">
+            </div>
+            <div style="width:50%"><h3>@Html.ActionLink("Submit Book", "SubmitBook", "LibraryRecord", null, new { @class = "text-dark text-decoration-none" })</h3></div>
         </div>
 
     </div>

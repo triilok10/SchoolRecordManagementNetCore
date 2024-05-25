@@ -32,7 +32,7 @@
                             <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Teachers">Teachers</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Notices">Library</a>
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="LibraryBookManagement">Library</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Attendance">Attendance</a>
@@ -54,7 +54,6 @@
                 @RenderBody()
                 <!-- Scripts section -->
                 @RenderSection("Scripts", required: false)
-                <hr />
                 <footer class="text-center">
                     <p>&copy; @DateTime.Now.Year - Developed by Trilok Chand Swami</p>
                 </footer>
