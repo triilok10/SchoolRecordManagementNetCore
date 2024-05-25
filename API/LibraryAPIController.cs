@@ -145,15 +145,41 @@ namespace CoreProject1.API
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
+                    string query = @"
+    DECLARE @BookAlreadyIssued INT;
 
-                    //string query = "Update Library Set Book1IssuedTo= @Book1IssuedTo , Book1IssueClass = @Book1IssueClass ,Book1IssueDateTime = @Book1IssueDateTime,Book1IssueId = @Book1IssueId WHERE Id = @id";
-                    string query = @"UPDATE Library 
-                                     SET 
-                                        Book1IssuedTo = CASE WHEN Book1IssuedTo IS NULL THEN @Book1IssuedTo ELSE Book1IssuedTo END,
-                                        Book1IssueClass = CASE WHEN Book1IssueClass IS NULL THEN @Book1IssueClass ELSE Book1IssueClass END,
-                                        Book1IssueDateTime = CASE WHEN Book1IssueDateTime IS NULL THEN @Book1IssueDateTime ELSE Book1IssueDateTime END,
-                                        Book1IssueId = CASE WHEN Book1IssueId IS NULL THEN @Book1IssueId ELSE Book1IssueId END
-                                     WHERE Id = @Id AND (Book1IssuedTo IS NULL OR Book1IssueClass IS NULL OR Book1IssueDateTime IS NULL OR Book1IssueId IS NULL)";
+    
+    SELECT @BookAlreadyIssued = COUNT(*)
+    FROM Library
+    WHERE Id = @Id
+        AND (
+            Book1IssuedTo IS NOT NULL 
+            OR Book1IssueClass IS NOT NULL 
+            OR Book1IssueDateTime IS NOT NULL 
+            OR Book1IssueId IS NOT NULL
+        );
+    IF @BookAlreadyIssued > 0
+    BEGIN
+        THROW 51000, 'This book is already issued to someone else.', 1;
+    END
+    ELSE
+    BEGIN
+        UPDATE Library 
+        SET 
+            Book1IssuedTo = @Book1IssuedTo,
+            Book1IssueClass = @Book1IssueClass,
+            Book1IssueDateTime = @Book1IssueDateTime,
+            Book1IssueId = @Book1IssueId
+        WHERE 
+            Id = @Id 
+            AND (
+                Book1IssuedTo IS NULL 
+                OR Book1IssueClass IS NULL 
+                OR Book1IssueDateTime IS NULL 
+                OR Book1IssueId IS NULL
+            );
+    END";
+
                     using (SqlCommand cmd = new SqlCommand(query, connection))
                     {
                         cmd.Parameters.AddWithValue("@id", BookId);
