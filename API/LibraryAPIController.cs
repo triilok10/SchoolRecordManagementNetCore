@@ -189,7 +189,6 @@ namespace CoreProject1.API
                         cmd.Parameters.AddWithValue("@Book1IssueId", HdnStudentId);
                         cmd.ExecuteNonQuery();
                     }
-                    Message = "Book Issued Successfully to the Student";
                     res = true;
                     if (res == true)
                     {
@@ -200,8 +199,8 @@ namespace CoreProject1.API
                             cmd.Parameters.AddWithValue("@Book1", hdnBookName);
                             cmd.Parameters.AddWithValue("@BAuthor1", hdnBookAuthor);
                             cmd.ExecuteNonQuery();
-                            Message = "Book Inseration Update in Student Record";
                         }
+                        Message = "Book issued to the Student is Successfully Recorded";
                     }
                 }
 
@@ -212,7 +211,7 @@ namespace CoreProject1.API
             }
 
 
-            return Ok();
+            return Ok(new { message = Message});
         }
     }
 }

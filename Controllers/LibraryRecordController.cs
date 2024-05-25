@@ -201,12 +201,12 @@ namespace CoreProject1.Controllers
         [HttpPost]
         public async Task<IActionResult> SelectBookByStd(int BookId, int HdnStudentId, string StudentFirstName, string StudentLastName, string StudentClass, string IssueDateTime, string hdnBookAuthor, string hdnBookName)
         {
-            string Message = "";
+            string successMessage = "";
             try
             {
                 if (string.IsNullOrWhiteSpace(StudentFirstName) && string.IsNullOrWhiteSpace(StudentLastName))
                 {
-                    Message = "Student Name and FatherName must not be null!";
+                    successMessage = "Student Name and FatherName must not be null!";
                     return View("");
                 }
                 if (HdnStudentId != null && BookId != null)
@@ -225,7 +225,16 @@ namespace CoreProject1.Controllers
                     HttpResponseMessage response = await _httpClient.GetAsync(fullurl);
                     if (response.IsSuccessStatusCode)
                     {
+                        string ResponseBody = await response.Content.ReadAsStringAsync();
+                        var ResponseObject = JsonConvert.DeserializeObject<dynamic>(ResponseBody);
+                        successMessage = ResponseObject.message;
 
+                        ViewBag.SuccessMessage = successMessage;
+                        return View("BookIssueStd");
+                    }
+                    else
+                    {
+                        ViewBag.SuccessMessage = "Book Issued Failed!, Please Check Again";
                     }
                 }
 

@@ -8,50 +8,54 @@
             @ViewBag.SuccessMessage
         </div>
     }
-    <div class="row justify-content-center">
-        <div class="col-md-6" style="padding:23px;">
-            <br />
-            <div class="text-center" style="padding:10px">
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-6" style="padding:23px;">
                 <br />
-                <h2 class="text-danger"> Select the Book </h2>
-                <table id="tbJquerytable" class="table table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th> ID </th>
-                            <th> Book Name </th>
-                            <th> Book Author Name </th>
-                            <th> Book Medium </th>
-                            <th> Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
+                <div class="text-center" style="padding:10px">
+                    <br />
+                    <h2 class="text-danger"> Select the Book </h2>
+                    <table id="tbJquerytable" class="table table-bordered table-hover">
+                        <thead>
                             <tr>
-                                <td>@item.Id</td>
-                                <td>@item.BookName @item.LastName</td>
-                                <td>@item.BookAuthorName</td>
-                                <td>@item.BookMediumLanguage</td>
-                                <td>
-                                    <form method="post" asp-controller="LibraryRecord" asp-action="SelectBookByStd">
-                                        <input type="hidden" name="BookId" value="@item.Id" />
-                                        <input type="hidden" name="HdnStudentId" value="@item.HdnStudentId" />
-                                        <input type="hidden" name="StudentFirstName" value="@item.FirstName" />
-                                        <input type="hidden" name="StudentLastName" value="@item.LastName" />
-                                        <input type="hidden" name="StudentClass" value="@item.Class" />
-                                        <input type="hidden" name="IssueDateTime" value="@DateTime.Now" />
-                                        <input type="hidden" name="hdnBookName" value="@item.BookName" />
-                                        <input type="hidden" name="hdnBookAuthor" value="@item.BookAuthorName" />
-                                        <button type="submit" class="btn btn-primary">Book Issue</button>
-                                    </form>
-                                </td>
+                                <th> ID </th>
+                                <th> Book Name </th>
+                                <th> Book Author Name </th>
+                                <th> Book Medium </th>
+                                <th> Action</th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.BookName @item.LastName</td>
+                                    <td>@item.BookAuthorName</td>
+                                    <td>@item.BookMediumLanguage</td>
+                                    <td>
+                                        <form method="post" asp-controller="LibraryRecord" asp-action="SelectBookByStd">
+                                            <input type="hidden" name="BookId" value="@item.Id" />
+                                            <input type="hidden" name="HdnStudentId" value="@item.HdnStudentId" />
+                                            <input type="hidden" name="StudentFirstName" value="@item.FirstName" />
+                                            <input type="hidden" name="StudentLastName" value="@item.LastName" />
+                                            <input type="hidden" name="StudentClass" value="@item.Class" />
+                                            <input type="hidden" name="IssueDateTime" value="@DateTime.Now" />
+                                            <input type="hidden" name="hdnBookName" value="@item.BookName" />
+                                            <input type="hidden" name="hdnBookAuthor" value="@item.BookAuthorName" />
+                                            <button type="submit" class="btn btn-primary">Book Issue</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+    }
+  
 </div>
 
 
