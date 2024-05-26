@@ -13,6 +13,7 @@ namespace CoreProject1.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Please Enter your FirstName")]
+        public string StudentName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

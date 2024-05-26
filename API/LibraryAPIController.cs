@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using System.Runtime.Intrinsics.Arm;
 
 namespace CoreProject1.API
 {
@@ -43,7 +44,7 @@ namespace CoreProject1.API
                                     FatherName = reader["Fathername"].ToString(),
                                     MotherName = reader["Mothername"].ToString(),
                                     Class = (ClassName)Convert.ToInt32(reader["Class"])
-                                    
+
                                 };
                                 students.Add(student);
                             }
@@ -213,16 +214,15 @@ namespace CoreProject1.API
             }
 
 
-            return Ok(new { message = Message});
+            return Ok(new { message = Message });
         }
 
         [HttpGet]
         public IActionResult CheckIssuedBookAPI()
         {
-
             string Message = "";
             bool res = false;
-                List<Student> ObjIssedBook = new List<Student>();
+            List<Student> ObjIssedBook = new List<Student>();
             try
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
@@ -230,26 +230,31 @@ namespace CoreProject1.API
                     SqlCommand cmd = new SqlCommand("Sp_ViewIssuedBookToStudents", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
                     con.Open();
-                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    using (SqlDataReader reader = cmd.ExecuteReader())
                     {
-                        Student libStudent = new Student();
+                        while (reader.Read())
+                        {
+                            Student libStudent = new Student();
+                            libStudent.BookName = Convert.ToString(reader["Book1"]);
+                            libStudent.BookAuthorName = Convert.ToString(reader["Book1Publisher"]);
+                            if (Enum.TryParse<BookMedium>(Convert.ToString(reader["Book1Medium"]), out BookMedium BookMediumLanguage))
+                            {
+                                libStudent.BookMediumLanguage = BookMediumLanguage;
+                            }
+                            libStudent.StudentName = Convert.ToString(reader["Book1IssuedTo"]);
+                            if (Enum.TryParse<ClassName>(Convert.ToString(reader["Book1IssueClass"]), out ClassName classname))
+                            {
+                                libStudent.Class = classname;
+                            }
+                            ObjIssedBook.Add(libStudent);
+                            res = true;
+                        }
 
-                        libStudent.BookName = Convert.ToString(reader["Book1"]);
-                        libStudent.BookAuthorName = Convert.ToString(reader["Book1Publisher"]);
-                        if (Enum.TryParse<BookMedium>(Convert.ToString(reader["Book1Medium"]), out BookMedium BookMediumLanguage))
-                        {
-                            libStudent.BookMediumLanguage = BookMediumLanguage;
-                        }
-                        libStudent.FirstName = Convert.ToString(reader["Book1IssuedTo"]);
-                        if (Enum.TryParse<ClassName>(Convert.ToString(reader["Class"]), out ClassName classname))
-                        {
-                            libStudent.Class = classname;
-                        }
-                        ObjIssedBook.Add(libStudent);
                     }
-                    
+
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Message = ex.Message;
             }

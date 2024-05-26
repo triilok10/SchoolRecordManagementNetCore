@@ -1,7 +1,31 @@
-﻿
-@{
-    ViewData["Title"] = "IssuedBook";
-}
+﻿@model List<CoreProject1.Models.Student>
+<br />
 
-<h1>IssuedBook</h1>
-
+<div class="text-center" style="padding:10px">
+    <br />
+    <h2 class="text-danger"> Issued Book to the Students </h2>
+    <table id="tbJquerytable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th> Book Name </th>
+                <th> Book Author Name </th>
+                <th> Book Medium </th>
+                <th> Student Name </th>
+                <th> Student Class </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> @item.BookName</td>
+                    <td> @item.BookAuthorName </td>
+                    <td> @item.BookMediumLanguage </td>
+                    <td> @item.StudentName </td>
+                    <td> @item.Class </td>
+             
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

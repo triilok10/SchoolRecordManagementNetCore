@@ -1,4 +1,5 @@
-﻿using CoreProject1.Models;
+﻿using Azure;
+using CoreProject1.Models;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Globalization;
@@ -259,14 +260,20 @@ namespace CoreProject1.Controllers
                 HttpResponseMessage Response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/CheckIssuedBookAPI");
                 if(Response.IsSuccessStatusCode)
                 {
-
+                    string responsebody = await Response.Content.ReadAsStringAsync();
+                    List<Student> IssuedBook = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    return View(IssuedBook);
+                }
+                else
+                {
+                    return View("Error");
                 }
             }
             catch (Exception ex)
             {
-
+                return View("Error");
             }
-            return View();
+      
         }
 
         [HttpGet]
