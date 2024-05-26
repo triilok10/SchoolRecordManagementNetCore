@@ -143,79 +143,40 @@ namespace CoreProject1.API
                 DateTime parsedDateTime;
                 if (!DateTime.TryParse(IssueDateTime, out parsedDateTime))
                 {
-                    Message = "Invalid Date Format";
+                    return Ok(new { message = "Invalid Date Format" });
                 }
-                using (var connection = new SqlConnection(_connectionString))
+
+                using (SqlConnection connection = new SqlConnection(_connectionString))
                 {
-                    connection.Open();
-                    string query = @"
-    DECLARE @BookAlreadyIssued INT;
-
-    
-    SELECT @BookAlreadyIssued = COUNT(*)
-    FROM Library
-    WHERE Id = @Id
-        AND (
-            Book1IssuedTo IS NOT NULL 
-            OR Book1IssueClass IS NOT NULL 
-            OR Book1IssueDateTime IS NOT NULL 
-            OR Book1IssueId IS NOT NULL
-        );
-    IF @BookAlreadyIssued > 0
-    BEGIN
-        THROW 51000, 'This book is already issued to someone else.', 1;
-    END
-    ELSE
-    BEGIN
-        UPDATE Library 
-        SET 
-            Book1IssuedTo = @Book1IssuedTo,
-            Book1IssueClass = @Book1IssueClass,
-            Book1IssueDateTime = @Book1IssueDateTime,
-            Book1IssueId = @Book1IssueId
-        WHERE 
-            Id = @Id 
-            AND (
-                Book1IssuedTo IS NULL 
-                OR Book1IssueClass IS NULL 
-                OR Book1IssueDateTime IS NULL 
-                OR Book1IssueId IS NULL
-            );
-    END";
-
-                    using (SqlCommand cmd = new SqlCommand(query, connection))
+                    using (SqlCommand cmd = new SqlCommand("SP_BookIssueToStudent", connection))
                     {
-                        cmd.Parameters.AddWithValue("@id", BookId);
-                        cmd.Parameters.AddWithValue("@Book1IssuedTo", FullName);
-                        cmd.Parameters.AddWithValue("@Book1IssueClass", StudentClass);
-                        cmd.Parameters.AddWithValue("@Book1IssueDateTime", parsedDateTime);
-                        cmd.Parameters.AddWithValue("@Book1IssueId", HdnStudentId);
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@FullName", FullName);
+                        cmd.Parameters.AddWithValue("@StudentClass", StudentClass);
+                        cmd.Parameters.AddWithValue("@IssueDateTime", parsedDateTime);
+                        cmd.Parameters.AddWithValue("@HdnStudentId", HdnStudentId);
+                        cmd.Parameters.AddWithValue("@BookId", BookId);
+                        cmd.Parameters.AddWithValue("@BookName", hdnBookName);
+                        cmd.Parameters.AddWithValue("@BookAuthor", hdnBookAuthor);
+                        connection.Open();
                         cmd.ExecuteNonQuery();
                     }
-                    res = true;
-                    if (res == true)
-                    {
-                        string Studentquery = "Update Student Set Book1= @Book1 , BAuthor1 = @BAuthor1 WHERE Id = @id";
-                        using (SqlCommand cmd = new SqlCommand(Studentquery, connection))
-                        {
-                            cmd.Parameters.AddWithValue("@Id", HdnStudentId);
-                            cmd.Parameters.AddWithValue("@Book1", hdnBookName);
-                            cmd.Parameters.AddWithValue("@BAuthor1", hdnBookAuthor);
-                            cmd.ExecuteNonQuery();
-                        }
-                        Message = "Book issued to the Student is Successfully Recorded";
-                    }
                 }
-
+                res = true;
+                Message = "New Book Issued successfully done";
+            }
+            catch (SqlException ex)
+            {
+                Message = ex.Message; 
             }
             catch (Exception ex)
             {
                 Message = ex.Message;
             }
 
-
             return Ok(new { message = Message });
         }
+
 
         [HttpGet]
         public IActionResult CheckIssuedBookAPI()
