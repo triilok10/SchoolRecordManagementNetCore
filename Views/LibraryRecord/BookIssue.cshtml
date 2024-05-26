@@ -79,7 +79,8 @@
                             <form method="post" asp-controller="LibraryRecord" asp-action="BookIssueStd">
                                 <input type="hidden" name="StudentId" value="@item.Id" />
                                 <input type="hidden" name="StudentFirstName" value="@item.FirstName"/>
-                                <input type="hidden" name="StudentLastName" value="@item.FatherName" />
+                                <input type="hidden" name="StudentLastName" value="@item.LastName" />
+                                <input type="hidden" name="StudentClass" value="@item.Class" />
                                 <button type="submit" class="btn btn-primary">Book Issue</button>
                             </form>
                         </td>

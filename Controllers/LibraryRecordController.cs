@@ -128,14 +128,15 @@ namespace CoreProject1.Controllers
 
         [HttpPost]
         [Route("Book-Issue")]
-        public async Task<IActionResult> BookIssueStd(int StudentId, string StudentFirstName, string StudentLastName)
+        public async Task<IActionResult> BookIssueStd(int StudentId, string StudentFirstName, string StudentLastName, string StudentClass)
         {
             try
             {
                 int HdnStudentId = StudentId;
                 string HdnFirstName = StudentFirstName;
                 string HdnLastName = StudentLastName;
-               
+                int hdnClass = (int)Enum.Parse(typeof(ClassName), StudentClass);
+
 
                 HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
 
@@ -148,6 +149,7 @@ namespace CoreProject1.Controllers
                         student.HdnStudentId = HdnStudentId;
                         student.FirstName = HdnFirstName;
                         student.LastName = HdnLastName;
+                        student.Class = (ClassName)hdnClass;
                     }
                     return View(objBooks);
                 }
@@ -250,8 +252,20 @@ namespace CoreProject1.Controllers
 
         [HttpGet]
         [Route("IssuedBook")]
-        public IActionResult IssuedBook()
+        public async Task<IActionResult> IssuedBook()
         {
+            try
+            {
+                HttpResponseMessage Response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/CheckIssuedBookAPI");
+                if(Response.IsSuccessStatusCode)
+                {
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
             return View();
         }
 

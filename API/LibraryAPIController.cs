@@ -42,6 +42,8 @@ namespace CoreProject1.API
                                     LastName = reader["LastName"].ToString(),
                                     FatherName = reader["Fathername"].ToString(),
                                     MotherName = reader["Mothername"].ToString(),
+                                    Class = (ClassName)Convert.ToInt32(reader["Class"])
+                                    
                                 };
                                 students.Add(student);
                             }
@@ -212,6 +214,46 @@ namespace CoreProject1.API
 
 
             return Ok(new { message = Message});
+        }
+
+        [HttpGet]
+        public IActionResult CheckIssuedBookAPI()
+        {
+
+            string Message = "";
+            bool res = false;
+                List<Student> ObjIssedBook = new List<Student>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("Sp_ViewIssuedBookToStudents", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using(SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        Student libStudent = new Student();
+
+                        libStudent.BookName = Convert.ToString(reader["Book1"]);
+                        libStudent.BookAuthorName = Convert.ToString(reader["Book1Publisher"]);
+                        if (Enum.TryParse<BookMedium>(Convert.ToString(reader["Book1Medium"]), out BookMedium BookMediumLanguage))
+                        {
+                            libStudent.BookMediumLanguage = BookMediumLanguage;
+                        }
+                        libStudent.FirstName = Convert.ToString(reader["Book1IssuedTo"]);
+                        if (Enum.TryParse<ClassName>(Convert.ToString(reader["Class"]), out ClassName classname))
+                        {
+                            libStudent.Class = classname;
+                        }
+                        ObjIssedBook.Add(libStudent);
+                    }
+                    
+                }
+            }catch (Exception ex)
+            {
+                Message = ex.Message;
+            }
+            return Ok(ObjIssedBook);
         }
     }
 }
