@@ -202,6 +202,28 @@ namespace CoreProject1.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> GetBookIssuedStudent(string Class)
+        {
+
+            if (!string.IsNullOrEmpty(Class))
+            {
+                string APIURL = $"{_baseUrl}api/LibraryAPI/GetBookIssuedStudentAPI/{Class}";
+                HttpResponseMessage Response = await _httpClient.GetAsync(APIURL);
+                if(Response.IsSuccessStatusCode)
+                {
+                    string ResponseBody = await Response.Content.ReadAsStringAsync();
+                    List<Student> students = JsonConvert.DeserializeObject<List<Student>>(ResponseBody);
+                    return View("SubmitBook", SubmitBook);
+                }
+
+            }
+
+
+
+            return View();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> SelectBookByStd(int BookId, int HdnStudentId, string StudentFirstName, string StudentLastName, string StudentClass, string IssueDateTime, string hdnBookAuthor, string hdnBookName)
         {
             string successMessage = "";
@@ -258,7 +280,7 @@ namespace CoreProject1.Controllers
             try
             {
                 HttpResponseMessage Response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/CheckIssuedBookAPI");
-                if(Response.IsSuccessStatusCode)
+                if (Response.IsSuccessStatusCode)
                 {
                     string responsebody = await Response.Content.ReadAsStringAsync();
                     List<Student> IssuedBook = JsonConvert.DeserializeObject<List<Student>>(responsebody);
@@ -273,7 +295,7 @@ namespace CoreProject1.Controllers
             {
                 return View("Error");
             }
-      
+
         }
 
         [HttpGet]
