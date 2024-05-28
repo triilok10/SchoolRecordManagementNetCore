@@ -59,6 +59,50 @@ namespace CoreProject1.API
             }
         }
 
+        [HttpGet("{className}")]
+        public IActionResult GetBookIssuedStudentAPI(string className)
+        {
+            try
+            {
+                int classValue = (int)Enum.Parse(typeof(ClassName), className);
+
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    string query = $" Select * from Library Where LEN(RTRIM(BOOK1IssueId))>0 and  Book1IssueClass= @ClassName;";
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@ClassName", classValue);
+                        using (var reader = command.ExecuteReader())
+                        {
+                            var students = new List<Student>();
+                            while (reader.Read())
+                            {
+                                var student = new Student
+                                {
+                                    Id = Convert.ToInt32(reader["Id"]),
+                                    FirstName = reader["FirstName"].ToString(),
+                                    LastName = reader["LastName"].ToString(),
+                                    FatherName = reader["Fathername"].ToString(),
+                                    MotherName = reader["Mothername"].ToString(),
+                                    Class = (ClassName)Convert.ToInt32(reader["Class"])
+
+                                };
+                                students.Add(student);
+                            }
+                            return Ok(students);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+        }
+
+
         [HttpGet]
         public IActionResult AddNewBooks(string BookName, string BookAuthorName, string BookMediumLanguage)
         {

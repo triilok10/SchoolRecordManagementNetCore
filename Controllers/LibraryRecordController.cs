@@ -218,8 +218,6 @@ namespace CoreProject1.Controllers
 
             }
 
-
-
             return View();
         }
 
