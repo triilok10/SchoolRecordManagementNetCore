@@ -70,8 +70,7 @@ namespace CoreProject1.API
                 {
                     connection.Open();
 
-                    string query = $" Select * from Library Where LEN(RTRIM(BOOK1IssueId))>0 and  Book1IssueClass= @ClassName;";
-                    //string query = $" Select * from Student Where LEN(RTRIM(BOOK1IssueId))>0 and  Book1IssueClass= @ClassName;";
+                    string query = $" Select * from Library Where LEN(RTRIM(BOOK1IssueId))>0 and  Book1IssueClass= @ClassName";
                     using (var command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@ClassName", className);

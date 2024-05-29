@@ -214,7 +214,7 @@ namespace CoreProject1.Controllers
                 {
                     string ResponseBody = await Response.Content.ReadAsStringAsync();
                     List<Student> students = JsonConvert.DeserializeObject<List<Student>>(ResponseBody);
-                    return View("SubmitBook", SubmitBook);
+                    return View("SubmitBook", students);
                 }
 
             }

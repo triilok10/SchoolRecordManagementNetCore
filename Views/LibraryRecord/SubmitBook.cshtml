@@ -60,11 +60,13 @@
         <table id="tbJquerytable" class="table table-bordered table-hover">
             <thead>
                 <tr>
-                    <th> ID </th>
-                    <th> First Name </th>
-                    <th> Father's Name </th>
-                    <th> Mother's Name </th>
-                    <th>Action</th>
+                    <th> Student ID </th>
+                    <th> Student Name </th>
+                    <th> Student Class </th>
+                    <th> Book Id </th>
+                    <th> Book Name </th>
+                    <th> Book Author Name </th>
+                    <th> Action </th>
                 </tr>
             </thead>
             <tbody>
@@ -72,18 +74,20 @@
                 {
                     <tr>
                         <td>@item.Id</td>
-                        <td>@item.FirstName @item.LastName</td>
-                        <td>@item.FatherName</td>
-                        <td>@item.MotherName</td>
+                        <td>@item.StudentName   </td>
+                        <td>@item.Class</td>
+                        <td>@item.HdnStudentId</td>
+                        <td>@item.BookName</td>
+                        <td>@item.BookAuthorName</td>
                         <td>
-                            <form method="post" asp-controller="LibraryRecord" asp-action="BookIssueStd">
-                                <input type="hidden" name="StudentId" value="@item.Id" />
-                                <input type="hidden" name="StudentFirstName" value="@item.FirstName" />
-                                <input type="hidden" name="StudentLastName" value="@item.LastName" />
-                                <input type="hidden" name="StudentClass" value="@item.Class" />
-                                <button type="submit" class="btn btn-primary">Book Issue</button>
-                            </form>
-                        </td>
+                <form method="post" asp-controller="LibraryRecord" asp-action="SubmitBackBook">
+                <input type="hidden" name="StudentId" value="@item.Id" />
+                <input type="hidden" name="StudentFirstName" value="@item.FirstName" />
+                <input type="hidden" name="StudentLastName" value="@item.LastName" />
+                <input type="hidden" name="StudentClass" value="@item.Class" />
+                <button type="submit" class="btn btn-primary">Book Issue</button>
+                </form>
+                </td>
                     </tr>
                 }
             </tbody>
