@@ -64,16 +64,17 @@ namespace CoreProject1.API
         {
             try
             {
-                int classValue = (int)Enum.Parse(typeof(ClassName), className);
+                //int classValue = (int)Enum.Parse(typeof(ClassName), className);
 
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.Open();
 
                     string query = $" Select * from Library Where LEN(RTRIM(BOOK1IssueId))>0 and  Book1IssueClass= @ClassName;";
+                    //string query = $" Select * from Student Where LEN(RTRIM(BOOK1IssueId))>0 and  Book1IssueClass= @ClassName;";
                     using (var command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@ClassName", classValue);
+                        command.Parameters.AddWithValue("@ClassName", className);
                         using (var reader = command.ExecuteReader())
                         {
                             var students = new List<Student>();
@@ -82,11 +83,11 @@ namespace CoreProject1.API
                                 var student = new Student
                                 {
                                     Id = Convert.ToInt32(reader["Id"]),
-                                    FirstName = reader["FirstName"].ToString(),
-                                    LastName = reader["LastName"].ToString(),
-                                    FatherName = reader["Fathername"].ToString(),
-                                    MotherName = reader["Mothername"].ToString(),
-                                    Class = (ClassName)Convert.ToInt32(reader["Class"])
+                                    StudentName = reader["Book1IssuedTo"].ToString(),
+                                    BookName = reader["Book1"].ToString(),
+                                    BookAuthorName = reader["Book1Publisher"].ToString(),
+                                    Class = (ClassName)Convert.ToInt32(reader["Book1IssueClass"]),
+                                    HdnStudentId = Convert.ToInt32(reader["BOOK1IssueId"])
 
                                 };
                                 students.Add(student);
@@ -180,8 +181,10 @@ namespace CoreProject1.API
         [HttpGet]
         public IActionResult IssueBooktoStd(int BookId, int HdnStudentId, string FullName, string StudentClass, string IssueDateTime, string hdnBookAuthor, string hdnBookName)
         {
+
             string Message = "";
             bool res = false;
+            int classValue = (int)Enum.Parse(typeof(ClassName), StudentClass);
             try
             {
                 DateTime parsedDateTime;
@@ -196,7 +199,7 @@ namespace CoreProject1.API
                     {
                         cmd.CommandType = System.Data.CommandType.StoredProcedure;
                         cmd.Parameters.AddWithValue("@FullName", FullName);
-                        cmd.Parameters.AddWithValue("@StudentClass", StudentClass);
+                        cmd.Parameters.AddWithValue("@StudentClass", classValue);
                         cmd.Parameters.AddWithValue("@IssueDateTime", parsedDateTime);
                         cmd.Parameters.AddWithValue("@HdnStudentId", HdnStudentId);
                         cmd.Parameters.AddWithValue("@BookId", BookId);
