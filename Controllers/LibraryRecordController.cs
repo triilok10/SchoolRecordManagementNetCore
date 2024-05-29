@@ -303,5 +303,25 @@ namespace CoreProject1.Controllers
         {
             return View();
         }
+
+
+        [HttpPost]
+        public IActionResult SubmitIssueBook(int hdnStudentId, string StudentName, string hdnClass, int HdnBookId, string hdnBookName, string HdnBookAuthorName)
+        {
+            int classValue = (int)Enum.Parse(typeof(ClassName), hdnClass);
+
+
+            Student objStudent = new Student();
+            objStudent.HdnStudentId = hdnStudentId;
+            objStudent.StudentName = StudentName;
+            objStudent.Class = (ClassName)classValue;
+            objStudent.Id = HdnBookId;
+            objStudent.BookName = hdnBookName;
+            objStudent.BookAuthorName = HdnBookAuthorName;
+
+
+
+            return Ok();
+        }
     }
 }

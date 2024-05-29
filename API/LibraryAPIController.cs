@@ -213,7 +213,7 @@ namespace CoreProject1.API
             }
             catch (SqlException ex)
             {
-                Message = ex.Message; 
+                Message = ex.Message;
             }
             catch (Exception ex)
             {
@@ -221,7 +221,7 @@ namespace CoreProject1.API
             }
 
             return Ok(new { message = Message });
-                             }
+        }
 
 
         [HttpGet]

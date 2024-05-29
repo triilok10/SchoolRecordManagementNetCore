@@ -73,21 +73,23 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Id</td>
+                        <td>@item.HdnStudentId</td>
                         <td>@item.StudentName   </td>
                         <td>@item.Class</td>
-                        <td>@item.HdnStudentId</td>
+                        <td>@item.Id</td>
                         <td>@item.BookName</td>
                         <td>@item.BookAuthorName</td>
                         <td>
-                <form method="post" asp-controller="LibraryRecord" asp-action="SubmitBackBook">
-                <input type="hidden" name="StudentId" value="@item.Id" />
-                <input type="hidden" name="StudentFirstName" value="@item.FirstName" />
-                <input type="hidden" name="StudentLastName" value="@item.LastName" />
-                <input type="hidden" name="StudentClass" value="@item.Class" />
-                <button type="submit" class="btn btn-primary">Book Issue</button>
-                </form>
-                </td>
+                            <form method="post" asp-controller="LibraryRecord" asp-action="SubmitIssueBook">
+                                <input type="hidden" name="hdnStudentId" value="@item.HdnStudentId" />
+                                <input type="hidden" name="StudentName" value="@item.StudentName" />
+                                <input type="hidden" name="hdnClass" value="@item.Class" />
+                                <input type="hidden" name="HdnBookId" value="@item.Id" />
+                                <input type="hidden" name="hdnBookName" value="@item.BookName" />
+                                <input type="hidden" name="HdnBookAuthorName" value="@item.BookAuthorName" />
+                                <button type="submit" class="btn btn-primary">Book Issue</button>
+                            </form>
+                        </td>
                     </tr>
                 }
             </tbody>
