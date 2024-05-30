@@ -210,7 +210,7 @@ namespace CoreProject1.Controllers
             {
                 string APIURL = $"{_baseUrl}api/LibraryAPI/GetBookIssuedStudentAPI/{Class}";
                 HttpResponseMessage Response = await _httpClient.GetAsync(APIURL);
-                if(Response.IsSuccessStatusCode)
+                if (Response.IsSuccessStatusCode)
                 {
                     string ResponseBody = await Response.Content.ReadAsStringAsync();
                     List<Student> students = JsonConvert.DeserializeObject<List<Student>>(ResponseBody);
@@ -306,18 +306,21 @@ namespace CoreProject1.Controllers
 
 
         [HttpPost]
-        public IActionResult SubmitIssueBook(int hdnStudentId, string StudentName, string hdnClass, int HdnBookId, string hdnBookName, string HdnBookAuthorName)
+        public async Task<IActionResult> SubmitIssueBook(int HdnBookId)
         {
-            int classValue = (int)Enum.Parse(typeof(ClassName), hdnClass);
+            string successMessage = "";
+            string APIURL = $"{_baseUrl}api/LibraryAPI/SubmitBookAPI/{HdnBookId}";
+            HttpResponseMessage Response = await _httpClient.PostAsync(APIURL, null);
 
+            if (Response.IsSuccessStatusCode)
+            {
+                string ResponseBody = await Response.Content.ReadAsStringAsync();
+                dynamic ResponseObject = JsonConvert.DeserializeObject<dynamic>(ResponseBody);
+                successMessage = ResponseObject.message;
 
-            Student objStudent = new Student();
-            objStudent.HdnStudentId = hdnStudentId;
-            objStudent.StudentName = StudentName;
-            objStudent.Class = (ClassName)classValue;
-            objStudent.Id = HdnBookId;
-            objStudent.BookName = hdnBookName;
-            objStudent.BookAuthorName = HdnBookAuthorName;
+                ViewBag.SuccessMessage = successMessage;
+                return View("SubmitBook");
+            }
 
 
 

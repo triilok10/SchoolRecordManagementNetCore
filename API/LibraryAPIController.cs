@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Runtime.Intrinsics.Arm;
+using System.Security.Cryptography.Pkcs;
 
 namespace CoreProject1.API
 {
@@ -266,6 +267,34 @@ namespace CoreProject1.API
                 Message = ex.Message;
             }
             return Ok(ObjIssedBook);
+        }
+
+
+        [HttpPost("{HdnBookId}")]
+        public IActionResult SubmitBookAPI(int HdnBookId, int HdnStudentId)
+        {
+            bool res = false;
+            string Message = "";
+
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("SP_SubmitIssueBook", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@HdnBookId", HdnBookId);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
+                }
+                res = true;
+                Message = "Book Sumbitted Successfully";
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Ok(new { message = Message });
         }
     }
 }
