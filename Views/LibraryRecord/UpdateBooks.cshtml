@@ -22,7 +22,7 @@
                     <td> @item.BookName</td>
                     <td> @item.BookAuthorName </td>
                     <td> @item.BookMediumLanguage </td>
-                    <td><a asp-controller="LibraryRecord" asp-action="GetBookDatabyId" asp-route-Id="@item.Id">Update Record</a></td>
+                    <td><a asp-controller="LibraryRecord" asp-action="PostUpdate" asp-route-Id="@item.Id">Update Record</a></td>
                 </tr>
             }
         </tbody>

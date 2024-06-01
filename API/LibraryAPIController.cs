@@ -296,5 +296,43 @@ namespace CoreProject1.API
             }
             return Ok(new { message = Message });
         }
+
+        [HttpGet("{Id}")]
+        public IActionResult updateBookAPI(int Id)
+        {
+            bool False;
+            string Message = "";
+
+            try
+            {
+                Student objstudent = new Student(); 
+
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    SqlCommand cmd = new SqlCommand("", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("", Id);
+                   
+                    using(SqlDataReader rdr =  cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            Id = Convert.ToInt32(rdr["Id"]);
+                            objstudent.BookName = Convert.ToString(rdr["BookName"]);
+                            objstudent.BookAuthorName = Convert.ToString(rdr["BookAuthorName"]);
+                            objstudent.BookMediumLanguage = (BookMedium)Enum.Parse(typeof(BookMedium), Convert.ToString(rdr["BookMediumLanguage"]));
+                        }
+                    }
+                
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Ok();
+
+        }
     }
 }
