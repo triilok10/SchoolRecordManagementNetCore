@@ -51,6 +51,7 @@ namespace CoreProject1.Models
         public int HdnStudentId { get; set; }
         public string IssueDateTime { get; set; }
         public BookMedium BookMediumLanguage { get; set; }
+
     }
 
     public enum BookMedium

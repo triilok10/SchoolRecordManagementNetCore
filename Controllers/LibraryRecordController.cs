@@ -109,23 +109,52 @@ namespace CoreProject1.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> PostUpdate(int Id)
         {
-            string APIURL = $"{_baseUrl}api/LibraryAPI/updateBookAPI/{Id}";
-            HttpResponseMessage response = await _httpClient.GetAsync(APIURL);
-
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                string ResponseBody = await response.Content.ReadAsStringAsync();   
+                string APIURL = $"{_baseUrl}api/LibraryAPI/updateBookAPI/{Id}";
+                HttpResponseMessage response = await _httpClient.GetAsync(APIURL);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string ResponseBody = await response.Content.ReadAsStringAsync();
+                    Student LibUpdate = JsonConvert.DeserializeObject<Student>(ResponseBody);
+                    return View(LibUpdate);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
             }
 
-            return View();
+
         }
 
 
+        [HttpPost]
+        public IActionResult UpdateLibBooksPost(Student objBooks)
+        {
+            try
+            {
+                string apiurl = $"{_baseUrl}/api/LibraryAPI/PostUpdateBookAPI";
 
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+
+            return Ok();
+        }
 
         [Route("Get-Book-Data-by-Id")]
         public IActionResult GetBookDatabyId(int Id)

@@ -305,34 +305,36 @@ namespace CoreProject1.API
 
             try
             {
-                Student objstudent = new Student(); 
+                Student objstudent = new Student();
 
                 using (SqlConnection con = new SqlConnection(_connectionString))
                 {
                     con.Open();
-                    SqlCommand cmd = new SqlCommand("", con);
+                    SqlCommand cmd = new SqlCommand("Sp_UpdateBookDataGet", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("", Id);
-                   
-                    using(SqlDataReader rdr =  cmd.ExecuteReader())
+                    cmd.Parameters.AddWithValue("@Id", Id);
+
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         if (rdr.Read())
                         {
                             Id = Convert.ToInt32(rdr["Id"]);
-                            objstudent.BookName = Convert.ToString(rdr["BookName"]);
-                            objstudent.BookAuthorName = Convert.ToString(rdr["BookAuthorName"]);
-                            objstudent.BookMediumLanguage = (BookMedium)Enum.Parse(typeof(BookMedium), Convert.ToString(rdr["BookMediumLanguage"]));
+                            objstudent.BookName = Convert.ToString(rdr["Book1"]);
+                            objstudent.BookAuthorName = Convert.ToString(rdr["Book1Publisher"]);
+                            objstudent.BookMediumLanguage = (BookMedium)Enum.Parse(typeof(BookMedium), Convert.ToString(rdr["Book1Medium"]));
+
                         }
                     }
-                
+
                 }
+                return Ok(objstudent);
             }
             catch (Exception ex)
             {
-
+                return Ok(ex.Message);
             }
-            return Ok();
 
         }
+       
     }
 }
