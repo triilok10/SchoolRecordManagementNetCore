@@ -51,7 +51,7 @@ namespace CoreProject1.Controllers
         [Route("Add-Books")]
         public IActionResult AddBooks()
         {
-            return View();
+            return View(new Student());
         }
         [HttpPost]
         public async Task<IActionResult> AddBookInfo(Student objBooks)
@@ -71,9 +71,8 @@ namespace CoreProject1.Controllers
                     string responseBody = await response.Content.ReadAsStringAsync();
                     var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
                     successMessage = responseObject.message;
-
-                    ViewBag.SuccessMessage = successMessage;
-                    return View("AddBooks");
+                    TempData["SuccessMessage"] = successMessage;
+                    return RedirectToAction("AddBooks");
                 }
 
             }
@@ -82,7 +81,7 @@ namespace CoreProject1.Controllers
                 return View("Error");
             }
 
-            return View();
+            return RedirectToAction("AddBooks");
         }
 
         [Route("Update-Books")]
@@ -167,8 +166,8 @@ namespace CoreProject1.Controllers
                     string ResponseBody = await Response.Content.ReadAsStringAsync();
                     var responseObject = JsonConvert.DeserializeObject<dynamic>(ResponseBody);
                     successMessage = responseObject.msg;
-                    ViewBag.SuccessMessage = successMessage;
-                    return View("PostUpdate");
+                    TempData["SuccessMessage"] = successMessage;
+                    return RedirectToAction("PostUpdate");
                 }
                 else
                 {

@@ -1,9 +1,9 @@
 ﻿@model CoreProject1.Models.Student
-@if (ViewBag.SuccessMessage != null)
+@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success" role="alert">
-     
-        @ViewBag.SuccessMessage
+
+        @TempData["SuccessMessage"]
 
 
     </div>
@@ -54,14 +54,4 @@
     </div>
 </div>
 
-<script type="text/javascript">
 
-    $(document).ready(function () {
-        Js_AddBook();
-    })
-    function Js_AddBook() {
-        $('#BookName').val('');
-        $('#BookAuthorName').val('');
-        $('#BookMediumLanguage').val('');
-    }
-</script>
