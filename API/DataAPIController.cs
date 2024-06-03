@@ -155,6 +155,7 @@ namespace CoreProject1.API
             }
             catch (Exception ex)
             {
+                message = ex.Message;
             }
             return Ok(new { Message = message });
         }

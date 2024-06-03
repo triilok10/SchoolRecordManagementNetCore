@@ -1,8 +1,8 @@
 ﻿@model CoreProject1.Models.Student
-@if (ViewBag.SuccessMessage != null)
+@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success" role="alert">
-        @ViewBag.SuccessMessage
+        @TempData["SuccessMessage"]
     </div>
 }
 <div class="container">

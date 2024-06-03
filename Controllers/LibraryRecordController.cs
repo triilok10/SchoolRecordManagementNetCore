@@ -230,7 +230,7 @@ namespace CoreProject1.Controllers
                 }
                 else
                 {
-                    ViewBag.SuccessMessage = "Book Updation Failed!, Please Check Again";
+                    ViewBag.SuccessMessage = "Book Deletion Failed!, Please Check Again";
                 }
             }
             catch (Exception ex)
@@ -441,8 +441,6 @@ namespace CoreProject1.Controllers
                 ViewBag.SuccessMessage = successMessage;
                 return View("SubmitBook");
             }
-
-
 
             return Ok();
         }

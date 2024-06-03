@@ -74,17 +74,17 @@ namespace CoreProject1.Controllers
                     }
                     if (pStudent.DateOfBirth < new DateTime(1998, 1, 1))
                     {
-                        ViewBag.SuccessMessage = "Please Enter the Correct DOB.";
+                        TempData["SuccessMessage"] = "Please Enter the Correct DOB.";
                         return View("UpdateChangeData");
                     }
                     if (pStudent.FirstName == pStudent.FatherName)
                     {
-                        ViewBag.SuccessMessage = "Student Name and Father's Name not be Same! , Please fill the correct data.";
+                        TempData["SuccessMessage"] = "Student Name and Father's Name not be Same! , Please fill the correct data.";
                         return View("AddStudent");
                     }
                     if (pStudent.Mobile.Length != 10)
                     {
-                        ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
+                        TempData["SuccessMessage"] = "Please Enter the 10 digit Mobile Number.";
                         return View("AddStudent");
                     }
 
@@ -111,19 +111,20 @@ namespace CoreProject1.Controllers
                         string responseBody = await response.Content.ReadAsStringAsync();
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
                         successMessage = responseObject.message;
-
-                        ViewBag.SuccessMessage = successMessage;
+                        ModelState.Clear();
+                        TempData["SuccessMessage"] = successMessage;
                         return View("AddStudent");
                     }
                     else
                     {
-                        ViewBag.SuccessMessage = "Please Enter the Correct Data, Failed!";
+
+                        TempData["SuccessMessage"] = "Please Enter the Correct Data, Failed!";
                         return View("AddStudent");
                     }
                 }
                 else
                 {
-                    ViewBag.SuccessMessage = "Please Enter the Mandatory Field's.";
+                    TempData["SuccessMessage"] = "Please Enter the Mandatory Field's.";
                     return View("AddStudent");
 
                 }
@@ -138,7 +139,7 @@ namespace CoreProject1.Controllers
         [Route("Add-Student-Record")]
         public IActionResult AddStudent()
         {
-            return View();
+            return View(new Student());
         }
 
         [HttpGet]
@@ -220,20 +221,20 @@ namespace CoreProject1.Controllers
                     {
                         pStudent.Filepath = "null.jpg";
                     }
-                    if(pStudent.DateOfBirth < new DateTime(1998,1,1))
+                    if (pStudent.DateOfBirth < new DateTime(1998, 1, 1))
                     {
-                        ViewBag.SuccessMessage = "Please Enter the Correct DOB.";
-                        return View("UpdateChangeData");
+                        TempData["SuccessMessage"] = "Please Enter the Correct DOB.";
+                        return RedirectToAction("UpdateChangeData");
                     }
                     if (pStudent.FirstName == pStudent.FatherName)
                     {
-                        ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
-                        return View("UpdateChangeData");
+                        TempData["SuccessMessage"] = "Student Name and Father's Name not be Same!, Please fill the correct data.";
+                        return RedirectToAction("UpdateChangeData");
                     }
                     if (pStudent.Mobile.Length != 10)
                     {
-                        ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
-                        return View("UpdateChangeData");
+                        TempData["SuccessMessage"] = "Please Enter the 10 digit Mobile Number.";
+                        return RedirectToAction("UpdateChangeData");
                     }
                     string Apiurl = _baseUrl + "api/DataAPI/UpdateStudentDataAPI";
 
@@ -260,9 +261,9 @@ namespace CoreProject1.Controllers
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
                         string successMessage = responseObject.message;
 
-
-                        ViewBag.SuccessMessage = successMessage;
-                        return View("UpdateChangeData");
+                        ModelState.Clear();
+                        TempData["SuccessMessage"] = successMessage;
+                        return RedirectToAction("UpdateChangeData");
                     }
                     else
                     {
