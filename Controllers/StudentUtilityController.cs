@@ -325,7 +325,7 @@ namespace CoreProject1.Controllers
 
                     TempData["SuccessMessage"] = message;
 
-                    return RedirectToAction("Students", "Home");
+                    return RedirectToAction("DeleteStudent");
 
                 }
                 else
