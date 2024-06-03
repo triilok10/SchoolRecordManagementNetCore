@@ -2,7 +2,10 @@
 @if (ViewBag.SuccessMessage != null)
 {
     <div class="alert alert-success" role="alert">
+     
         @ViewBag.SuccessMessage
+
+
     </div>
 }
 <div class="container">
@@ -16,15 +19,15 @@
                     <div style="width: 100%; ">
                         <div class="form-group">
                             <label class="control-label">Book Name :</label>
-                            <input asp-for="BookName" class="form-control" required />
+                            <input asp-for="BookName" class="form-control"  id="BookName" required />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Book Author Name :</label>
-                            <input asp-for="BookAuthorName" class="form-control" />
+                            <input asp-for="BookAuthorName" class="form-control" id="BookAuthorName" />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Book Medium :</label>
-                            <select asp-for="BookMediumLanguage" class="form-control" required>
+                            <select asp-for="BookMediumLanguage" class="form-control" id="BookMediumLanguage" required>
                                 <option value="">Select Medium</option>
                                 @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.BookMedium)))
                                 {
@@ -50,3 +53,15 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Js_AddBook();
+    })
+    function Js_AddBook() {
+        $('#BookName').val('');
+        $('#BookAuthorName').val('');
+        $('#BookMediumLanguage').val('');
+    }
+</script>

@@ -1,7 +1,38 @@
-﻿
-@{
-    ViewData["Title"] = "DeleteBooks";
+﻿@model List<CoreProject1.Models.Student>
+<br />
+@if (ViewBag.SuccessMessage != null)
+{
+    <div class="alert alert-success" role="alert">
+        @ViewBag.SuccessMessage
+    </div>
 }
-
-<h1>DeleteBooks</h1>
-
+else
+{
+    <div class="text-center" style="padding:10px">
+        <br />
+        <h2 class="text-danger"> Select the Book to Delete </h2>
+        <table id="tbJquerytable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th> ID </th>
+                    <th> Book Name </th>
+                    <th> Book Author Name </th>
+                    <th> Book Medium </th>
+                    <th> Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td> @item.Id </td>
+                        <td> @item.BookName</td>
+                        <td> @item.BookAuthorName </td>
+                        <td> @item.BookMediumLanguage </td>
+                        <td><a asp-controller="LibraryRecord" asp-action="DeleteBookPost" asp-route-Id="@item.Id">Delete Book</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

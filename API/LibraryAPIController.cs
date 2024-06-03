@@ -212,10 +212,6 @@ namespace CoreProject1.API
                 res = true;
                 Message = "New Book Issued successfully done";
             }
-            catch (SqlException ex)
-            {
-                Message = ex.Message;
-            }
             catch (Exception ex)
             {
                 Message = ex.Message;
@@ -335,6 +331,74 @@ namespace CoreProject1.API
             }
 
         }
-       
+
+
+        [HttpGet]
+        public IActionResult PostUpdateBookAPI(string BookName, string BookAuthorName, string BookMedium, int BookId)
+        {
+            bool res = false;
+            string Message = "";
+            int BookMediumLang = (int)Enum.Parse(typeof(BookMedium), BookMedium);
+            try
+            {
+                Student pStudent = new Student();
+                pStudent.BookName = BookName;
+                pStudent.BookAuthorName = BookAuthorName;
+                pStudent.BookMediumLanguage = (BookMedium)BookMediumLang;
+                pStudent.Id = BookId;
+
+
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("SP_BookUpdate", con))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@Id", BookId);
+                        cmd.Parameters.AddWithValue("@BookName", BookName);
+                        cmd.Parameters.AddWithValue("@BookAuthorName", BookAuthorName);
+                        cmd.Parameters.AddWithValue("@BookMedium", BookMediumLang);
+                        cmd.ExecuteNonQuery();
+
+                    }
+                    Message = "Book Updated Successfully in the Library Record";
+                    res = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = ex.Message;
+            }
+
+            return Ok(new { msg = Message });
+        }
+
+        [HttpDelete("{Id}")]
+        public IActionResult DeleteBookPostAPI(int Id)
+        {
+            bool res = false;
+            string Message = "";
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    con.Open();
+                    using (SqlCommand cmd = new SqlCommand("SP_DeleteLibBook", con))
+                    {
+                        cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@BookId", Id);
+                        cmd.ExecuteNonQuery();
+                    }
+                    res = true;
+                    Message = "Book Deleted Successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                Message = ex.Message;
+            }
+            return Ok(new { msg = Message });
+
+        }
     }
 }

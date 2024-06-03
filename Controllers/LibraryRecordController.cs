@@ -79,7 +79,7 @@ namespace CoreProject1.Controllers
             }
             catch (Exception ex)
             {
-
+                return View("Error");
             }
 
             return View();
@@ -108,6 +108,9 @@ namespace CoreProject1.Controllers
                 return View("Error");
             }
         }
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> PostUpdate(int Id)
@@ -139,21 +142,44 @@ namespace CoreProject1.Controllers
 
 
         [HttpPost]
-        public IActionResult UpdateLibBooksPost(Student objBooks)
+        public async Task<IActionResult> UpdateLibBooksPost(Student objBooks)
         {
+            bool res = false;
+            string successMessage = "";
             try
             {
-                string apiurl = $"{_baseUrl}/api/LibraryAPI/PostUpdateBookAPI";
+                if (string.IsNullOrWhiteSpace(objBooks.Id.ToString()) && string.IsNullOrWhiteSpace(objBooks.BookName) && string.IsNullOrWhiteSpace(objBooks.BookAuthorName) && string.IsNullOrWhiteSpace(objBooks.BookMediumLanguage.ToString()))
+                {
+                    res = false;
+                    successMessage = "Please Pass all the Paremeters";
+                }
 
+                string apiurl = $"{_baseUrl}api/LibraryAPI/PostUpdateBookAPI";
+
+                string FullUrl = $"{apiurl}?BookName={(string.IsNullOrWhiteSpace(objBooks.BookName) ? "" : HttpUtility.UrlEncode(objBooks.BookName))}" +
+                    $"&BookAuthorName={(string.IsNullOrWhiteSpace(objBooks.BookAuthorName) ? "" : HttpUtility.UrlEncode(objBooks.BookAuthorName))}" +
+                    $"&BookMedium={(string.IsNullOrWhiteSpace(objBooks.BookMediumLanguage.ToString()) ? "" : HttpUtility.UrlEncode(objBooks.BookMediumLanguage.ToString()))}" +
+                    $"&BookId={(string.IsNullOrWhiteSpace(objBooks.Id.ToString()) ? "" : HttpUtility.UrlEncode(objBooks.Id.ToString()))}";
+
+                HttpResponseMessage Response = await _httpClient.GetAsync(FullUrl);
+                if (Response.IsSuccessStatusCode)
+                {
+                    string ResponseBody = await Response.Content.ReadAsStringAsync();
+                    var responseObject = JsonConvert.DeserializeObject<dynamic>(ResponseBody);
+                    successMessage = responseObject.msg;
+                    ViewBag.SuccessMessage = successMessage;
+                    return View("PostUpdate");
+                }
+                else
+                {
+                    ViewBag.SuccessMessage = "Book Updation Failed!, Please Check Again";
+                }
             }
             catch (Exception ex)
             {
-
+                return View("Error");
             }
-
-
-
-            return Ok();
+            return View();
         }
 
         [Route("Get-Book-Data-by-Id")]
@@ -163,8 +189,55 @@ namespace CoreProject1.Controllers
         }
 
         [Route("Delete-Books")]
-        public IActionResult DeleteBooks()
+        public async Task<IActionResult> DeleteBooks()
         {
+            try
+            {
+                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    return View(objBooks);
+                }
+                else
+                {
+                    return View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> DeleteBookPost(int Id)
+        {
+            bool res = false;
+            string successMessage = "";
+            try
+            {
+                string apiurl = $"{_baseUrl}api/LibraryAPI/DeleteBookPostAPI/{Id}";
+                HttpResponseMessage response = await _httpClient.DeleteAsync(apiurl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string ResponseBody = await response.Content.ReadAsStringAsync();
+                    var ResponseMessage = JsonConvert.DeserializeObject<dynamic>(ResponseBody);
+                    successMessage = ResponseMessage.msg;
+                    ViewBag.SuccessMessage = successMessage;
+                    return View("DeleteBooks");
+                }
+                else
+                {
+                    ViewBag.SuccessMessage = "Book Updation Failed!, Please Check Again";
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
             return View();
         }
 
