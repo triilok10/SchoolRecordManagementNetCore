@@ -171,7 +171,7 @@ namespace CoreProject1.Controllers
                 }
                 else
                 {
-                    ViewBag.SuccessMessage = "Book Updation Failed!, Please Check Again";
+                    TempData["SuccessMessage"] = "Book Updation Failed!, Please Check Again";
                 }
             }
             catch (Exception ex)
