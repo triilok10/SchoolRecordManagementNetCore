@@ -1,4 +1,5 @@
 using CoreProject1.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,41 +16,109 @@ namespace CoreProject1.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                return View();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
         }
 
         public IActionResult Dashboard()
         {
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if(IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                return View();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
+         
         }
 
         [Route("Data-Students")]
         public IActionResult Students()
         {
-            string successMessage = TempData["SuccessMessage"] as string;
-            ViewBag.SuccessMessage = successMessage;
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                string successMessage = TempData["SuccessMessage"] as string;
+                ViewBag.SuccessMessage = successMessage;
+                return View();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
         }
 
 
         [Route("Data-Teachers")]
         public IActionResult Teachers()
         {
-            string successMessage = TempData["SuccessMessage"] as string;
-            ViewBag.SuccessMessage = successMessage;
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                string successMessage = TempData["SuccessMessage"] as string;
+                ViewBag.SuccessMessage = successMessage;
+                return View();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
         }
 
 
         [Route("Library-Book-Management")]
         public IActionResult LibraryBookManagement()
         {
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                return View();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
         }
-    
+
         public IActionResult Classes()
         {
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if(IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                return View();
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
         }
 
 

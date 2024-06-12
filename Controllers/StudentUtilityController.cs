@@ -26,24 +26,34 @@ namespace CoreProject1.Controllers
         [Route("View-Student-Record")]
         public async Task<IActionResult> ViewStudent()
         {
-            try
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername !=null && LoginPassword !=null)
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
-                    return View(objstudent);
+                    HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responsebody = await response.Content.ReadAsStringAsync();
+                        List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                        return View(objstudent);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+                TempData["SuccessMessage"] = "Please login to view the Students";
+                return RedirectToAction("LogIn", "Log");
             }
         }
 
