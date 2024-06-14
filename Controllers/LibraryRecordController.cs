@@ -23,36 +23,79 @@ namespace CoreProject1.Controllers
 
         }
 
+        #region "ViewBooks"
         [HttpGet]
         [Route("View-Books")]
         public async Task<IActionResult> ViewBooks()
         {
-            try
-            {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
 
-                if (response.IsSuccessStatusCode)
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                try
                 {
-                    string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
-                    return View(objBooks);
+                    HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responsebody = await response.Content.ReadAsStringAsync();
+                        List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                        return View(objBooks);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+
+                TempData["SuccessMessage"] = "Please login to View Books";
+                return RedirectToAction("LogIn", "Log");
+
             }
+
         }
 
+        #endregion
+
+        #region "Add Books"
         [Route("Add-Books")]
         public IActionResult AddBooks()
         {
-            return View(new Student());
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                try
+                {
+                    return View(new Student());
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
+                }
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login to Add Books";
+                return RedirectToAction("LogIn", "Log");
+            }
+
+
         }
+
+
+
+
         [HttpPost]
         public async Task<IActionResult> AddBookInfo(Student objBooks)
         {
@@ -84,56 +127,80 @@ namespace CoreProject1.Controllers
             return RedirectToAction("AddBooks");
         }
 
+
+        #endregion
+
+        #region "Update Books"
         [Route("Update-Books")]
         public async Task<IActionResult> UpdateBooks()
         {
-            try
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
-                    return View(objBooks);
+                    HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responsebody = await response.Content.ReadAsStringAsync();
+                        List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                        return View(objBooks);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+                TempData["SuccessMessage"] = "Please login to UpdateBooks";
+                return RedirectToAction("LogIn", "Log");
             }
         }
-
-
 
 
         [HttpGet]
         public async Task<IActionResult> PostUpdate(int Id)
         {
-            try
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
-                string APIURL = $"{_baseUrl}api/LibraryAPI/updateBookAPI/{Id}";
-                HttpResponseMessage response = await _httpClient.GetAsync(APIURL);
-
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string ResponseBody = await response.Content.ReadAsStringAsync();
-                    Student LibUpdate = JsonConvert.DeserializeObject<Student>(ResponseBody);
-                    return View(LibUpdate);
+                    string APIURL = $"{_baseUrl}api/LibraryAPI/updateBookAPI/{Id}";
+                    HttpResponseMessage response = await _httpClient.GetAsync(APIURL);
+
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string ResponseBody = await response.Content.ReadAsStringAsync();
+                        Student LibUpdate = JsonConvert.DeserializeObject<Student>(ResponseBody);
+                        return View(LibUpdate);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+                TempData["SuccessMessage"] = "Please login to PostUpdate";
+                return RedirectToAction("LogIn", "Log");
             }
 
 
@@ -181,6 +248,10 @@ namespace CoreProject1.Controllers
             return View();
         }
 
+
+        #endregion
+
+        #region "Delete Books"
         [Route("Get-Book-Data-by-Id")]
         public IActionResult GetBookDatabyId(int Id)
         {
@@ -190,24 +261,35 @@ namespace CoreProject1.Controllers
         [Route("Delete-Books")]
         public async Task<IActionResult> DeleteBooks()
         {
-            try
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
-                    return View(objBooks);
+                    HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responsebody = await response.Content.ReadAsStringAsync();
+                        List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                        return View(objBooks);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+                TempData["SuccessMessage"] = "Please login to DeleteBooks";
+                return RedirectToAction("LogIn", "Log");
             }
         }
 
@@ -239,11 +321,33 @@ namespace CoreProject1.Controllers
             }
             return View();
         }
+        #endregion
 
+        #region "Book Issue"
         [Route("Issue-Book")]
         public IActionResult BookIssue()
         {
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                try
+                {
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
+                }
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login to BookIssue";
+                return RedirectToAction("LogIn", "Log");
+            }
+
+
         }
 
 
@@ -251,40 +355,54 @@ namespace CoreProject1.Controllers
         [Route("Book-Issue")]
         public async Task<IActionResult> BookIssueStd(int StudentId, string StudentFirstName, string StudentLastName, string StudentClass)
         {
-
-            try
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
-                int HdnStudentId = StudentId;
-                string HdnFirstName = StudentFirstName;
-                string HdnLastName = StudentLastName;
-                int hdnClass = (int)Enum.Parse(typeof(ClassName), StudentClass);
-
-
-                HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
-
-                if (response.IsSuccessStatusCode)
+                try
                 {
-                    string responsebody = await response.Content.ReadAsStringAsync();
-                    List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
-                    foreach (var student in objBooks)
+                    int HdnStudentId = StudentId;
+                    string HdnFirstName = StudentFirstName;
+                    string HdnLastName = StudentLastName;
+                    int hdnClass = (int)Enum.Parse(typeof(ClassName), StudentClass);
+
+
+                    HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/ViewBooksAPI");
+
+                    if (response.IsSuccessStatusCode)
                     {
-                        student.HdnStudentId = HdnStudentId;
-                        student.FirstName = HdnFirstName;
-                        student.LastName = HdnLastName;
-                        student.Class = (ClassName)hdnClass;
+                        string responsebody = await response.Content.ReadAsStringAsync();
+                        List<Student> objBooks = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                        foreach (var student in objBooks)
+                        {
+                            student.HdnStudentId = HdnStudentId;
+                            student.FirstName = HdnFirstName;
+                            student.LastName = HdnLastName;
+                            student.Class = (ClassName)hdnClass;
+                        }
+                        return View(objBooks);
                     }
-                    return View(objBooks);
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+                TempData["SuccessMessage"] = "Please login to BookIssueStd";
+                return RedirectToAction("LogIn", "Log");
             }
         }
+
+        #endregion
+
+        #region "GetBookByClass"
 
         [HttpPost]
         [Route("Class-Student")]
@@ -322,6 +440,9 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
+
+        #region "GetBookIssuedStudent"
         [HttpPost]
         public async Task<IActionResult> GetBookIssuedStudent(string Class)
         {
@@ -341,6 +462,10 @@ namespace CoreProject1.Controllers
 
             return View();
         }
+
+        #endregion
+
+        #region "SelectBookByStd"
 
         [HttpPost]
         public async Task<IActionResult> SelectBookByStd(int BookId, int HdnStudentId, string StudentFirstName, string StudentLastName, string StudentClass, string IssueDateTime, string hdnBookAuthor, string hdnBookName)
@@ -385,43 +510,78 @@ namespace CoreProject1.Controllers
             }
             catch (Exception ex)
             {
-
+               
             }
             return Ok();
         }
 
+        #endregion
 
+        #region "IssuedBooks"
 
         [HttpGet]
         [Route("IssuedBook")]
         public async Task<IActionResult> IssuedBook()
         {
-            try
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
-                HttpResponseMessage Response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/CheckIssuedBookAPI");
-                if (Response.IsSuccessStatusCode)
+                try
                 {
-                    string responsebody = await Response.Content.ReadAsStringAsync();
-                    List<Student> IssuedBook = JsonConvert.DeserializeObject<List<Student>>(responsebody);
-                    return View(IssuedBook);
+                    HttpResponseMessage Response = await _httpClient.GetAsync(_baseUrl + "api/LibraryAPI/CheckIssuedBookAPI");
+                    if (Response.IsSuccessStatusCode)
+                    {
+                        string responsebody = await Response.Content.ReadAsStringAsync();
+                        List<Student> IssuedBook = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                        return View(IssuedBook);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
                     return View("Error");
                 }
             }
-            catch (Exception ex)
+            else
             {
-                return View("Error");
+                TempData["SuccessMessage"] = "Please login to IssuedBook";
+                return RedirectToAction("LogIn", "Log");
             }
 
         }
+
+        #endregion
+
+        #region "SubmitBook"
 
         [HttpGet]
         [Route("SubmitBook")]
         public IActionResult SubmitBook()
         {
-            return View();
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+                try
+                {
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    return View(ex.Message);
+                }
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login to SubmitBook";
+                return RedirectToAction("LogIn", "Log");
+            }
         }
 
 
@@ -444,5 +604,7 @@ namespace CoreProject1.Controllers
 
             return Ok();
         }
+
+        #endregion
     }
 }
