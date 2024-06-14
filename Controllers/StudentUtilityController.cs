@@ -22,6 +22,8 @@ namespace CoreProject1.Controllers
 
         }
 
+
+        #region "ViewStudent"
         [HttpGet]
         [Route("View-Student-Record")]
         public async Task<IActionResult> ViewStudent()
@@ -55,6 +57,16 @@ namespace CoreProject1.Controllers
                 TempData["SuccessMessage"] = "Please login to view the Students";
                 return RedirectToAction("LogIn", "Log");
             }
+        }
+
+        #endregion
+
+        #region "AddStudent"
+
+        [Route("Add-Student-Record")]
+        public IActionResult AddStudent()
+        {
+            return View(new Student());
         }
 
 
@@ -146,12 +158,11 @@ namespace CoreProject1.Controllers
         }
 
 
-        [Route("Add-Student-Record")]
-        public IActionResult AddStudent()
-        {
-            return View(new Student());
-        }
 
+
+        #endregion
+
+        #region "Update Student"
         [HttpGet]
         [Route("ViewUpdate-Student-Record")]
         public async Task<IActionResult> UpdateStudent()
@@ -205,8 +216,7 @@ namespace CoreProject1.Controllers
             }
         }
 
-
-
+      
         [HttpPost]
         public async Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
         {
@@ -292,6 +302,9 @@ namespace CoreProject1.Controllers
                 return View("Error");
             }
         }
+        #endregion
+
+        #region "Delete Student"
 
         [HttpGet]
         [Route("DeleteView-Student-Record")]
@@ -348,6 +361,6 @@ namespace CoreProject1.Controllers
                 return View("Error");
             }
         }
-
+        #endregion
     }
 }
