@@ -12,7 +12,7 @@ namespace CoreProject1.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please Select your Class")]
-        public Degination Class { get; set; }
+        public Degination Subject { get; set; }
 
         [Required(ErrorMessage = "Please Select your Gender")]
         public GenderTypes Gender { get; set; }
@@ -37,7 +37,7 @@ namespace CoreProject1.Models
 
         [Required(ErrorMessage = "Please Select the Profile Photo")]
         public string Filepath { get; set; }
-        public string DateOfBirth { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
     }
     public enum Degination

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
+using System.Web;
 
 namespace CoreProject1.Controllers
 {
@@ -55,15 +56,15 @@ namespace CoreProject1.Controllers
         [Route("Add-Teacher-Record")]
         public IActionResult AddTeacher()
         {
-            return View();
+            return View(new TeacherDetail());
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTeacherData(TeacherDetail pStudent, IFormFile File)
+        public async Task<IActionResult> CreateTeacherData(TeacherDetail pTeacher, IFormFile File)
         {
             try
             {
-                if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
+                if (pTeacher.FirstName != "" && pTeacher.FatherName != "" && pTeacher.Email != "")
                 {
 
                     if (File != null && File.Length > 0)
@@ -75,33 +76,45 @@ namespace CoreProject1.Controllers
                             await File.CopyToAsync(stream);
                         }
 
-                        pStudent.Filepath = FileName;
+                        pTeacher.Filepath = FileName;
                     }
 
-                    if (string.IsNullOrEmpty(pStudent.Filepath))
+                    if (string.IsNullOrEmpty(pTeacher.Filepath))
                     {
-                        pStudent.Filepath = "";
+                        pTeacher.Filepath = "";
                     }
-                    if (string.IsNullOrEmpty(pStudent.LastName))
+                    if (string.IsNullOrEmpty(pTeacher.LastName))
                     {
-                        pStudent.LastName = "";
+                        pTeacher.LastName = "";
                     }
-                    if (pStudent.FirstName == pStudent.FatherName)
+                    if (pTeacher.DateOfBirth < new DateTime(1998, 1, 1))
                     {
-                        ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
+                        TempData["SuccessMessage"] = "Please Enter the Correct DOB.";
+                        return View("UpdateChangeData");
+                    }
+                    if (pTeacher.FirstName == pTeacher.FatherName)
+                    {
+                        TempData["SuccessMessage"] = "Student Name and Father's Name not be Same!, Please fill the correct data.";
                         return View("AddTeacher");
                     }
 
                     string Apiurl = _baseUrl + "api/TeacherAPI/AddTeacherAPI";
 
 
-                    string jsonStudent = JsonConvert.SerializeObject(pStudent);
+                    string fullurl = $"{Apiurl}?FirstName={(string.IsNullOrWhiteSpace(pTeacher.FirstName) ? "" : HttpUtility.UrlEncode(pTeacher.FirstName))}+" +
+                        $"&LastName{(string.IsNullOrWhiteSpace(pTeacher.LastName) ? "" : HttpUtility.UrlEncode(pTeacher.LastName))}+" +
+                        $"&FatherName={(string.IsNullOrWhiteSpace(pTeacher.FatherName) ? "" : HttpUtility.UrlEncode(pTeacher.FatherName))}" +
+                       $"&MotherName={(string.IsNullOrWhiteSpace(pTeacher.MotherName) ? "" : HttpUtility.UrlEncode(pTeacher.MotherName))}" +
+                       $"&Mobile={(string.IsNullOrWhiteSpace(pTeacher.Mobile) ? "" : HttpUtility.UrlEncode(pTeacher.Mobile))}" +
+                       $"&Gender={(string.IsNullOrWhiteSpace(pTeacher.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Gender.ToString()))}" +
+                       $"&Email={(string.IsNullOrWhiteSpace(pTeacher.Email) ? "" : HttpUtility.UrlEncode(pTeacher.Email))}" +
+                       $"&Remarks={(string.IsNullOrWhiteSpace(pTeacher.Remarks) ? "" : HttpUtility.UrlEncode(pTeacher.Remarks))}" +
+                       $"&Subject={(string.IsNullOrWhiteSpace(pTeacher.Subject.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Subject.ToString()))}" +
+                       $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString()) ? "DD/MM/YYYY" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString()))}" +
+                       $"&Filepath={(string.IsNullOrWhiteSpace(pTeacher.Filepath) ? "Null.jpg" : HttpUtility.UrlEncode(pTeacher.Filepath))}" +
+                       $"&Address={(string.IsNullOrWhiteSpace(pTeacher.Address) ? "" : HttpUtility.UrlEncode(pTeacher.Address))}";
 
-
-                    var content = new StringContent(jsonStudent, Encoding.UTF8, "application/json");
-
-
-                    HttpResponseMessage response = await _httpClient.PostAsync(Apiurl, content);
+                    HttpResponseMessage response = await _httpClient.GetAsync(fullurl);
 
 
                     if (response.IsSuccessStatusCode)
@@ -109,20 +122,19 @@ namespace CoreProject1.Controllers
                         string responseBody = await response.Content.ReadAsStringAsync();
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
                         string successMessage = responseObject.message;
-
-
-                        ViewBag.SuccessMessage = successMessage;
+                        ModelState.Clear();
+                        TempData["SuccessMessage"] = successMessage;
                         return View("AddTeacher");
                     }
                     else
                     {
-                        ViewBag.SuccessMessage = "Please Enter the Correct Data, Failed!";
+                        TempData["SuccessMessage"] = "Please Enter the Correct Data, Failed!";
                         return View("AddTeacher");
                     }
                 }
                 else
                 {
-                    ViewBag.SuccessMessage = "Please Enter the Mandatory Field's.";
+                    TempData["SuccessMessage"] = "Please Enter the Mandatory Field's.";
                     return View("AddTeacher");
 
                 }

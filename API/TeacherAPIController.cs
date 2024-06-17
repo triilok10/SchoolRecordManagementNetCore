@@ -71,13 +71,36 @@ namespace CoreProject1.API
 
         #region "Add Teacher API"
         [HttpPost]
-        public IActionResult AddTeacherAPI(TeacherDetail pStudent)
+        public IActionResult AddTeacherAPI(string FirstName = "", string LastName = "", string FatherName = "", string MotherName = "", string Mobile = "",
+            string Gender = "", string Email = "", string Remarks = "", string Subject = "", string DateOfBirth = "", string Filepath = "", string Address = "")
         {
+            TeacherDetail pTeacher = new TeacherDetail();
             string Message = "";
             bool res = false;
+            int GenderValue = (int)Enum.Parse(typeof(GenderType), Gender);
+            int ClassValue = (int)Enum.Parse(typeof(Degination), Subject);
+            DateTime DOBValue;
+            if (!DateTime.TryParse(DateOfBirth, out DOBValue))
+            {
+                Message = "Please Select the DateOfBirth in Correct Format";
+            }
+
+            pTeacher.FirstName = FirstName;
+            pTeacher.LastName = LastName;
+            pTeacher.FatherName = FatherName;
+            pTeacher.MotherName = MotherName;
+            pTeacher.Mobile = Mobile;
+            pTeacher.Gender = (GenderTypes)GenderValue;
+            pTeacher.Email = Email;
+            pTeacher.Remarks = Remarks;
+            pTeacher.Subject = (Degination)ClassValue;
+            pTeacher.Filepath = Filepath;
+            pTeacher.Address = Address;
+            pTeacher.DateOfBirth = DOBValue;
+
             try
             {
-                if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
+                if (pTeacher.FirstName != "" && pTeacher.FatherName != "" && pTeacher.Email != "")
                 {
                     using (SqlConnection con = new SqlConnection(_connectionString))
                     {
@@ -85,18 +108,18 @@ namespace CoreProject1.API
                         using (SqlCommand cmd = new SqlCommand("AddTeacherMain", con))
                         {
                             cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                            cmd.Parameters.AddWithValue("@Filepath", string.IsNullOrEmpty(pStudent.Filepath) ? (object)DBNull.Value : pStudent.Filepath);
-                            cmd.Parameters.AddWithValue("@FirstName", pStudent.FirstName);
-                            cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pStudent.LastName) ? (object)DBNull.Value : pStudent.LastName);
-                            cmd.Parameters.AddWithValue("@Class", pStudent.Class);
-                            cmd.Parameters.AddWithValue("@Gender", pStudent.Gender);
-                            cmd.Parameters.AddWithValue("@FathersName", pStudent.FatherName);
-                            cmd.Parameters.AddWithValue("@MotherName", pStudent.MotherName);
-                            cmd.Parameters.AddWithValue("@Address", pStudent.Address);
-                            cmd.Parameters.AddWithValue("@Remark", pStudent.Remarks);
-                            cmd.Parameters.AddWithValue("@Email", pStudent.Email);
-                            cmd.Parameters.AddWithValue("@Mobile", pStudent.Mobile);
-                            cmd.Parameters.AddWithValue("@DateOfBirth", pStudent.DateOfBirth);
+                            cmd.Parameters.AddWithValue("@Filepath", string.IsNullOrEmpty(pTeacher.Filepath) ? (object)DBNull.Value : pTeacher.Filepath);
+                            cmd.Parameters.AddWithValue("@FirstName", pTeacher.FirstName);
+                            cmd.Parameters.AddWithValue("@LastName", string.IsNullOrEmpty(pTeacher.LastName) ? (object)DBNull.Value : pTeacher.LastName);
+                            cmd.Parameters.AddWithValue("@Class", pTeacher.Subject);
+                            cmd.Parameters.AddWithValue("@Gender", pTeacher.Gender);
+                            cmd.Parameters.AddWithValue("@FathersName", pTeacher.FatherName);
+                            cmd.Parameters.AddWithValue("@MotherName", pTeacher.MotherName);
+                            cmd.Parameters.AddWithValue("@Address", pTeacher.Address);
+                            cmd.Parameters.AddWithValue("@Remark", pTeacher.Remarks);
+                            cmd.Parameters.AddWithValue("@Email", pTeacher.Email);
+                            cmd.Parameters.AddWithValue("@Mobile", pTeacher.Mobile);
+                            cmd.Parameters.AddWithValue("@DateOfBirth", pTeacher.DateOfBirth);
 
 
                             cmd.ExecuteNonQuery();
@@ -173,11 +196,11 @@ namespace CoreProject1.API
                                 MotherName = Convert.ToString(rdr["MotherName"]),
                                 Gender = (GenderTypes)Enum.Parse(typeof(GenderTypes), Convert.ToString(rdr["Gender"])),
                                 Address = Convert.ToString(rdr["Address"]),
-                                Class = (Degination)Enum.Parse(typeof(Degination), Convert.ToString(rdr["Class"])),
+                                Subject = (Degination)Enum.Parse(typeof(Degination), Convert.ToString(rdr["Class"])),
                                 Remarks = Convert.ToString(rdr["Remarks"]),
                                 Email = Convert.ToString(rdr["Email"]),
                                 Mobile = Convert.ToString(rdr["Mobile"]),
-                                DateOfBirth = Convert.ToString(rdr["DateOfBirth"])
+                                DateOfBirth = Convert.ToDateTime(rdr["DateOfBirth"])
                             };
                         }
                     }
@@ -211,7 +234,7 @@ namespace CoreProject1.API
                     cmd.Parameters.AddWithValue("@Filepath", std.Filepath);
                     cmd.Parameters.AddWithValue("@FirstName", std.FirstName);
                     cmd.Parameters.AddWithValue("@LastName", std.LastName);
-                    cmd.Parameters.AddWithValue("@Class", std.Class);
+                    cmd.Parameters.AddWithValue("@Class", std.Subject);
                     cmd.Parameters.AddWithValue("@Gender", std.Gender);
                     cmd.Parameters.AddWithValue("@FatherName", std.FatherName);
                     cmd.Parameters.AddWithValue("@MotherName", std.MotherName);
