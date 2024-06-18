@@ -202,11 +202,11 @@ namespace CoreProject1.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateTeacherData(TeacherDetail pStudent, IFormFile File)
+        public async Task<IActionResult> UpdateTeacherData(TeacherDetail pTeacher, IFormFile File)
         {
             try
             {
-                if (pStudent.FirstName != "" && pStudent.FatherName != "" && pStudent.Email != "")
+                if (pTeacher.FirstName != "" && pTeacher.FatherName != "" && pTeacher.Email != "")
                 {
 
                     if (File != null && File.Length > 0)
@@ -218,45 +218,49 @@ namespace CoreProject1.Controllers
                             await File.CopyToAsync(stream);
                         }
 
-                        pStudent.Filepath = FileName;
+                        pTeacher.Filepath = FileName;
                     }
-                    if (string.IsNullOrWhiteSpace(pStudent.Filepath))
+                    if (string.IsNullOrWhiteSpace(pTeacher.Filepath))
                     {
-                        pStudent.Filepath = "null.jpg";
+                        pTeacher.Filepath = "null.jpg";
                     }
-                    if (string.IsNullOrEmpty(pStudent.LastName))
+                    if (string.IsNullOrEmpty(pTeacher.LastName))
                     {
-                        pStudent.LastName = "";
+                        pTeacher.LastName = "";
                     }
-                    if (pStudent.FirstName == pStudent.FatherName)
+                    if (pTeacher.FirstName == pTeacher.FatherName)
                     {
                         ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
                         return View("UpdateChangeData");
                     }
-                    if (pStudent.Mobile.Length != 10)
+                    if (pTeacher.Mobile.Length != 10)
                     {
                         ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
                         return View("UpdateChangeData");
                     }
                     string Apiurl = _baseUrl + "api/TeacherAPI/UpdateTeacherDataAPI";
 
+                    string FullAPL = $"{Apiurl}?Id={(string.IsNullOrWhiteSpace(pTeacher.Id.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Id.ToString()))}" +
+                        $"&FirstName={(string.IsNullOrWhiteSpace(pTeacher.FirstName) ? "" : HttpUtility.UrlEncode(pTeacher.FirstName))}" +
+                        $"&LastName={(string.IsNullOrWhiteSpace(pTeacher.LastName) ? "" : HttpUtility.UrlEncode(pTeacher.LastName))}" +
+                        $"&Subject={(string.IsNullOrWhiteSpace(pTeacher.Subject.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Subject.ToString()))}" +
+                        $"&FatherName={(string.IsNullOrWhiteSpace(pTeacher.FatherName) ? "" : HttpUtility.UrlEncode(pTeacher.FatherName))}" +
+                        $"&MotherName={(string.IsNullOrWhiteSpace(pTeacher.MotherName) ? "" : HttpUtility.UrlEncode(pTeacher.MotherName))}" +
+                        $"&email={(string.IsNullOrWhiteSpace(pTeacher.Email) ? "" : HttpUtility.UrlEncode(pTeacher.Email))}" +
+                        $"&Mobile={(string.IsNullOrWhiteSpace(pTeacher.Mobile) ? "" : HttpUtility.UrlEncode(pTeacher.Mobile))}" +
+                        $"&Gender={(string.IsNullOrWhiteSpace(pTeacher.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Gender.ToString()))}" +
+                        $"&Address={(string.IsNullOrWhiteSpace(pTeacher.Address) ? "" : HttpUtility.UrlEncode(pTeacher.Address))}" +
+                        $"&Remarks={(string.IsNullOrWhiteSpace(pTeacher.Remarks) ? "" : HttpUtility.UrlEncode(pTeacher.Remarks))}" +
+                        $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString()))}" +
+                        $"&Filepath={(string.IsNullOrWhiteSpace(pTeacher.Filepath) ? "" : HttpUtility.UrlEncode(pTeacher.Filepath))}";
 
-                    string jsonStudent = JsonConvert.SerializeObject(pStudent);
-
-
-                    var content = new StringContent(jsonStudent, Encoding.UTF8, "application/json");
-
-
-                    HttpResponseMessage response = await _httpClient.PostAsync(Apiurl, content);
-
+                    HttpResponseMessage response = await _httpClient.GetAsync(FullAPL);
 
                     if (response.IsSuccessStatusCode)
                     {
                         string responseBody = await response.Content.ReadAsStringAsync();
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
                         string successMessage = responseObject.message;
-
-
                         ViewBag.SuccessMessage = successMessage;
                         return View("UpdateChangeData");
                     }

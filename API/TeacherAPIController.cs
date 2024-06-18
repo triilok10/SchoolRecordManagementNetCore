@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 
 namespace CoreProject1.API
 {
@@ -70,7 +71,7 @@ namespace CoreProject1.API
         #endregion
 
         #region "Add Teacher API"
-        [HttpPost]
+        [HttpGet]
         public IActionResult AddTeacherAPI(string FirstName = "", string LastName = "", string FatherName = "", string MotherName = "", string Mobile = "",
             string Gender = "", string Email = "", string Remarks = "", string Subject = "", string DateOfBirth = "", string Filepath = "", string Address = "")
         {
@@ -218,10 +219,33 @@ namespace CoreProject1.API
             }
         }
 
-        [HttpPost]
-        public IActionResult UpdateTeacherDataAPI(TeacherDetail std)
+        [HttpGet]
+        public IActionResult UpdateTeacherDataAPI(string FirstName, string LastName, string Subject, string FatherName, string MotherName, string email, string Mobile, string Gender, string Address, string Remarks, string Filepath, string DateOfBirth)
         {
+
+            TeacherDetail pTeacher = new TeacherDetail();
             string Message = "";
+            bool res = false;
+            int GenderValue = (int)Enum.Parse(typeof(GenderType), Gender);
+            int ClassValue = (int)Enum.Parse(typeof(Degination), Subject);
+            DateTime DOBValue;
+            if (!DateTime.TryParse(DateOfBirth, out DOBValue))
+            {
+                Message = "Please Select the DateOfBirth in Correct Format";
+            }
+
+            pTeacher.FirstName = FirstName;
+            pTeacher.LastName = LastName;
+            pTeacher.FatherName = FatherName;
+            pTeacher.MotherName = MotherName;
+            pTeacher.Mobile = Mobile;
+            pTeacher.Gender = (GenderTypes)GenderValue;
+            pTeacher.Email = email;
+            pTeacher.Remarks = Remarks;
+            pTeacher.Subject = (Degination)ClassValue;
+            pTeacher.Filepath = Filepath;
+            pTeacher.Address = Address;
+            pTeacher.DateOfBirth = DOBValue;
             try
             {
 
@@ -230,19 +254,19 @@ namespace CoreProject1.API
                     SqlCommand cmd = new SqlCommand("UpdateTeacherData", con);
                     cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                    cmd.Parameters.AddWithValue("@Id", std.Id);
-                    cmd.Parameters.AddWithValue("@Filepath", std.Filepath);
-                    cmd.Parameters.AddWithValue("@FirstName", std.FirstName);
-                    cmd.Parameters.AddWithValue("@LastName", std.LastName);
-                    cmd.Parameters.AddWithValue("@Class", std.Subject);
-                    cmd.Parameters.AddWithValue("@Gender", std.Gender);
-                    cmd.Parameters.AddWithValue("@FatherName", std.FatherName);
-                    cmd.Parameters.AddWithValue("@MotherName", std.MotherName);
-                    cmd.Parameters.AddWithValue("@Address", std.Address);
-                    cmd.Parameters.AddWithValue("@Remark", std.Remarks);
-                    cmd.Parameters.AddWithValue("@Email", std.Email);
-                    cmd.Parameters.AddWithValue("@Mobile", std.Mobile);
-                    cmd.Parameters.AddWithValue("@DateOfBirth", std.DateOfBirth);
+                    cmd.Parameters.AddWithValue("@Id", pTeacher.Id);
+                    cmd.Parameters.AddWithValue("@Filepath", pTeacher.Filepath);
+                    cmd.Parameters.AddWithValue("@FirstName", pTeacher.FirstName);
+                    cmd.Parameters.AddWithValue("@LastName", pTeacher.LastName);
+                    cmd.Parameters.AddWithValue("@Class", pTeacher.Subject);
+                    cmd.Parameters.AddWithValue("@Gender", pTeacher.Gender);
+                    cmd.Parameters.AddWithValue("@FatherName", pTeacher.FatherName);
+                    cmd.Parameters.AddWithValue("@MotherName", pTeacher.MotherName);
+                    cmd.Parameters.AddWithValue("@Address", pTeacher.Address);
+                    cmd.Parameters.AddWithValue("@Remark", pTeacher.Remarks);
+                    cmd.Parameters.AddWithValue("@Email", pTeacher.Email);
+                    cmd.Parameters.AddWithValue("@Mobile", pTeacher.Mobile);
+                    cmd.Parameters.AddWithValue("@DateOfBirth", pTeacher.DateOfBirth);
                     con.Open();
                     cmd.ExecuteNonQuery();
                 }
