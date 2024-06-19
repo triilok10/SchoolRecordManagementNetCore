@@ -1,5 +1,10 @@
 ﻿@model List<CoreProject1.Models.TeacherDetail>
-
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+    </div>
+}
 <div class="text-center">
     <br />
     <h2 class="text-danger"> Update Teacher Record</h2>

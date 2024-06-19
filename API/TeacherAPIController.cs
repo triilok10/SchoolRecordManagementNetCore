@@ -220,7 +220,7 @@ namespace CoreProject1.API
         }
 
         [HttpGet]
-        public IActionResult UpdateTeacherDataAPI(string FirstName, string LastName, string Subject, string FatherName, string MotherName, string email, string Mobile, string Gender, string Address, string Remarks, string Filepath, string DateOfBirth)
+        public IActionResult UpdateTeacherDataAPI(int Id, string FirstName, string LastName, string Subject, string FatherName, string MotherName, string email, string Mobile, string Gender, string Address, string Remarks, string Filepath, string DateOfBirth)
         {
 
             TeacherDetail pTeacher = new TeacherDetail();
@@ -233,7 +233,7 @@ namespace CoreProject1.API
             {
                 Message = "Please Select the DateOfBirth in Correct Format";
             }
-
+            pTeacher.Id = Id;
             pTeacher.FirstName = FirstName;
             pTeacher.LastName = LastName;
             pTeacher.FatherName = FatherName;

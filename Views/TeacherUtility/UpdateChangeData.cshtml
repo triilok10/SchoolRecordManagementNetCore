@@ -7,117 +7,119 @@
 
 </style>
 
-@if (ViewBag.SuccessMessage != null)
+@if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success" role="alert">
-        @ViewBag.SuccessMessage
+        @TempData["SuccessMessage"]
     </div>
 }
-<div class="container">
-    <br />
-    <div class="row justify-content-center">
-        <div class="col-md-6" style="padding:23px;">
-            <h2 class="text-center text-capitalize">Update Teacher</h2>
-            <br />
-            <form method="post" asp-controller="TeacherUtility" asp-action="UpdateTeacherData" enctype="multipart/form-data">
-                <div class="d-flex justify-content-evenly align-items-center">
-                    <div style="width: 50%;">
-                        <div class="form-group">
-                            <label class="control-label">Photo :</label>
-                            @if (string.IsNullOrEmpty(Model.Filepath))
-                            {
-                                <img src="~/Images/UserImages/null.jpg" class="img-thumbnail userPhoto" alt="No Photo Available">
-                            }
-                            else
-                            {
-                                <img src="~/@Model.Filepath" class="img-thumbnail userPhoto" alt="Teacher Photo">
-                            }
-                        </div>
-                    </div>
-                    <div style="width: 50%; ">
-                        <div class="form-group">
-                            <input asp-for="Id" class="form-control" type="hidden" />
+    <div class="container">
+        <br />
+        <div class="row justify-content-center">
+            <div class="col-md-6" style="padding:23px;">
+                <h2 class="text-center text-capitalize">Update Teacher</h2>
+                <br />
+                <form method="post" asp-controller="TeacherUtility" asp-action="UpdateTeacherData" enctype="multipart/form-data">
+                    <div class="d-flex justify-content-evenly align-items-center">
+                        <div style="width: 50%;">
                             <div class="form-group">
-                                <label class="control-label">Date Of Birth :</label>
-                                @*      <input ="date" name="DateOfBirth" value=""/> *@
-                                <input asp-for="DateOfBirth" class="form-control" disabled />
-                                <p>Date Of Birth is only updated once.</p>
+                                <label class="control-label">Photo :</label>
+                                @if (string.IsNullOrEmpty(Model.Filepath))
+                                {
+                                    <img src="~/Images/UserImages/null.jpg" class="img-thumbnail userPhoto" alt="No Photo Available">
+                                }
+                                else
+                                {
+                                    <img src="~/@Model.Filepath" class="img-thumbnail userPhoto" alt="Teacher Photo">
+                                }
+                            </div>
+                        </div>
+                        <div style="width: 50%; ">
+                            <div class="form-group">
+                                <input asp-for="Id" class="form-control" type="hidden" />
+                                <div class="form-group">
+                                    <label class="control-label">Date Of Birth :</label>
+                                    @*      <input ="date" name="DateOfBirth" value=""/> *@
+                                    <input asp-for="DateOfBirth" class="form-control" readonly />
+                                    <p>Date Of Birth is only updated once.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="d-flex justify-content-evenly align-items-center">
-                    <div style="width: 50%; ">
-                        <div class="form-group">
-                            <label class="control-label">First Name :</label>
-                            <input asp-for="FirstName" class="form-control" disabled />
+                    <div class="d-flex justify-content-evenly align-items-center">
+                        <div style="width: 50%; ">
+                            <div class="form-group">
+                                <label class="control-label">First Name :</label>
+                                <input asp-for="FirstName" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Class :</label>
+                                <select asp-for="Subject" class="form-control" readonly>
+                                    <option value="">Select Class</option>
+                                    @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.Degination)))
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Fathers Name :</label>
+                                <input asp-for="FatherName" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Address :</label>
+                                <input asp-for="Address" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Phone Number :</label>
+                                <input asp-for="Mobile" class="form-control" type="number" maxlength="10" required />
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label">Class :</label>
-                            <select asp-for="Subject" class="form-control" disabled>
-                                <option value="">Select Class</option>
-                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.Degination)))
-                                {
-                                    <option value="@item">@item</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Fathers Name :</label>
-                            <input asp-for="FatherName" class="form-control" disabled />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Address :</label>
-                            <input asp-for="Address" class="form-control" required />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Phone Number :</label>
-                            <input asp-for="Mobile" class="form-control" type="number" maxlength="10" required />
+                        <div style="width:50% ;">
+                            <div class="form-group">
+                                <label class="control-label">Last Name :</label>
+                                <input asp-for="LastName" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Gender :</label>
+                                <select asp-for="Gender" class="form-control" readonly>
+                                    <option value="">Select Gender</option>
+                                    @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.GenderTypes)))
+                                    {
+                                        <option value="@item">@item</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Mothers Name :</label>
+                                <input asp-for="MotherName" class="form-control" readonly />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Email :</label>
+                                <input asp-for="Email" class="form-control" required />
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Remarks :</label>
+                                <input asp-for="Remarks" class="form-control" required />
+                            </div>
                         </div>
                     </div>
-                    <div style="width:50% ;">
-                        <div class="form-group">
-                            <label class="control-label">Last Name :</label>
-                            <input asp-for="LastName" class="form-control" disabled/>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Gender :</label>
-                            <select asp-for="Gender" class="form-control" disabled>
-                                <option value="">Select Gender</option>
-                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.GenderTypes)))
-                                {
-                                    <option value="@item">@item</option>
-                                }
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Mothers Name :</label>
-                            <input asp-for="MotherName" class="form-control" disabled />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Email :</label>
-                            <input asp-for="Email" class="form-control" required />
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label">Remarks :</label>
-                            <input asp-for="Remarks" class="form-control" required />
-                        </div>
-                    </div>
-                </div>
 
-                <br />
-                <div class="d-flex justify-content-evenly align-items-center">
-                    <div style="width: 50%;">
-                        <div class="form-group">
+                    <br />
+                    <div class="d-flex justify-content-evenly align-items-center">
+                        <div style="width: 50%;">
+                            <div class="form-group">
+                            </div>
+                        </div>
+                        <div style="width: 50%;display:flex;justify-content:end ">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
                         </div>
                     </div>
-                    <div style="width: 50%;display:flex;justify-content:end ">
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+
+

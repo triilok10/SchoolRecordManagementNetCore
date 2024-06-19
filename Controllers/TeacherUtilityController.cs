@@ -110,7 +110,7 @@ namespace CoreProject1.Controllers
                        $"&Email={(string.IsNullOrWhiteSpace(pTeacher.Email) ? "" : HttpUtility.UrlEncode(pTeacher.Email))}" +
                        $"&Remarks={(string.IsNullOrWhiteSpace(pTeacher.Remarks) ? "" : HttpUtility.UrlEncode(pTeacher.Remarks))}" +
                        $"&Subject={(string.IsNullOrWhiteSpace(pTeacher.Subject.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Subject.ToString()))}" +
-                       $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString()) ? "DD/MM/YYYY" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString()))}" +
+                       $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString("yyyy-MM-dd")) ? "DD/MM/YYYY" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString("yyyy-MM-dd")))}" +
                        $"&Filepath={(string.IsNullOrWhiteSpace(pTeacher.Filepath) ? "Null.jpg" : HttpUtility.UrlEncode(pTeacher.Filepath))}" +
                        $"&Address={(string.IsNullOrWhiteSpace(pTeacher.Address) ? "" : HttpUtility.UrlEncode(pTeacher.Address))}";
 
@@ -230,13 +230,13 @@ namespace CoreProject1.Controllers
                     }
                     if (pTeacher.FirstName == pTeacher.FatherName)
                     {
-                        ViewBag.SuccessMessage = "Student Name and Father's Name not be Same!, Please fill the correct data.";
-                        return View("UpdateChangeData");
+                        TempData["SuccessMessage"] = "Student Name and Father's Name not be Same!, Please fill the correct data.";
+                        return RedirectToAction("UpdateTeacher");
                     }
                     if (pTeacher.Mobile.Length != 10)
                     {
-                        ViewBag.SuccessMessage = "Please Enter the 10 digit Mobile Number.";
-                        return View("UpdateChangeData");
+                        TempData["SuccessMessage"] = "Please Enter the 10 digit Mobile Number.";
+                        return RedirectToAction("UpdateTeacher");
                     }
                     string Apiurl = _baseUrl + "api/TeacherAPI/UpdateTeacherDataAPI";
 
@@ -251,7 +251,7 @@ namespace CoreProject1.Controllers
                         $"&Gender={(string.IsNullOrWhiteSpace(pTeacher.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Gender.ToString()))}" +
                         $"&Address={(string.IsNullOrWhiteSpace(pTeacher.Address) ? "" : HttpUtility.UrlEncode(pTeacher.Address))}" +
                         $"&Remarks={(string.IsNullOrWhiteSpace(pTeacher.Remarks) ? "" : HttpUtility.UrlEncode(pTeacher.Remarks))}" +
-                        $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString()))}" +
+                        $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString("yyyy-MM-dd")) ? "" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString("yyyy-MM-dd")))}" +
                         $"&Filepath={(string.IsNullOrWhiteSpace(pTeacher.Filepath) ? "" : HttpUtility.UrlEncode(pTeacher.Filepath))}";
 
                     HttpResponseMessage response = await _httpClient.GetAsync(FullAPL);
@@ -261,8 +261,8 @@ namespace CoreProject1.Controllers
                         string responseBody = await response.Content.ReadAsStringAsync();
                         var responseObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
                         string successMessage = responseObject.message;
-                        ViewBag.SuccessMessage = successMessage;
-                        return View("UpdateChangeData");
+                        TempData["SuccessMessage"] = successMessage;
+                        return RedirectToAction("UpdateTeacher");
                     }
                     else
                     {
