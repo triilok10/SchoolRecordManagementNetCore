@@ -1,5 +1,11 @@
 ﻿@model CoreProject1.Models.Student
+<style>
 
+    .userPhoto {
+        height: 120px;
+    }
+
+</style>
 <div class="container">
     <br />
     @if (TempData["SuccessMessage"] != null)
@@ -18,13 +24,24 @@
                     <div style="width: 50%;">
                         <div class="form-group">
                             <label class="control-label">Photo :</label>
-                            <input type="file" name="File" value=""/>
+                            @if (string.IsNullOrEmpty(Model.Filepath))
+                            {
+                                <img src="~/Images/UserImages/null.jpg" class="img-thumbnail userPhoto" alt="No Photo Available">
+                            }
+                            else
+                            {
+                                <img src="~/Images/UserImages/@Model.Filepath" class="img-thumbnail userPhoto" alt="Student Photo">
+                            }
                         </div>
                     </div>
                     <div style="width: 50%; ">
                         <div class="form-group">
-                            <label class="control-label">Date Of Birth :</label>
-                            <input type="date" name="DateOfBirth" value=""/>
+                            <input asp-for="Id" class="form-control" type="hidden" />
+                            <div class="form-group">
+                                <label class="control-label">Date Of Birth :</label>
+                                <input asp-for="DateOfBirth" class="form-control" readonly />
+                                <p>Date Of Birth is only updated once.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -32,12 +49,12 @@
                     <div style="width: 50%; ">
                         <div class="form-group">
                             <label class="control-label">First Name :</label>
-                            <input asp-for="FirstName" class="form-control" required /> 
-                          
+                            <input asp-for="FirstName" class="form-control" readonly />
+
                         </div>
                         <div class="form-group">
                             <label class="control-label">Class :</label>
-                            <select asp-for="Class" class="form-control" required>
+                            <select asp-for="Class" class="form-control" disabled>
                                 <option value="">Select Class</option>
                                 @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
                                 {
@@ -45,13 +62,14 @@
                                 }
                             </select>
                         </div>
+
                         <div class="form-group">
                             <label class="control-label">Fathers Name :</label>
-                            <input asp-for="FatherName" class="form-control" required />
+                            <input asp-for="FatherName" class="form-control" readonly />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Address :</label>
-                            <input asp-for="Address" class="form-control" required />
+                            <input asp-for="Address" class="form-control" readonly />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Phone Number :</label>
@@ -61,13 +79,13 @@
                     <div style="width:50% ;">
                         <div class="form-group">
                             <label class="control-label">Last Name :</label>
-                            <input asp-for="LastName" class="form-control" />
+                            <input asp-for="LastName" class="form-control" readonly />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Gender :</label>
-                            <select asp-for="Gender" class="form-control" required>
+                            <select asp-for="Gender" class="form-control" disabled>
                                 <option value="">Select Gender</option>
-                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.GenderType)))
+                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.GenderTypes)))
                                 {
                                     <option value="@item">@item</option>
                                 }
@@ -75,7 +93,7 @@
                         </div>
                         <div class="form-group">
                             <label class="control-label">Mothers Name :</label>
-                            <input asp-for="MotherName" class="form-control" required />
+                            <input asp-for="MotherName" class="form-control" readonly />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Email :</label>
