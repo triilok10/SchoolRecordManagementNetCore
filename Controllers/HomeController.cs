@@ -1,6 +1,7 @@
 using CoreProject1.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using System.Diagnostics;
 
 namespace CoreProject1.Controllers
@@ -8,12 +9,15 @@ namespace CoreProject1.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly string _connectionString;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IConfiguration configuration, ILogger<HomeController> logger)
         {
+            _connectionString = configuration.GetConnectionString("CustomConnection");
             _logger = logger;
         }
 
+    
         public IActionResult Index()
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
@@ -27,6 +31,72 @@ namespace CoreProject1.Controllers
             {
                 TempData["SuccessMessage"] = "Please login";
                 return RedirectToAction("LogIn", "Log");
+            }
+        }
+
+        public JsonResult ChartsViewStudent()
+        {
+            List<Student> ltrStudents = new List<Student>();
+            int maleCount = 0;
+            int femaleCount = 0;
+            int otherCount = 0;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("AddViewStudents", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Student objStudent = new Student();
+
+                            if (Enum.TryParse<GenderType>(Convert.ToString(rdr["Gender"]), out GenderType gender))
+                            {
+                                objStudent.Gender = gender;
+                                if (gender == GenderType.Male)
+                                {
+                                    maleCount++;
+                                }
+                                else if (gender == GenderType.Female)
+                                {
+                                    femaleCount++;
+                                }
+                                else if (gender == GenderType.Other)
+                                {
+                                    otherCount++;
+                                }
+                            }
+
+                            ltrStudents.Add(objStudent);
+                        }
+                    }
+                }
+
+                int totalCount = maleCount + femaleCount + otherCount;
+
+                if (totalCount == 0)
+                {
+                    return Json(new { error = "Total count of students is zero." });
+                }
+
+                double malePercentage = (double)maleCount / totalCount * 100;
+                double femalePercentage = (double)femaleCount / totalCount * 100;
+                double otherPercentage = (double)otherCount / totalCount * 100;
+
+                var result = new
+                {
+                    malePercentage = malePercentage,
+                    femalePercentage = femalePercentage,
+                    otherPercentage = otherPercentage
+                };
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
             }
         }
 

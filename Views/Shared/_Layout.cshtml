@@ -10,9 +10,9 @@
 </head>
 <body>
     <div class="container-fluid">
-       
+
         <div class="row no-g">
-          
+
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse" style="height:100vh; position:fixed; background-color:#146261">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
@@ -22,7 +22,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="DashBoard">Dashboard</a>
                         </li>
-                       
+
                         <li class="nav-item">
                             <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="Students">Student</a>
                         </li>
@@ -52,6 +52,10 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/highcharts/code/highcharts.js"></script>
+    <script src="~/lib/highcharts/code/highcharts.src.js"></script>
+    <a href="~/lib/highcharts/code/highcharts.js.map"></a>
+    <link href="~/lib/highcharts/code/css/highcharts.css" rel="stylesheet" />
     <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
     <script>
         $(document).ready(function () {
