@@ -59,6 +59,9 @@
                         }
                     }
                 },
+                credits: {
+                    enabled: false // Remove Highcharts.com link
+                },
                 series: [{
                     enableMouseTracking: false,
                     animation: {
