@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     $.ajax({
         type: "POST",
-        url: "/Home/ChartsViewStudent",
+        url: "/Home/DashboardTeacher",
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
@@ -27,13 +27,13 @@
         }
 
         try {
-            Highcharts.chart('container', {
+            Highcharts.chart('containerChart', {
                 chart: {
                     type: 'pie',
                     height: 500
                 },
                 title: {
-                    text: 'Students Ratio',
+                    text: 'Teacher Ratio',
                     align: 'Center',
                     style: {
                         fontSize: '18px',
@@ -48,7 +48,24 @@
                         color: '#666666'
                     }
                 },
-                s: {
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                    borderColor: '#666666',
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    shadow: false,
+                    style: {
+                        color: '#333333',
+                        fontSize: '12px'
+                    }
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
                     pie: {
                         allowPointSelect: true,
                         borderWidth: 1,
@@ -87,6 +104,7 @@
                     }]
                 }]
             });
+
         } catch (err) {
             console.error("Chart Error:", err);
         }

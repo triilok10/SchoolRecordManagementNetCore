@@ -1,4 +1,5 @@
 using CoreProject1.Models;
+using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -17,7 +18,7 @@ namespace CoreProject1.Controllers
             _logger = logger;
         }
 
-    
+
         public IActionResult Index()
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
@@ -100,12 +101,84 @@ namespace CoreProject1.Controllers
             }
         }
 
+
+        public JsonResult DashboardTeacher()
+        {
+            List<TeacherDetail> lstTeacher = new List<TeacherDetail>();
+            int maleTeacher = 0;
+            int femaleTeacher = 0;
+            int otherTeacher = 0;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("AddViewTeachers", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            TeacherDetail objTeacher = new TeacherDetail();
+
+                            if (Enum.TryParse<GenderTypes>(Convert.ToString(rdr["Gender"]), out GenderTypes gender))
+                            {
+                                objTeacher.Gender = gender;
+                                if (gender == GenderTypes.Male)
+                                {
+                                    maleTeacher++;
+                                }
+                                else if (gender == GenderTypes.Female)
+                                {
+                                    femaleTeacher++;
+                                }
+                                else if (gender == GenderTypes.Other)
+                                {
+                                    otherTeacher++;
+                                }
+                            }
+
+                            lstTeacher.Add(objTeacher);
+                        }
+                    }
+                }
+                int totalCount = maleTeacher + femaleTeacher + otherTeacher;
+
+                if (totalCount == 0)
+                {
+                    return Json(new { error = "Total count of students is zero." });
+                }
+
+                double malePercentage = (double)maleTeacher / totalCount * 100;
+                double femalePercentage = (double)femaleTeacher / totalCount * 100;
+                double otherPercentage = (double)otherTeacher / totalCount * 100;
+
+                var result = new
+                {
+                    malePercentage = malePercentage,
+                    femalePercentage = femalePercentage,
+                    otherPercentage = otherPercentage
+                };
+                return Json(result);
+            }
+
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+
+            return Json(new { });
+        }
+
+
+
+
         public IActionResult Dashboard()
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
             var LoginPassword = HttpContext.Session.GetString("Password");
-            if(IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
                 return View();
             }
@@ -114,7 +187,7 @@ namespace CoreProject1.Controllers
                 TempData["SuccessMessage"] = "Please login";
                 return RedirectToAction("LogIn", "Log");
             }
-         
+
         }
 
         [Route("Data-Students")]
@@ -180,7 +253,7 @@ namespace CoreProject1.Controllers
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
             var LoginPassword = HttpContext.Session.GetString("Password");
-            if(IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
                 return View();
             }
