@@ -76,10 +76,10 @@
                     },
                     colorByPoint: true,
                     data: [{
-                        name: 'Female Teacher',
+                        name: 'Girls',
                         y: data.femalePercentage
                     }, {
-                        name: 'Male Teacher',
+                        name: 'Boys',
                         y: data.malePercentage
                     }, {
                         name: 'Other',

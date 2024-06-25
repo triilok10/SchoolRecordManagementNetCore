@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿
+
+$(document).ready(function () {
     $.ajax({
         type: "POST",
         url: "/Home/DashboardTeacher",
@@ -41,7 +43,7 @@
                     }
                 },
                 subtitle: {
-                    text: 'Student Data',
+                    text: 'Teacher Data',
                     align: 'Center',
                     style: {
                         fontSize: '14px',
@@ -110,3 +112,5 @@
         }
     }
 });
+
+
