@@ -37,7 +37,7 @@ namespace CoreProject1.Controllers
                         HttpContext.Session.SetString("IsLoggedIn", "true");
                         HttpContext.Session.SetString("Username", pLogin.Username);
                         HttpContext.Session.SetString("Password", pLogin.Password);
-                       return RedirectToAction("Index", "Home");
+                       return RedirectToAction("Dashboard", "Home");
 
                     }
                     else

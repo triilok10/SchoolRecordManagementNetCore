@@ -3,39 +3,48 @@ using Humanizer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
+using Newtonsoft.Json;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace CoreProject1.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly HttpClient _httpClient;
+        IHttpContextAccessor _httpContextAccessor;
+        private readonly dynamic _baseUrl;
         private readonly ILogger<HomeController> _logger;
         private readonly string _connectionString;
 
-        public HomeController(IConfiguration configuration, ILogger<HomeController> logger)
+        public HomeController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor, ILogger<HomeController> logger, IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("CustomConnection");
             _logger = logger;
+            _httpClient = httpClient;
+            _httpContextAccessor = httpContextAccessor;
+            var request = _httpContextAccessor.HttpContext.Request;
+            _baseUrl = $"{request.Scheme}://{request.Host.Value}/"; _httpClient.BaseAddress = new Uri(_baseUrl);
+
         }
 
+        //public IActionResult Index()
+        //{
+        //    var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+        //    var LoginUsername = HttpContext.Session.GetString("Username");
+        //    var LoginPassword = HttpContext.Session.GetString("Password");
+        //    if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+        //    {
+        //        return View();
+        //    }
+        //    else
+        //    {
+        //        TempData["SuccessMessage"] = "Please login";
+        //        return RedirectToAction("LogIn", "Log");
+        //    }
+        //}
 
-        public IActionResult Index()
-        {
-            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
-            var LoginUsername = HttpContext.Session.GetString("Username");
-            var LoginPassword = HttpContext.Session.GetString("Password");
-            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
-            {
-                return View();
-            }
-            else
-            {
-                TempData["SuccessMessage"] = "Please login";
-                return RedirectToAction("LogIn", "Log");
-            }
-        }
-
-        public JsonResult ChartsViewStudent()
+        public JsonResult DashBoardStudent()
         {
             List<Student> ltrStudents = new List<Student>();
             int maleCount = 0;
@@ -169,8 +178,93 @@ namespace CoreProject1.Controllers
 
             return Json(new { });
         }
+        public JsonResult LibraryDashboard()
+        {
+            List<Student> lstTeacher = new List<Student>();
+            int HindiBook = 0;
+            int EnglishBook = 0;
+            int PunjabiBook = 0;
+            int SpanishBook = 0;
+            int ItalianBook = 0;
+            int Other = 0;
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("Sp_ViewBooks", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Student objLibrary = new Student();
 
+                            if (Enum.TryParse<BookMedium>(Convert.ToString(rdr["Book1Medium"]), out BookMedium libMedium))
+                            {
+                                objLibrary.BookMediumLanguage = libMedium;
+                                if (libMedium == BookMedium.English)
+                                {
+                                    EnglishBook++;
+                                }
+                                else if (libMedium == BookMedium.Hindi)
+                                {
+                                    HindiBook++;
+                                }
+                                else if (libMedium == BookMedium.Other)
+                                {
+                                    Other++;
+                                }
+                                else if (libMedium == BookMedium.Punjabi)
+                                {
+                                    PunjabiBook++;
+                                }
+                                else if (libMedium == BookMedium.Spanish)
+                                {
+                                    SpanishBook++;
+                                }
+                                else if (libMedium == BookMedium.Italian)
+                                {
+                                    ItalianBook++;
+                                }
+                            }
 
+                            lstTeacher.Add(objLibrary);
+                        }
+                    }
+                }
+                int totalCount = EnglishBook + HindiBook + Other + PunjabiBook + SpanishBook + ItalianBook;
+
+                if (totalCount == 0)
+                {
+                    return Json(new { error = "Total count of Books is zero." });
+                }
+
+                double EnglishBooks = (double)EnglishBook / totalCount * 100;
+                double HindiBooks = (double)HindiBook / totalCount * 100;
+                double PunjabiBooks = (double)PunjabiBook / totalCount * 100;
+                double SpanishBooks = (double)SpanishBook / totalCount * 100;
+                double ItalianBooks = (double)ItalianBook / totalCount * 100;
+                double OtherBooks = (double)ItalianBook / Other * 100;
+
+                var result = new
+                {
+                    EnglishBooksPercentage = EnglishBooks,
+                    HindiBooksPercentage = HindiBooks,
+                    PunjabiBooksPercentage = PunjabiBooks,
+                    SpanishBooksPercent = SpanishBooks,
+                    ItalianBooksPercentage = ItalianBooks,
+                    OtherBooksPercentage = OtherBooks
+                };
+                return Json(result);
+            }
+
+            catch (Exception ex)
+            {
+                return Json(new { error = ex.Message });
+            }
+
+        }
 
 
         public IActionResult Dashboard()

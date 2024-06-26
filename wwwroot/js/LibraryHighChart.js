@@ -1,7 +1,9 @@
-﻿$(document).ready(function () {
+﻿
+
+$(document).ready(function () {
     $.ajax({
         type: "POST",
-        url: "/Home/DashBoardStudent",
+        url: "/Home/LibraryDashboard",
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
@@ -9,7 +11,8 @@
                 console.error("Invalid JSON response:", data);
                 return;
             }
-            if (!isFinite(data.malePercentage) || !isFinite(data.femalePercentage) || !isFinite(data.otherPercentage)) {
+            if (!isFinite(data.EnglishBooksPercentage) || !isFinite(data.HindiBooksPercentage) || !isFinite(data.PunjabiBooksPercentage) || !isFinite(data.SpanishBooksPercent) || !isFinite(data.ItalianBooksPercentage) || !isFinite(data.OtherBooksPercentage))
+            {
                 console.error("Invalid percentage values:", data);
                 return;
             }
@@ -27,13 +30,13 @@
         }
 
         try {
-            Highcharts.chart('container', {
+            Highcharts.chart('containerLibrary', {
                 chart: {
                     type: 'pie',
                     height: 500
                 },
                 title: {
-                    text: 'Students Ratio',
+                    text: 'Teacher Ratio',
                     align: 'Center',
                     style: {
                         fontSize: '18px',
@@ -41,14 +44,31 @@
                     }
                 },
                 subtitle: {
-                    text: 'Student Data',
+                    text: 'Teacher Data',
                     align: 'Center',
                     style: {
                         fontSize: '14px',
                         color: '#666666'
                     }
                 },
-                s: {
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                    borderColor: '#666666',
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    shadow: false,
+                    style: {
+                        color: '#333333',
+                        fontSize: '12px'
+                    }
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
                     pie: {
                         allowPointSelect: true,
                         borderWidth: 1,
@@ -76,19 +96,31 @@
                     },
                     colorByPoint: true,
                     data: [{
-                        name: 'Girls',
-                        y: data.femalePercentage
+                        name: 'Female Teacher',
+                        y: data.EnglishBooksPercentage
                     }, {
-                        name: 'Boys',
-                        y: data.malePercentage
+                        name: 'Male Teacher',
+                        y: data.HindiBooksPercentage
                     }, {
                         name: 'Other',
-                        y: data.otherPercentage
+                        y: data.PunjabiBooksPercentage
+                    }, {
+                        name: 'Female Teacher',
+                        y: data.SpanishBooksPercent
+                    }, {
+                        name: 'Female Teacher',
+                        y: data.ItalianBooksPercentage
+                    }, {
+                        name: 'Female Teacher',
+                        y: data.OtherBooksPercentage
                     }]
                 }]
             });
+
         } catch (err) {
             console.error("Chart Error:", err);
         }
     }
 });
+
+
