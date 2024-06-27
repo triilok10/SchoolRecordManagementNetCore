@@ -1,21 +1,17 @@
-﻿
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     $.ajax({
         type: "POST",
         url: "/Home/LibraryDashboard",
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
+            // Check if the response is a valid object
             if (typeof data !== 'object' || data === null) {
                 console.error("Invalid JSON response:", data);
                 return;
             }
-            if (!isFinite(data.EnglishBooksPercentage) || !isFinite(data.HindiBooksPercentage) || !isFinite(data.PunjabiBooksPercentage) || !isFinite(data.SpanishBooksPercent) || !isFinite(data.ItalianBooksPercentage) || !isFinite(data.OtherBooksPercentage))
-            {
-                console.error("Invalid percentage values:", data);
-                return;
-            }
+
+            // Call function to update the pie chart with the retrieved data
             updatePieChart(data);
         },
         error: function (xhr, status, error) {
@@ -23,29 +19,32 @@ $(document).ready(function () {
         }
     });
 
+    // Function to update the Highcharts pie chart
     function updatePieChart(data) {
+        // Validate the data object
         if (!data || typeof data !== 'object') {
             console.error("Invalid data:", data);
             return;
         }
 
         try {
+            // Initialize Highcharts pie chart
             Highcharts.chart('containerLibrary', {
                 chart: {
                     type: 'pie',
                     height: 500
                 },
                 title: {
-                    text: 'Teacher Ratio',
-                    align: 'Center',
+                    text: 'Books Distribution by Language', // Updated title
+                    align: 'center',
                     style: {
                         fontSize: '18px',
                         fontWeight: 'bold'
                     }
                 },
                 subtitle: {
-                    text: 'Teacher Data',
-                    align: 'Center',
+                    text: 'Language Distribution',
+                    align: 'center',
                     style: {
                         fontSize: '14px',
                         color: '#666666'
@@ -96,31 +95,28 @@ $(document).ready(function () {
                     },
                     colorByPoint: true,
                     data: [{
-                        name: 'Female Teacher',
-                        y: data.EnglishBooksPercentage
+                        name: 'English',
+                        y: data.englishBooks
                     }, {
-                        name: 'Male Teacher',
-                        y: data.HindiBooksPercentage
+                        name: 'Hindi',
+                        y: data.hindiBooks
+                    }, {
+                        name: 'Punjabi',
+                        y: data.punjabiBooks
+                    }, {
+                        name: 'Spanish',
+                        y: data.spanishBooks
+                    }, {
+                        name: 'Italian',
+                        y: data.italianBooks
                     }, {
                         name: 'Other',
-                        y: data.PunjabiBooksPercentage
-                    }, {
-                        name: 'Female Teacher',
-                        y: data.SpanishBooksPercent
-                    }, {
-                        name: 'Female Teacher',
-                        y: data.ItalianBooksPercentage
-                    }, {
-                        name: 'Female Teacher',
-                        y: data.OtherBooksPercentage
+                        y: data.otherBooks
                     }]
                 }]
             });
-
         } catch (err) {
             console.error("Chart Error:", err);
         }
     }
 });
-
-

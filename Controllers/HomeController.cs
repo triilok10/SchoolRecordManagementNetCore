@@ -176,7 +176,6 @@ namespace CoreProject1.Controllers
                 return Json(new { error = ex.Message });
             }
 
-            return Json(new { });
         }
         public JsonResult LibraryDashboard()
         {
@@ -245,16 +244,16 @@ namespace CoreProject1.Controllers
                 double PunjabiBooks = (double)PunjabiBook / totalCount * 100;
                 double SpanishBooks = (double)SpanishBook / totalCount * 100;
                 double ItalianBooks = (double)ItalianBook / totalCount * 100;
-                double OtherBooks = (double)ItalianBook / Other * 100;
+                double OtherBooks = (double)Other / totalCount * 100;
 
                 var result = new
                 {
-                    EnglishBooksPercentage = EnglishBooks,
-                    HindiBooksPercentage = HindiBooks,
-                    PunjabiBooksPercentage = PunjabiBooks,
-                    SpanishBooksPercent = SpanishBooks,
-                    ItalianBooksPercentage = ItalianBooks,
-                    OtherBooksPercentage = OtherBooks
+                    EnglishBooks = EnglishBooks,
+                    HindiBooks = HindiBooks,
+                    PunjabiBooks = PunjabiBooks,
+                    SpanishBooks = SpanishBooks,
+                    ItalianBooks = ItalianBooks,
+                    OtherBooks = OtherBooks
                 };
                 return Json(result);
             }
