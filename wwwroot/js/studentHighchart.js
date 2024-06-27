@@ -33,22 +33,39 @@
                     height: 500
                 },
                 title: {
-                    text: 'Students Ratio',
-                    align: 'Center',
+                    text: 'Gender Ratio', 
+                    align: 'center',
                     style: {
                         fontSize: '18px',
                         fontWeight: 'bold'
                     }
                 },
                 subtitle: {
-                    text: 'Student Data',
-                    align: 'Center',
+                    text: 'Student Distribution',
+                    align: 'center',
                     style: {
                         fontSize: '14px',
                         color: '#666666'
                     }
                 },
-                s: {
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>',
+                    backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                    borderColor: '#666666',
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    shadow: false,
+                    style: {
+                        color: '#333333',
+                        fontSize: '12px'
+                    }
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
                     pie: {
                         allowPointSelect: true,
                         borderWidth: 1,

@@ -35,16 +35,16 @@ $(document).ready(function () {
                     height: 500
                 },
                 title: {
-                    text: 'Teacher Ratio',
-                    align: 'Center',
+                    text: 'Gender Ratio', 
+                    align: 'center',
                     style: {
                         fontSize: '18px',
                         fontWeight: 'bold'
                     }
                 },
                 subtitle: {
-                    text: 'Teacher Data',
-                    align: 'Center',
+                    text: 'Student Ratio',
+                    align: 'center',
                     style: {
                         fontSize: '14px',
                         color: '#666666'

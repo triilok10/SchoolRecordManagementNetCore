@@ -11,7 +11,6 @@
                 return;
             }
 
-            // Call function to update the pie chart with the retrieved data
             updatePieChart(data);
         },
         error: function (xhr, status, error) {
@@ -21,21 +20,19 @@
 
     // Function to update the Highcharts pie chart
     function updatePieChart(data) {
-        // Validate the data object
         if (!data || typeof data !== 'object') {
             console.error("Invalid data:", data);
             return;
         }
 
         try {
-            // Initialize Highcharts pie chart
             Highcharts.chart('containerLibrary', {
                 chart: {
                     type: 'pie',
                     height: 500
                 },
                 title: {
-                    text: 'Books Distribution by Language', // Updated title
+                    text: 'Books Distribution by Language', 
                     align: 'center',
                     style: {
                         fontSize: '18px',
