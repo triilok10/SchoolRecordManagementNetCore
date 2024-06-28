@@ -1,7 +1,91 @@
-﻿
-@{
-    ViewData["Title"] = "Classes";
-}
+﻿@model List<CoreProject1.Models.Student>
 
-<h1>Classes</h1>
+<style>
+    .DataStudent {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding: 25px;
+    }
+
+    .DataStudentC {
+        display: inline-flex;
+        justify-content: space-evenly;
+    }
+</style>
+
+<div class="text-center DataStudent">
+    <div>
+        <h3>Select the Class to get Students</h3>
+        <div>
+            <form id="classForm" method="post" asp-controller="Home" asp-action="Classes">
+                <div class="DataStudentC">
+                    <div class="form-group">
+                        <select id="classSelect" class="form-control" name="Class" required>
+                            <option value="" selected disabled>Select Class</option>
+                            <option value="0">First</option>
+                            <option value="1">Second</option>
+                            <option value="2">Third</option>
+                            <option value="3">Fourth</option>
+                            <option value="4">Fifth</option>
+                            <option value="5">Sixth</option>
+                            <option value="6">Seventh</option>
+                            <option value="7">Eight</option>
+                            <option value="8">Nineth</option>
+                            <option value="9">Tenth</option>
+                            <option value="10">Eleventh</option>
+                            <option value="11">Twelth</option>
+                        </select>
+                    </div>
+                    <div style="width: 50%; display: flex; justify-content: flex-end;">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="text-center" style="padding:10px">
+    <br />
+    <h2 class="text-danger"> Data </h2>
+    @if (Model == null || Model.Count == 0)
+    {
+        <p>No data available</p>
+    }
+    else
+    {
+        <table id="tbJquerytable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th> ID </th>
+                    <th> Name </th>
+                    <th> Father's Name </th>
+                    <th> Mother's Name </th>
+                    <th> Class </th>
+                    <th> Gender </th>
+                    <th> Mobile </th>
+                    <th> Email </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.FirstName @item.LastName</td>
+                        <td>@item.FatherName</td>
+                        <td>@item.MotherName</td>
+                        <td>@item.Class</td>
+                        <td>@item.Gender</td>
+                        <td>@item.Mobile</td>
+                        <td>@item.Email</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
 

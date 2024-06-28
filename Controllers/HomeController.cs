@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace CoreProject1.Controllers
 {
@@ -28,21 +29,6 @@ namespace CoreProject1.Controllers
 
         }
 
-        //public IActionResult Index()
-        //{
-        //    var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
-        //    var LoginUsername = HttpContext.Session.GetString("Username");
-        //    var LoginPassword = HttpContext.Session.GetString("Password");
-        //    if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
-        //    {
-        //        return View();
-        //    }
-        //    else
-        //    {
-        //        TempData["SuccessMessage"] = "Please login";
-        //        return RedirectToAction("LogIn", "Log");
-        //    }
-        //}
 
         public JsonResult DashBoardStudent()
         {
@@ -340,15 +326,39 @@ namespace CoreProject1.Controllers
                 return RedirectToAction("LogIn", "Log");
             }
         }
-
-        public IActionResult Classes()
+        [HttpGet, HttpPost]
+        [Route("Classes")]
+        public async Task<IActionResult> Classes(string Class)
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
             var LoginPassword = HttpContext.Session.GetString("Password");
             if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
-                return View();
+
+                if (!string.IsNullOrEmpty(Class))
+                {
+                    string apiUrl = $"{_baseUrl}api/LibraryAPI/GetClassRecord/{Class}";
+                    HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+
+                        List<Student> students = JsonConvert.DeserializeObject<List<Student>>(responseBody);
+
+                        return View(students);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+
             }
             else
             {
@@ -357,10 +367,10 @@ namespace CoreProject1.Controllers
             }
         }
 
-
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
+

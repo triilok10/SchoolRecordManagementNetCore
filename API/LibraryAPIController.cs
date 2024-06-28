@@ -44,7 +44,11 @@ namespace CoreProject1.API
                                     LastName = reader["LastName"].ToString(),
                                     FatherName = reader["Fathername"].ToString(),
                                     MotherName = reader["Mothername"].ToString(),
-                                    Class = (ClassName)Convert.ToInt32(reader["Class"])
+                                    Class = (ClassName)Convert.ToInt32(reader["Class"]),
+                                    Gender = (GenderType)Convert.ToInt32(reader["Gender"]),
+                                    Email = reader["Email"].ToString(),
+                                    Mobile = reader["MOBILE"].ToString()
+
 
                                 };
                                 students.Add(student);
