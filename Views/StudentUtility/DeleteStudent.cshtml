@@ -1,48 +1,77 @@
 ﻿@model List<CoreProject1.Models.Student>
-@if (TempData["SuccessMessage"] != null)
+
+
+
+@if (ViewBag.successMessage != null)
 {
-    <div class="alert alert-success" role="alert">
-        @TempData["SuccessMessage"]
-    </div>
+    <script>
+        toastr.success('@Html.Raw(ViewBag.successMessage)');
+    </script>
 }
-else
+
+@if (TempData["ErrorMessage"] != null)
 {
+    <script>
+        $(document).ready(function () {
+            toastr.error('@TempData["ErrorMessage"]');
+        });
+    </script>
+}
 
 
-    <div class="text-center">
-        <br />
-        <h2 class="text-danger">Delete the Student Data</h2>
 
-        <table id="tbJquerytable" class="table table-bordered table-hover">
-            <thead>
+<div class="text-center">
+    <br />
+    <h2 class="text-danger">Delete the Student Data</h2>
+
+    <table id="tbJquerytable" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Class</th>
+                <th>Remarks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
                 <tr>
-                    <th>ID</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Class</th>
-                    <th>Remarks</th>
-                    <th>Action</th>
+                    <td>@item.Id</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Class</td>
+                    <td>@item.Remarks</td>
+                    <td><a asp-controller="StudentUtility" asp-action="DeleteStudentData" asp-route-Id="@item.Id">Delete</a></td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.FirstName</td>
-                        <td>@item.LastName</td>
-                        <td>@item.Class</td>
-                        <td>@item.Remarks</td>
-                        <td><a asp-controller="StudentUtility" asp-action="DeleteStudentData" asp-route-Id="@item.Id">Delete</a></td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model != null && Model.Count == 0)
+{
+    <div class="text-center">
+        <p>No students found.</p>
     </div>
-    @if (Model != null && Model.Count == 0)
-    {
-        <div class="text-center">
-            <p>No students found.</p>
-        </div>
-    }
 }
+<script type="text/javascript">
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+</script>

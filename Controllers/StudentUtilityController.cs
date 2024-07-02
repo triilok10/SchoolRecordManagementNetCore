@@ -312,6 +312,12 @@ namespace CoreProject1.Controllers
         {
             try
             {
+                string successMessage = TempData["SuccessMessage"] as string;
+                if (!string.IsNullOrEmpty(successMessage))
+                {
+                    ViewBag.SuccessMessage = successMessage; 
+                }
+
                 HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
 
                 if (response.IsSuccessStatusCode)
@@ -347,12 +353,14 @@ namespace CoreProject1.Controllers
                     string message = responseObject.message;
 
                     TempData["SuccessMessage"] = message;
+                    TempData.Keep("SuccessMessage");
 
                     return RedirectToAction("DeleteStudent");
 
                 }
                 else
                 {
+
                     return View("Error");
                 }
             }
