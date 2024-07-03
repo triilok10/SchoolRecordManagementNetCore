@@ -1,5 +1,4 @@
-﻿
-<div>
+﻿<div>
     @if (ViewBag.SuccessMessage != null)
     {
         <div class="alert alert-success" role="alert">
@@ -16,19 +15,19 @@
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width:50%;">
                 <img src="~/Images/students.png" style="height:auto; width: 70px;">
             </div>
-            <div><h4>Total Students: </h4></div>
+            <div><h4>Total Students: @ViewBag.totalCount</h4></div>
         </div>
         <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: chocolate; border-radius: 10px;">
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width: 50%">
                 <img src="~/Images/girlstudent.png" style="height:auto; width: 70px;">
             </div>
-            <div><h4>Girl Students:  </h4></div>
+            <div><h4>Girl Students:  @ViewBag.FemaleCount</h4></div>
         </div>
         <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color: coral; border-radius: 10px;">
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width: 50%">
                 <img src="~/Images/boy.png" style="height:auto; width: 70px;">
             </div>
-            <div><h4>Boy Students: </h4></div>
+            <div><h4>Boy Students: @ViewBag.MaleCount</h4></div>
         </div>
         <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color:orchid; border-radius: 10px;">
             <div style="background-position: center; background-size: contain; background-repeat: no-repeat; width: 50%">
@@ -38,30 +37,6 @@
         </div>
     </div>
     <br />
-    <div class="text-center text-danger">
-        <h2>Present Students</h2>
-    </div>
-    <br />
-    <div class="text-center d-flex justify-content-evenly align-content-center">
-        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color:cornflowerblue; border-radius: 10px;">
-            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
-                <img src="~/Images/boypresent (1).png" style="height:auto; width: 70px;">
-            </div>
-            <div style="width:50%"><h4>Total Boy Present :</h4></div>
-        </div>
-        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color:darkcyan; border-radius: 10px;">
-            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
-                <img src="~/Images/girlpresent.png" style="height:auto; width: 70px;">
-            </div>
-            <div style="width:50%"><h4>Total Girl Present :</h4></div>
-        </div>
-        <div class="d-flex justify-content-evenly align-items-center" style="width: 250px; height: 150px; background-color:gold; border-radius: 10px;">
-            <div style="background-position: center; background-size: contain; background-repeat: no-repeat;">
-                <img src="~/Images/other.png" style="height:auto; width: 70px;">
-            </div>
-            <div><h4>Other's</h4></div>
-        </div>
-    </div>
     <br />
     <br />
     <div class="text-center"><h2 class="text-wrap text-dark">Student Configurations</h2></div>

@@ -281,5 +281,43 @@ namespace CoreProject1.API
         }
 
         #endregion
+
+        #region "Get Teacher Data"
+        [HttpGet]
+        public IActionResult GetTeacherData()
+        {
+            List<Student> ltrStudents = new List<Student>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("TeacherCount", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Student objStudent = new Student();
+                            if (Enum.TryParse<GenderType>(Convert.ToString(rdr["Gender"]), out GenderType gender))
+                            {
+                                objStudent.Gender = gender;
+                            }
+
+                            ltrStudents.Add(objStudent);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+            return Ok(ltrStudents);
+        }
+
+
+
+        #endregion
     }
 }

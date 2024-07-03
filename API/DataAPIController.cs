@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace CoreProject1.API
 {
@@ -271,5 +272,42 @@ namespace CoreProject1.API
         }
 
 
+        #region "GetStudentData"
+        [HttpGet]
+        public IActionResult GetStudentData()
+        {
+            List<Student> ltrStudents = new List<Student>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("StudentCount", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Student objStudent = new Student();
+                            if (Enum.TryParse<GenderType>(Convert.ToString(rdr["Gender"]), out GenderType gender))
+                            {
+                                objStudent.Gender = gender;
+                            }
+
+                            ltrStudents.Add(objStudent);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+            return Ok(ltrStudents);
+        }
+
+
+
+        #endregion
     }
 }

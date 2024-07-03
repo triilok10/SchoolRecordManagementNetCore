@@ -270,13 +270,34 @@ namespace CoreProject1.Controllers
         }
 
         [Route("Data-Students")]
-        public IActionResult Students()
+        public async Task<IActionResult> Students()
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
             var LoginPassword = HttpContext.Session.GetString("Password");
             if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
+                string apiurl = _baseUrl + "api/DataAPI/GetStudentData";
+                HttpResponseMessage response = await _httpClient.GetAsync(apiurl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    int maleCount = objstudent.Count(s => s.Gender == GenderType.Male);
+                    int femaleCount = objstudent.Count(s => s.Gender == GenderType.Female);
+                    int otherCount = objstudent.Count(s => s.Gender == GenderType.Other);
+                    int totalCount = maleCount + femaleCount + otherCount;
+
+                    ViewBag.MaleCount = maleCount;
+                    ViewBag.FemaleCount = femaleCount;
+                    ViewBag.OtherCount = otherCount;
+                    ViewBag.totalCount = totalCount;
+                    return View(objstudent);
+
+
+                }
+
+
                 string successMessage = TempData["SuccessMessage"] as string;
                 ViewBag.SuccessMessage = successMessage;
                 return View();
@@ -290,7 +311,7 @@ namespace CoreProject1.Controllers
 
 
         [Route("Data-Teachers")]
-        public IActionResult Teachers()
+        public async Task<IActionResult> Teachers()
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
@@ -298,6 +319,27 @@ namespace CoreProject1.Controllers
 
             if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
+                string apiurl = _baseUrl + "api/TeacherAPI/GetTeacherData";
+                HttpResponseMessage response = await _httpClient.GetAsync(apiurl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objstudent = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+                    int maleCount = objstudent.Count(s => s.Gender == GenderType.Male);
+                    int femaleCount = objstudent.Count(s => s.Gender == GenderType.Female);
+                    int otherCount = objstudent.Count(s => s.Gender == GenderType.Other);
+                    int totalCount = maleCount + femaleCount + otherCount;
+
+                    ViewBag.MaleCount = maleCount;
+                    ViewBag.FemaleCount = femaleCount;
+                    ViewBag.OtherCount = otherCount;
+                    ViewBag.totalCount = totalCount;
+                    return View(objstudent);
+
+
+                }
+
+
                 string successMessage = TempData["SuccessMessage"] as string;
                 ViewBag.SuccessMessage = successMessage;
                 return View();
