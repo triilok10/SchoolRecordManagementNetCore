@@ -404,5 +404,44 @@ namespace CoreProject1.API
             return Ok(new { msg = Message });
 
         }
+
+
+        #region "Get Library Data"
+        [HttpGet]
+        public IActionResult GetLibraryData()
+        {
+            List<Student> ltrStudents = new List<Student>();
+            try
+            {
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("LibraryCount", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Student objStudent = new Student();
+                            if (Enum.TryParse<BookMedium>(Convert.ToString(rdr["Book1Medium"]), out BookMedium BookMediumLanguage))
+                            {
+                                objStudent.BookMediumLanguage = BookMediumLanguage;
+                            }
+
+                            ltrStudents.Add(objStudent);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+            return Ok(ltrStudents);
+        }
+
+
+
+        #endregion
     }
 }

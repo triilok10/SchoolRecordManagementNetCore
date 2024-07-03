@@ -29,7 +29,7 @@ namespace CoreProject1.Controllers
 
         }
 
-
+        #region DashBoardStudent""
         public JsonResult DashBoardStudent()
         {
             List<Student> ltrStudents = new List<Student>();
@@ -96,7 +96,9 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
 
+        #region "DashboardTeacher"
         public JsonResult DashboardTeacher()
         {
             List<TeacherDetail> lstTeacher = new List<TeacherDetail>();
@@ -163,6 +165,11 @@ namespace CoreProject1.Controllers
             }
 
         }
+
+        #endregion
+
+
+        #region "LibraryDashboard"
         public JsonResult LibraryDashboard()
         {
             List<Student> lstTeacher = new List<Student>();
@@ -251,6 +258,9 @@ namespace CoreProject1.Controllers
 
         }
 
+        #endregion
+
+        #region "Dashboard"
 
         public IActionResult Dashboard()
         {
@@ -268,6 +278,10 @@ namespace CoreProject1.Controllers
             }
 
         }
+
+        #endregion
+
+        #region "Students"
 
         [Route("Data-Students")]
         public async Task<IActionResult> Students()
@@ -309,7 +323,10 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
 
+
+        #region "Teachers"
         [Route("Data-Teachers")]
         public async Task<IActionResult> Teachers()
         {
@@ -351,15 +368,43 @@ namespace CoreProject1.Controllers
             }
         }
 
+        #endregion
+
+        #region "Library Book Management"
 
         [Route("Library-Book-Management")]
-        public IActionResult LibraryBookManagement()
+        public async Task<IActionResult> LibraryBookManagement()
         {
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
             var LoginPassword = HttpContext.Session.GetString("Password");
             if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
+                string apiurl = _baseUrl + "api/LibraryAPI/GetLibraryData";
+                HttpResponseMessage response = await _httpClient.GetAsync(apiurl);
+                if (response.IsSuccessStatusCode)
+                {
+                    string responsebody = await response.Content.ReadAsStringAsync();
+                    List<Student> objLibrary = JsonConvert.DeserializeObject<List<Student>>(responsebody);
+
+                    int EnglishCount = objLibrary.Count(s => s.BookMediumLanguage == BookMedium.English);
+                    int HindiCount = objLibrary.Count(s => s.BookMediumLanguage == BookMedium.Hindi);
+                    int ItalianCount = objLibrary.Count(s => s.BookMediumLanguage == BookMedium.Italian);
+                    int SpanishCount = objLibrary.Count(s => s.BookMediumLanguage == BookMedium.Spanish);
+                    int PunjabiCount = objLibrary.Count(s => s.BookMediumLanguage == BookMedium.Punjabi);
+
+                    ViewBag.EnglishCount = EnglishCount;
+                    ViewBag.HindiCount = HindiCount;
+                    ViewBag.ItalianCount = ItalianCount;
+                    ViewBag.SpanishCount = SpanishCount;
+                    ViewBag.PunjabiCount = PunjabiCount;
+                    ViewBag.OtherCount = ItalianCount + SpanishCount + PunjabiCount;
+                    ViewBag.TotalCount = EnglishCount + HindiCount + ItalianCount + SpanishCount + PunjabiCount;
+                    return View();
+                }
+
+                string successMessage = TempData["SuccessMessage"] as string;
+                ViewBag.SuccessMessage = successMessage;
                 return View();
             }
             else
@@ -368,7 +413,12 @@ namespace CoreProject1.Controllers
                 return RedirectToAction("LogIn", "Log");
             }
         }
-        [HttpGet, HttpPost]
+
+
+        #endregion
+
+        #region "Classes"
+
         [Route("Classes")]
         public async Task<IActionResult> Classes(string Class)
         {
@@ -409,10 +459,8 @@ namespace CoreProject1.Controllers
             }
         }
 
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        #endregion
+
     }
 }
 
