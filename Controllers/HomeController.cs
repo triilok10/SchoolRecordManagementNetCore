@@ -461,6 +461,49 @@ namespace CoreProject1.Controllers
 
         #endregion
 
+        #region "FeeReport"
+        public async Task<IActionResult> FeeReport(string Class)
+        {
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
+            {
+
+                if (!string.IsNullOrEmpty(Class))
+                {
+                    string apiUrl = $"{_baseUrl}api/LibraryAPI/GetClassRecord/{Class}";
+                    HttpResponseMessage response = await _httpClient.GetAsync(apiUrl);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        string responseBody = await response.Content.ReadAsStringAsync();
+
+                        List<Student> students = JsonConvert.DeserializeObject<List<Student>>(responseBody);
+
+                        return View(students);
+                    }
+                    else
+                    {
+                        return View("Error");
+                    }
+                }
+                else
+                {
+                    return View();
+                }
+
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Please login";
+                return RedirectToAction("LogIn", "Log");
+            }
+        }
+
+
+        #endregion
+
     }
 }
 

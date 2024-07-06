@@ -49,6 +49,9 @@ namespace CoreProject1.Models
 
         public string BookAuthorName { get; set; }
         public int HdnStudentId { get; set; }
+        public int FeeAmount { get; set; }
+        public int FirstInstallment { get; set; }
+        public int SecondInstallment { get; set; }
         public string IssueDateTime { get; set; }
         public BookMedium BookMediumLanguage { get; set; }
 
@@ -56,8 +59,8 @@ namespace CoreProject1.Models
 
     public enum BookMedium
     {
-        Hindi, 
-        English, 
+        Hindi,
+        English,
         Punjabi,
         Spanish,
         Italian,

@@ -1,0 +1,63 @@
+﻿@model CoreProject1.Models.Student
+@{
+    ViewData["Title"] = "FeeReportGet";
+}
+
+<div>
+    <br />
+    <div class="row justify-content-center">
+        <div class="col-md-6" style="padding:23px;">
+            <h2 class="text-center text-capitalize">Fee Submit Report</h2>
+            <br />
+            <form method="post" asp-controller="FeeReport" asp-action="FeeSubmitPost">
+                <div class="d-flex justify-content-evenly align-items-center">
+                    <div style="width: 50%; ">
+                        <div class="form-group">
+                            <label class="control-label">First Name :</label>
+                            <input asp-for="FirstName" class="form-control" readonly />
+                            <label class="control-label">LastName Name :</label>
+                            <input asp-for="LastName" class="form-control" readonly />
+                            <label class="control-label">Father Name :</label>
+                            <input asp-for="FatherName" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Class :</label>
+                            <select asp-for="Class" class="form-control" disabled>
+                                <option value="">Select Class</option>
+                                @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
+                                {
+                                    <option value="@item">@item</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Student Id :</label>
+                            <input asp-for="Id" class="form-control" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">Fees  :</label>
+                            <input asp-for="FeeAmount" class="form-control" readonly />
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+
+                <br />
+                <div class="d-flex justify-content-evenly align-items-center">
+                    <div style="width: 50%;">
+                        <div class="form-group">
+                        </div>
+                    </div>
+                    <div style="width: 50%;display:flex;justify-content:end ">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+</script>

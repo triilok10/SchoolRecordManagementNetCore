@@ -84,6 +84,24 @@ namespace CoreProject1.API
                 Message = "Please Select the DateOfBirth in Correct Format";
             }
 
+            int FeeAmount = 0;
+            if (ClassValue == 0 || ClassValue == 1 || ClassValue == 2)
+            {
+                FeeAmount = 3000;
+            }
+            else if (ClassValue == 4 || ClassValue == 5 || ClassValue == 6 || ClassValue == 7)
+            {
+                FeeAmount = 7200;
+            }
+            else if (ClassValue == 8 || ClassValue == 9)
+            {
+                FeeAmount = 9600;
+            }
+            else if (ClassValue == 10 || ClassValue == 11)
+            {
+                FeeAmount = 12000;
+            }
+
 
             pstudent.FirstName = FirstName;
             pstudent.LastName = LastName;
@@ -97,6 +115,7 @@ namespace CoreProject1.API
             pstudent.Filepath = Filepath;
             pstudent.Address = Address;
             pstudent.DateOfBirth = DOBValue;
+            pstudent.FeeAmount = FeeAmount;
 
             try
             {
@@ -120,6 +139,7 @@ namespace CoreProject1.API
                             cmd.Parameters.AddWithValue("@Email", pstudent.Email);
                             cmd.Parameters.AddWithValue("@Mobile", pstudent.Mobile);
                             cmd.Parameters.AddWithValue("@DateOfBirth", pstudent.DateOfBirth);
+                            cmd.Parameters.AddWithValue("@FeeReport", Convert.ToInt32(pstudent.FeeAmount));
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -191,6 +211,7 @@ namespace CoreProject1.API
                             objStudent.Mobile = Convert.ToString(rdr["Mobile"]);
                             //objStudent.DateOfBirth = Convert.ToDateTime(rdr["DateOfBirth"]);
                             objStudent.Filepath = Convert.ToString(rdr["Filepath"]);
+                            objStudent.FeeAmount = Convert.ToInt32(rdr["FeeReport"]);
 
                         }
                     }

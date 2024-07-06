@@ -31,7 +31,7 @@ namespace CoreProject1.Controllers
             var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
             var LoginUsername = HttpContext.Session.GetString("Username");
             var LoginPassword = HttpContext.Session.GetString("Password");
-            if (IsLogginIn == "true" && LoginUsername !=null && LoginPassword !=null)
+            if (IsLogginIn == "true" && LoginUsername != null && LoginPassword != null)
             {
                 try
                 {
@@ -97,7 +97,7 @@ namespace CoreProject1.Controllers
                     if (pStudent.DateOfBirth < new DateTime(1998, 1, 1))
                     {
                         TempData["SuccessMessage"] = "Please Enter the Correct DOB.";
-                        return View("UpdateChangeData");
+                        return View("AddStudent");
                     }
                     if (pStudent.FirstName == pStudent.FatherName)
                     {
@@ -157,9 +157,6 @@ namespace CoreProject1.Controllers
             }
         }
 
-
-
-
         #endregion
 
         #region "Update Student"
@@ -202,6 +199,7 @@ namespace CoreProject1.Controllers
                     string responsebody = await response.Content.ReadAsStringAsync();
 
                     Student student = JsonConvert.DeserializeObject<Student>(responsebody);
+
                     return View(student);
 
                 }
@@ -216,7 +214,7 @@ namespace CoreProject1.Controllers
             }
         }
 
-      
+
         [HttpPost]
         public async Task<IActionResult> UpdateStudentData(Student pStudent, IFormFile File)
         {
@@ -315,7 +313,7 @@ namespace CoreProject1.Controllers
                 string successMessage = TempData["SuccessMessage"] as string;
                 if (!string.IsNullOrEmpty(successMessage))
                 {
-                    ViewBag.SuccessMessage = successMessage; 
+                    ViewBag.SuccessMessage = successMessage;
                 }
 
                 HttpResponseMessage response = await _httpClient.GetAsync(_baseUrl + "api/DataAPI/ViewStudentAPI");
