@@ -350,8 +350,16 @@ namespace CoreProject1.Controllers
                     dynamic responseObject = JsonConvert.DeserializeObject(responsebody);
                     string message = responseObject.message;
 
-                    TempData["SuccessMessage"] = message;
-                    TempData.Keep("SuccessMessage");
+                    if (message == "Please pay the dues to delete the record of the student.")
+                    {
+                        TempData["ErrorMessage"] = message;
+                        TempData.Keep("ErrorMessage");
+                    }
+                    else
+                    {
+                        TempData["SuccessMessage"] = message;
+                        TempData.Keep("SuccessMessage");
+                    }
 
                     return RedirectToAction("DeleteStudent");
 

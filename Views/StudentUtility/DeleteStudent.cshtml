@@ -12,9 +12,7 @@
 @if (TempData["ErrorMessage"] != null)
 {
     <script>
-        $(document).ready(function () {
-            toastr.error('@TempData["ErrorMessage"]');
-        });
+        toastr.error('@TempData["ErrorMessage"]');
     </script>
 }
 
