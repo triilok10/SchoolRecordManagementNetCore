@@ -2,6 +2,12 @@
 @{
     ViewData["Title"] = "FeeReportGet";
 }
+@if (TempData.ContainsKey("message"))
+{
+    <script>
+        toastr.success('@Html.Raw(TempData["message"])');
+    </script>
+}
 
 <div>
     <br />
@@ -9,20 +15,21 @@
         <div class="col-md-6" style="padding:23px;">
             <h2 class="text-center text-capitalize">Fee Submit Report</h2>
             <br />
-            <form method="post" asp-controller="FeeReport" asp-action="FeeSubmitPost">
+            <form method="post" asp-controller="FeeReportData" asp-action="FeeSubmitPost">
                 <div class="d-flex justify-content-evenly align-items-center">
                     <div style="width: 50%; ">
                         <div class="form-group">
                             <label class="control-label">First Name :</label>
                             <input asp-for="FirstName" class="form-control" readonly />
-                            <label class="control-label">LastName Name :</label>
+                            <label class="control-label">LastName :</label>
                             <input asp-for="LastName" class="form-control" readonly />
                             <label class="control-label">Father Name :</label>
                             <input asp-for="FatherName" class="form-control" readonly />
                         </div>
                         <div class="form-group">
                             <label class="control-label">Class :</label>
-                            <select asp-for="Class" class="form-control" disabled>
+                            <input asp-for="Class" class="form-control" hidden />
+                            <select class="form-control" disabled>
                                 <option value="">Select Class</option>
                                 @foreach (var item in Enum.GetValues(typeof(CoreProject1.Models.ClassName)))
                                 {
@@ -59,5 +66,21 @@
     </div>
 </div>
 <script type="text/javascript">
-
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
 </script>

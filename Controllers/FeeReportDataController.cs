@@ -7,13 +7,13 @@ using System.Text;
 
 namespace CoreProject1.Controllers
 {
-    public class FeeReportController : Controller
+    public class FeeReportDataController : Controller
     {
         private readonly HttpClient _httpClient;
         IHttpContextAccessor _httpContextAccessor;
         private readonly dynamic _baseUrl;
 
-        public FeeReportController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
+        public FeeReportDataController(HttpClient httpClient, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClient;
             _httpContextAccessor = httpContextAccessor;
@@ -96,15 +96,23 @@ namespace CoreProject1.Controllers
             {
                 string apiurl = $"{_baseUrl}api/Fee/FeeSubmitPost";
                 string jsonContent = JsonConvert.SerializeObject(student);
-                var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+                StringContent content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
                 HttpResponseMessage res = await _httpClient.PostAsync(apiurl, content);
                 if (res.IsSuccessStatusCode)
                 {
                     string resbody = await res.Content.ReadAsStringAsync();
-                    string resdata = JsonConvert.DeserializeObject<string>(resbody);
-                }
+                    dynamic resdata = JsonConvert.DeserializeObject<dynamic>(resbody);
+                    string Message = resdata.msg;
+                    ModelState.Clear();
+                    TempData["message"] = Message;
+                    TempData.Keep("message");
+                    return RedirectToAction("FeeReport", "Home");
 
-                return Ok();
+                }
+                else
+                {
+                    return View("error");
+                }
             }
             catch (Exception ex)
             {

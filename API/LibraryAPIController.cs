@@ -48,7 +48,8 @@ namespace CoreProject1.API
                                     Gender = (GenderType)Convert.ToInt32(reader["Gender"]),
                                     Email = reader["Email"].ToString(),
                                     Mobile = reader["MOBILE"].ToString(),
-                                    FeeAmount = Convert.ToInt32(reader["FeeReport"])
+                                    FeeAmount = Convert.ToInt32(reader["FeeReport"]),
+                                    IsFeePaid = Convert.ToBoolean(reader["IsFeePaid"])
                                 };
                                 students.Add(student);
                             }
