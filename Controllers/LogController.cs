@@ -37,7 +37,7 @@ namespace CoreProject1.Controllers
                         HttpContext.Session.SetString("IsLoggedIn", "true");
                         HttpContext.Session.SetString("Username", pLogin.Username);
                         HttpContext.Session.SetString("Password", pLogin.Password);
-                       return RedirectToAction("Dashboard", "Home");
+                        return RedirectToAction("Dashboard", "Home");
 
                     }
                     else
@@ -55,13 +55,27 @@ namespace CoreProject1.Controllers
             {
                 return View(ex.Message);
             }
-          
+
         }
         #region "Logout"
         public IActionResult Logout()
         {
+            var IsLogginIn = HttpContext.Session.GetString("IsLoggedIn");
+            var LoginUsername = HttpContext.Session.GetString("Username");
+            var LoginPassword = HttpContext.Session.GetString("Password");
+            try
+            {
+                HttpContext.Session.SetString("IsLoggedIn", "false");
+                HttpContext.Session.SetString("Username", "");
+                HttpContext.Session.SetString("Password", "");
+                return RedirectToAction("LogIn");
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
 
-            return RedirectToAction("", "");
+
         }
         #endregion
 

@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 
 namespace CoreProject1.API
 {
@@ -328,6 +329,41 @@ namespace CoreProject1.API
         }
 
 
+
+        #endregion
+
+        #region "SportClub"
+        [HttpGet]
+        public IActionResult SportClub()
+        {
+            try
+            {
+                List<Student> ltrStudent = new List<Student>();
+                using (SqlConnection con = new SqlConnection(_connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand("SP_Sportsclub", con);
+                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                    con.Open();
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        while (rdr.Read())
+                        {
+                            Student objStudent = new Student
+                            {
+                                Id = Convert.ToInt32(rdr["Id"]),
+                                StudentName = rdr["FirstName"].ToString()
+                            };
+                            ltrStudent.Add(objStudent);
+                        }
+                    }
+                }
+                return Ok(ltrStudent);
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }
 
         #endregion
     }

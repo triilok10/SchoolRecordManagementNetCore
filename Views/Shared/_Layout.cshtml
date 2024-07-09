@@ -37,7 +37,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="FeeReport">FeeReport</a>
-                        </li>    <li class="nav-item">
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white p-3" asp-area="" asp-controller="Home" asp-action="SportClub">Sports-Club</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-white p-3" asp-area="" asp-controller="Log" asp-action="Logout">Logout</a>
                         </li>
                     </ul>
@@ -81,14 +85,14 @@
                     info: 'Showing _START_ to _END_ of _TOTAL_ entries'
                 },
                 initComplete: function () {
-                    
+
                     var table = $('#tbJquerytable').DataTable();
-                    $('.dataTables_filter').css('text-align', 'right'); 
-                    $('.dataTables_length').css('text-align', 'right'); 
+                    $('.dataTables_filter').css('text-align', 'right');
+                    $('.dataTables_length').css('text-align', 'right');
                     $('.dataTables_info').css('text-align', 'left');
                     $('.dataTables_paginate').css({
-                        'text-align': 'left',   
-                        'padding-left': '15px'  
+                        'text-align': 'left',
+                        'padding-left': '15px'
                     });
                     $('.paginate_button').css('margin-left', '5px');
                 }

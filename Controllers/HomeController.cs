@@ -504,7 +504,23 @@ namespace CoreProject1.Controllers
 
         #endregion
 
-    
+        #region "Sport Club"
+        public async Task<IActionResult> SportClub()
+        {
+            string APIURL = _baseUrl + "api/DataAPI/SportClub";
+            HttpResponseMessage res = await _httpClient.GetAsync(APIURL);
+            if (res.IsSuccessStatusCode)
+            {
+                string resData = await res.Content.ReadAsStringAsync();
+                List<Student> students = JsonConvert.DeserializeObject<List<Student>>(resData);
+                ViewBag.StudentsList = students;
+            }
+
+
+            return View();
+        }
+        #endregion
+
     }
 }
 

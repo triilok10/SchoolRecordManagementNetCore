@@ -1,0 +1,26 @@
+﻿
+@model CoreProject1.Models.Student  
+
+@{
+    ViewData["Title"] = "Sport Club";
+}
+
+<h1>Sport Club</h1>
+
+@if (ViewBag.StudentsList != null)
+{
+    <div>
+        <label for="studentDropdown">Select a Student:</label>
+        <select id="studentDropdown" name="studentDropdown">
+            <option value="">Select...</option>
+            @foreach (var student in ViewBag.StudentsList)
+            {
+                <option value="@student.Id">@student.StudentName</option>
+            }
+        </select>
+    </div>
+}
+else
+{
+    <p>No students available.</p>
+}
