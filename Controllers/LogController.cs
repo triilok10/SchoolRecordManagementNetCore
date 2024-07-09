@@ -57,5 +57,13 @@ namespace CoreProject1.Controllers
             }
           
         }
+        #region "Logout"
+        public IActionResult Logout()
+        {
+
+            return RedirectToAction("", "");
+        }
+        #endregion
+
     }
 }
