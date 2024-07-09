@@ -55,15 +55,47 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+    <script src="~/js/jquery.datatables.js"></script>
     <script>
         $(document).ready(function () {
             $('#tbJquerytable').DataTable({
                 paging: true,
                 responsive: true,
-                scrollY: "300px"
+                scrollY: "300px",
+                searching: true,
+                ordering: true,
+                info: true,
+                lengthChange: true,
+                scrollCollapse: true,
+                pagingType: 'full_numbers',
+                language: {
+                    paginate: {
+                        first: 'First',
+                        last: 'Last',
+                        next: 'Next',
+                        previous: 'Previous'
+                    },
+                    search: '_INPUT_',
+                    searchPlaceholder: 'Search...',
+                    lengthMenu: '_MENU_ entries',
+                    info: 'Showing _START_ to _END_ of _TOTAL_ entries'
+                },
+                initComplete: function () {
+                    
+                    var table = $('#tbJquerytable').DataTable();
+                    $('.dataTables_filter').css('text-align', 'right'); 
+                    $('.dataTables_length').css('text-align', 'right'); 
+                    $('.dataTables_info').css('text-align', 'left');
+                    $('.dataTables_paginate').css({
+                        'text-align': 'left',   
+                        'padding-left': '15px'  
+                    });
+                    $('.paginate_button').css('margin-left', '5px');
+                }
             });
         });
+
+
     </script>
 </body>
 </html>
