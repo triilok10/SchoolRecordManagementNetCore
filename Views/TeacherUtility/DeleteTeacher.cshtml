@@ -9,8 +9,7 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
+                <th> Name</th>
                 <th>Class</th>
                 <th>Remarks</th>
                 <th>Action</th>
@@ -21,8 +20,7 @@
             {
                 <tr>
                     <td>@item.Id</td>
-                    <td>@item.FirstName</td>
-                    <td>@item.LastName</td>
+                    <td>@item.FirstName @item.LastName</td>
                     <td>@item.Subject</td>
                     <td>@item.Remarks</td>
                     <td><a asp-controller="TeacherUtility" asp-action="DeleteTeacherData" asp-route-Id="@item.Id">Delete</a></td>
