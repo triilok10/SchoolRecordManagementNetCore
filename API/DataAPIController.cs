@@ -210,7 +210,7 @@ namespace CoreProject1.API
                             objStudent.Remarks = Convert.ToString(rdr["Remark"]);
                             objStudent.Email = Convert.ToString(rdr["Email"]);
                             objStudent.Mobile = Convert.ToString(rdr["Mobile"]);
-                            //objStudent.DateOfBirth = Convert.ToDateTime(rdr["DateOfBirth"]);
+                            objStudent.DateOfBirth = Convert.ToDateTime(rdr["DateOfBirth"]);
                             objStudent.Filepath = Convert.ToString(rdr["Filepath"]);
                             objStudent.FeeAmount = Convert.ToInt32(rdr["FeeReport"]);
 

@@ -199,7 +199,9 @@ namespace CoreProject1.Controllers
                     string responsebody = await response.Content.ReadAsStringAsync();
 
                     Student student = JsonConvert.DeserializeObject<Student>(responsebody);
-
+                    ViewBag.hdngenderValue = student.Gender;
+                    ViewBag.hdnclassValue = student.Class;
+                    ViewBag.hdnDateOfBirth = student.DateOfBirth;
                     return View(student);
 
                 }
@@ -263,10 +265,10 @@ namespace CoreProject1.Controllers
                         $"&FatherName={(string.IsNullOrWhiteSpace(pStudent.FatherName) ? "" : HttpUtility.UrlEncode(pStudent.FatherName))}" +
                         $"&MotherName={(string.IsNullOrWhiteSpace(pStudent.MotherName) ? "" : HttpUtility.UrlEncode(pStudent.MotherName))}" +
                         $"&Mobile={(string.IsNullOrWhiteSpace(pStudent.Mobile) ? "" : HttpUtility.UrlEncode(pStudent.Mobile))}" +
-                        $"&Gender={(string.IsNullOrWhiteSpace(pStudent.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Gender.ToString()))}" +
+                        $"&Gender={(string.IsNullOrWhiteSpace(pStudent.hdnGender) ? "" : HttpUtility.UrlEncode(pStudent.hdnGender))}" +
                         $"&Email={(string.IsNullOrWhiteSpace(pStudent.Email) ? "" : HttpUtility.UrlEncode(pStudent.Email))}" +
                         $"&Remarks={(string.IsNullOrWhiteSpace(pStudent.Remarks) ? "" : HttpUtility.UrlEncode(pStudent.Remarks))}" +
-                        $"&Class={(string.IsNullOrWhiteSpace(pStudent.Class.ToString()) ? "" : HttpUtility.UrlEncode(pStudent.Class.ToString()))}" +
+                        $"&Class={(string.IsNullOrWhiteSpace(pStudent.hdnClass) ? "" : HttpUtility.UrlEncode(pStudent.hdnClass))}" +
                         $"&DateOfBirth={(string.IsNullOrWhiteSpace(pStudent.DateOfBirth.ToString()) ? "DD/MM/YYYY" : HttpUtility.UrlEncode(pStudent.DateOfBirth.ToString()))}" +
                         $"&Filepath={(string.IsNullOrWhiteSpace(pStudent.Filepath) ? "Null.jpg" : HttpUtility.UrlEncode(pStudent.Filepath))}" +
                         $"&Address={(string.IsNullOrWhiteSpace(pStudent.Address) ? "" : HttpUtility.UrlEncode(pStudent.Address))}";
@@ -281,7 +283,7 @@ namespace CoreProject1.Controllers
 
                         ModelState.Clear();
                         TempData["SuccessMessage"] = successMessage;
-                        return RedirectToAction("UpdateChangeData");
+                        return RedirectToAction("UpdateStudent");
                     }
                     else
                     {
@@ -351,6 +353,11 @@ namespace CoreProject1.Controllers
                     string message = responseObject.message;
 
                     if (message == "Please pay the dues to delete the record of the student.")
+                    {
+                        TempData["ErrorMessage"] = message;
+                        TempData.Keep("ErrorMessage");
+                    }
+                    else if(message == "Please submit the library book to delete the record of the student.")
                     {
                         TempData["ErrorMessage"] = message;
                         TempData.Keep("ErrorMessage");

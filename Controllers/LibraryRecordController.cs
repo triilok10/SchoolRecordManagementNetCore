@@ -405,8 +405,8 @@ namespace CoreProject1.Controllers
         #region "GetBookByClass"
 
         [HttpPost]
-        [Route("Class-Student")]
-        public async Task<IActionResult> GetBookByClass(string Class)
+        [Route("Class-Student-Lib")]
+        public async Task<IActionResult> GetBookByClassLib(string Class)
         {
             try
             {

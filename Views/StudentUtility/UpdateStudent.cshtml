@@ -2,6 +2,16 @@
 
 <div class="text-center">
     <br />
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <script>
+            toastr.success('@TempData["SuccessMessage"]');
+
+        </script>
+    }
+    <br />
+    <br />
     <h2 class="text-danger"> Update Student Record</h2>
 
     <table class="table table-bordered table-hover" id="tbJquerytable">
@@ -38,4 +48,23 @@
         </tbody>
     </table>
 </div>
+<script type="text/javascript">
+    toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    }
+</script>
 

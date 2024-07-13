@@ -22,7 +22,7 @@ namespace CoreProject1.API
         [HttpGet]
         public IActionResult ViewTeacherAPI()
         {
-            List<Student> ltrStudents = new List<Student>();
+            List<TeacherDetail> ltrStudents = new List<TeacherDetail>();
             try
             {
                 using (SqlConnection con = new SqlConnection(_connectionString))
@@ -34,7 +34,7 @@ namespace CoreProject1.API
                     {
                         while (rdr.Read())
                         {
-                            Student objStudent = new Student();
+                            TeacherDetail objStudent = new TeacherDetail();
 
                             objStudent.Id = Convert.ToInt32(rdr["ID"]);
                             objStudent.FirstName = Convert.ToString(rdr["FirstName"]);
@@ -46,14 +46,15 @@ namespace CoreProject1.API
                             objStudent.Email = Convert.ToString(rdr["Email"]);
                             objStudent.Mobile = Convert.ToString(rdr["Mobile"]);
                             objStudent.Filepath = Convert.ToString(rdr["Filepath"]);
+                            objStudent.DateOfBirth = Convert.ToDateTime(rdr["DateOfBirth"]);
 
-                            if (Enum.TryParse<GenderType>(Convert.ToString(rdr["Gender"]), out GenderType gender))
+                            if (Enum.TryParse<GenderTypes>(Convert.ToString(rdr["Gender"]), out GenderTypes gender))
                             {
                                 objStudent.Gender = gender;
                             }
-                            if (Enum.TryParse<ClassName>(Convert.ToString(rdr["Class"]), out ClassName classname))
+                            if (Enum.TryParse<Degination>(Convert.ToString(rdr["Class"]), out Degination classname))
                             {
-                                objStudent.Class = classname;
+                                objStudent.Subject = classname;
                             }
                             ltrStudents.Add(objStudent);
                         }
@@ -232,6 +233,10 @@ namespace CoreProject1.API
             if (!DateTime.TryParse(DateOfBirth, out DOBValue))
             {
                 Message = "Please Select the DateOfBirth in Correct Format";
+            }
+            if (LastName == "0")
+            {
+                LastName = "";
             }
             pTeacher.Id = Id;
             pTeacher.FirstName = FirstName;

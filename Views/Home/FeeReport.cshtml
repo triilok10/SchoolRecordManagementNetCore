@@ -8,6 +8,12 @@
         toastr.success('@Html.Raw(TempData["message"])');
     </script>
 }
+@if (TempData.ContainsKey("errorMsg"))
+{
+    <script>
+        toastr.error('@Html.Raw(TempData["errorMsg"])');
+    </script>
+}
 <style>
     .DataStudent {
         display: flex;

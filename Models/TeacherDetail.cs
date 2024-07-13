@@ -10,6 +10,8 @@ namespace CoreProject1.Models
         [Required(ErrorMessage = "Please Enter your FirstName")]
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string hdnSubject { get; set; }
+        public string hdnGender { get; set; }
 
         [Required(ErrorMessage = "Please Select your Class")]
         public Degination Subject { get; set; }

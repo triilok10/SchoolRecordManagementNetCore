@@ -18,6 +18,7 @@ namespace CoreProject1.Models
 
         public GenderType? Gender { get; set; }
 
+        public string? hdnGender { get; set; }
         public string? Address { get; set; }
 
         public string? FatherName { get; set; }
@@ -43,6 +44,7 @@ namespace CoreProject1.Models
         public BookMedium? BookMediumLanguage { get; set; }
         public bool? IsFeePaid { get; set; }
         public ClassName? Class { get; set; }
+        public string? hdnClass { get; set; }
     }
 
     public enum BookMedium

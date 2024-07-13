@@ -90,7 +90,7 @@ namespace CoreProject1.Controllers
                     if (pTeacher.DateOfBirth < new DateTime(1998, 1, 1))
                     {
                         TempData["SuccessMessage"] = "Please Enter the Correct DOB.";
-                        return View("UpdateChangeData");
+                        return RedirectToAction("AddTeacher");
                     }
                     if (pTeacher.FirstName == pTeacher.FatherName)
                     {
@@ -187,6 +187,8 @@ namespace CoreProject1.Controllers
                     string responsebody = await response.Content.ReadAsStringAsync();
 
                     TeacherDetail student = JsonConvert.DeserializeObject<TeacherDetail>(responsebody);
+                    ViewBag.hdnSubject = student.Subject;
+                    ViewBag.hdnGender = student.Gender;
                     return View(student);
 
                 }
@@ -242,13 +244,13 @@ namespace CoreProject1.Controllers
 
                     string FullAPL = $"{Apiurl}?Id={(string.IsNullOrWhiteSpace(pTeacher.Id.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Id.ToString()))}" +
                         $"&FirstName={(string.IsNullOrWhiteSpace(pTeacher.FirstName) ? "" : HttpUtility.UrlEncode(pTeacher.FirstName))}" +
-                        $"&LastName={(string.IsNullOrWhiteSpace(pTeacher.LastName) ? "" : HttpUtility.UrlEncode(pTeacher.LastName))}" +
-                        $"&Subject={(string.IsNullOrWhiteSpace(pTeacher.Subject.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Subject.ToString()))}" +
+                        $"&LastName={(string.IsNullOrWhiteSpace(pTeacher.LastName) ? "0" : HttpUtility.UrlEncode(pTeacher.LastName))}" +
+                        $"&Subject={(string.IsNullOrWhiteSpace(pTeacher.hdnSubject) ? "" : HttpUtility.UrlEncode(pTeacher.hdnSubject))}" +
                         $"&FatherName={(string.IsNullOrWhiteSpace(pTeacher.FatherName) ? "" : HttpUtility.UrlEncode(pTeacher.FatherName))}" +
                         $"&MotherName={(string.IsNullOrWhiteSpace(pTeacher.MotherName) ? "" : HttpUtility.UrlEncode(pTeacher.MotherName))}" +
                         $"&email={(string.IsNullOrWhiteSpace(pTeacher.Email) ? "" : HttpUtility.UrlEncode(pTeacher.Email))}" +
                         $"&Mobile={(string.IsNullOrWhiteSpace(pTeacher.Mobile) ? "" : HttpUtility.UrlEncode(pTeacher.Mobile))}" +
-                        $"&Gender={(string.IsNullOrWhiteSpace(pTeacher.Gender.ToString()) ? "" : HttpUtility.UrlEncode(pTeacher.Gender.ToString()))}" +
+                        $"&Gender={(string.IsNullOrWhiteSpace(pTeacher.hdnGender) ? "" : HttpUtility.UrlEncode(pTeacher.hdnGender))}" +
                         $"&Address={(string.IsNullOrWhiteSpace(pTeacher.Address) ? "" : HttpUtility.UrlEncode(pTeacher.Address))}" +
                         $"&Remarks={(string.IsNullOrWhiteSpace(pTeacher.Remarks) ? "" : HttpUtility.UrlEncode(pTeacher.Remarks))}" +
                         $"&DateOfBirth={(string.IsNullOrWhiteSpace(pTeacher.DateOfBirth.ToString("yyyy-MM-dd")) ? "" : HttpUtility.UrlEncode(pTeacher.DateOfBirth.ToString("yyyy-MM-dd")))}" +
